@@ -185,3 +185,9 @@
 	text-decoration: none;
 	color: #38C071;
 }
+
+#nodebb .emoji {
+    height: 20px;
+    width: 20px;
+    display: inline-block !important;
+}
