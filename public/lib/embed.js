@@ -64,7 +64,7 @@
 			}
 			
 			if (commentsCounter) {
-				commentsCounter.innerHTML = data.postCount;
+				commentsCounter.innerHTML = data.postCount ? data.postCount - 1 : 0;
 			}
 
 			data.relative_path = nodeBBURL;
