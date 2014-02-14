@@ -1,0 +1,32 @@
+{
+  "name": "nodebb-plugin-blog-comments",
+  "version": "0.0.1",
+  "description": "NodeBB Mousetrap Plugin",
+  "main": "library.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin",
+    "mousetrap",
+    "keyboard",
+    "shortcuts"
+  ],
+  "author": {
+    "name": "psychobunny",
+    "email": "psycho.bunny@hotmail.com"
+  },
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "_id": "nodebb-plugin-blog-comments@0.0.1",
+  "_from": "nodebb-plugin-blog-comments@~0.0.1"
+}
