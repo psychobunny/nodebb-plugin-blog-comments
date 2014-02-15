@@ -22,7 +22,7 @@ Who needs screenshots when you got a [live demo](http://blog.nodebb.org)? :D
 
 Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere after `{{/post}}` and before `article`. All you have to edit is the first line - put the URL to your NodeBB forum's home page here.
 
-```javascript
+```html
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
 var nodeBBURL = 'http://your.nodebb.com',
@@ -39,7 +39,9 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/embed.min.js';
 
 You may optionally put a "# of comments" counter anywhere on your page with the following code:
 
-    <span id="nodebb-comments-count"></span> Comments
+```html
+<span id="nodebb-comments-count"></span> Comments
+```
 
 ### Publishing
 
@@ -49,3 +51,4 @@ Head over to the article that you'd like to publish. The code will detect if you
 
 * Republishing (for now you can just edit both the article and the published blog).
 * WP compatibility coming soon
+* Pull CSS files from appropriate plugins? Ability to load custom CSS to style widget.
