@@ -50,27 +50,27 @@
 		if (XHR.status >= 200 && XHR.status < 400) {
 			var data = JSON.parse(XHR.responseText), html;
 
-			contentDiv = document.getElementById('nodebb-content');
 			commentsDiv = document.getElementById('nodebb-comments-list');
 			commentsCounter = document.getElementById('nodebb-comments-count');
+
+			data.relative_path = nodeBBURL;
+			data.redirect_url = articlePath;
+			data.article_id = articleID;
+			data.pagination = pagination;
+			data.postCount = parseInt(data.postCount, 10);
 
 			for (var post in data.posts) {
 				if (data.posts.hasOwnProperty(post)) {
 					data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
-					if (parseInt(data.posts[post].index, 10) === parseInt(data.postCount,10) - 1) {
+					if (parseInt(data.posts[post].index, 10) === data.postCount - 1) {
 						delete data.posts[post];
 					}
 				}
 			}
 			
 			if (commentsCounter) {
-				commentsCounter.innerHTML = data.postCount ? data.postCount - 1 : 0;
+				commentsCounter.innerHTML = data.postCount ? (data.postCount - 1) : 0;
 			}
-
-			data.relative_path = nodeBBURL;
-			data.redirect_url = articlePath;
-			data.article_id = articleID;
-			data.pagination = pagination;
 
 			if (pagination) {
 				html = normalizePost(parse(data, templates.blocks['posts']));
@@ -79,6 +79,8 @@
 				html = parse(data, data.template);
 				nodebbDiv.innerHTML = normalizePost(html);
 			}
+
+			contentDiv = document.getElementById('nodebb-content');
 
 			setTimeout(function() {
 				var lists = nodebbDiv.getElementsByTagName("li");
