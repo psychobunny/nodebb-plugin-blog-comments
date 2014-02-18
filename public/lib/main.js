@@ -3,11 +3,8 @@ $('document').ready(function() {
 		$('#header-menu, .forum-header').hide();
 		$('body').css('paddingTop', '25px');
 
-		var ajaxifyGo = ajaxify.go;
-
-		ajaxify.go = function(url, callback, quiet) {
-			if (url !== 'register' && url !== 'login') window.close();
-			return ajaxifyGo(url, callback, quiet);
-		};
+		window.onbeforeunload = function () {
+			window.close();
+		}
 	}
 });
