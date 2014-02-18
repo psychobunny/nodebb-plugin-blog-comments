@@ -1,6 +1,5 @@
 $('document').ready(function() {
-	/* man, this is so hax. looking for a better solution :) */
-	/*if (window.opener || (window.locationbar && !window.locationbar.visible)) {
+	if (window.opener && window.location.hash === "#blog/authenticate") {
 		$('#header-menu, .forum-header').hide();
 		$('body').css('paddingTop', '65px');
 
@@ -10,5 +9,5 @@ $('document').ready(function() {
 			if (url !== 'register' && url !== 'login') window.close();
 			return ajaxifyGo(url, callback, quiet);
 		};
-	}*/
+	}
 });
