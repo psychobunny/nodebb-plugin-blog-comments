@@ -141,9 +141,9 @@
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
 							var articleData = JSON.parse(adminXHR.responseText),
-								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\nClick [here]('+articlePath+') to see the full blog post';
+								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
-							document.getElementById('nodebb-content-markdown').value = articleData.markdown;
+							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = articleData.title;
 						} else {
 							nodebbDiv.innerHTML = 'Welcome ' + data.user.username + ', <a href="/ghost">sign in to Ghost</a> to enable the publish button.</a>';
