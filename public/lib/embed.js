@@ -140,7 +140,8 @@
 					adminXHR.open('GET', '/ghost/api/v0.1/posts/' + articleID);
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
-							var articleData = JSON.parse(adminXHR.responseText);
+							var articleData = JSON.parse(adminXHR.responseText),
+								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\nClick [here]('+articlePath+') to see the full blog post';
 
 							document.getElementById('nodebb-content-markdown').value = articleData.markdown;
 							document.getElementById('nodebb-content-title').value = articleData.title;
