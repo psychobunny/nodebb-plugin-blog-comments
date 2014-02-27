@@ -93,7 +93,12 @@
 				res.json({error: "Only Administrators can publish articles"});
 			}
 
-			topics.post(uid, title, markdown, cid, function(err, result) {
+			topics.post({
+				uid: uid,
+				title: title,
+				content: markdown,
+				cid: cid
+			}, function(err, result) {
 				if(err) {
 					res.json({error: err.message});
 				}
