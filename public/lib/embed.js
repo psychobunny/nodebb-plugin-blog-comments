@@ -1,7 +1,7 @@
 (function() {
 	"use strict";
 	
-	var articlePath = window.location.protocol + '//' + window.location.hostname + window.location.pathname;
+	var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
 	var pluginURL = nodeBBURL + '/plugins/nodebb-plugin-blog-comments',
 		savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter;
