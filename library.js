@@ -70,7 +70,11 @@
 			url = req.body.url,
 			uid = req.user ? req.user.uid : 0;
 
-		topics.reply(tid, uid, content, function(err, postData) {
+		topics.reply({
+			tid: tid,
+			uid: uid,
+			content: content
+		}, function(err, postData) {
 			if(err) {
 				return res.redirect(url + '?error=' + err.message + '#nodebb/comments');
 			}
