@@ -28,12 +28,12 @@
 			<div class="topic-item">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
-						<a href="{relative_path}/user/{posts.user.userslug}">
-							<img src="{posts.user.picture}" alt="{posts.user.username}" class="profile-image" title="{posts.user.username}">
+						<a href="{relative_path}/user/{user.userslug}">
+							<img src="{user.picture}" alt="{user.username}" class="profile-image" title="{user.username}">
 						</a>
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small>{posts.user.username} commented {posts.timestamp}</small><br />{posts.content}</div>
+						<div class="post-content" itemprop="text"><small>{user.username} commented {posts.timestamp}</small><br />{posts.content}</div>
 					</div>
 				</div>
 			</div>
