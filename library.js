@@ -190,12 +190,4 @@
 		});
 	};
 
-	Comments.addScripts = function(scripts, callback) {
-		return scripts.concat([
-				'plugins/nodebb-plugin-blog-comments/lib/main.js'
-			]);
-	};
-
-
-
 }(module));

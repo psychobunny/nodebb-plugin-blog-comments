@@ -6,9 +6,6 @@
 	"library": "./library.js",
 	"hooks": [
 		{
-			"hook": "filter:scripts.get", "method": "addScripts", "callbacked": false
-		},
-		{
 			"hook": "filter:server.create_routes", "method": "addRoute", "callbacked": true
 		},
 		{
@@ -21,5 +18,8 @@
 			"hook": "filter:admin.create_routes", "method": "addAdminRoute", "callbacked": true
 		}
 	],
+	"scripts": [
+        "public/lib/main.js"
+    ],
 	"staticDir": "./public"
 }
