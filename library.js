@@ -132,34 +132,6 @@
 		});		
 	};
 
-	Comments.addRoute = function(server, callback) {
-		fs.readFile(path.resolve(__dirname, './public/templates/comments.tpl'), function (err, data) {
-			Comments.template = data.toString();
-		});
-
-		server.routes = server.routes.concat(
-			[
-				{
-					"route": "/comments/get/:id/:pagination?",
-					"method": "get",
-					"options": Comments.getCommentData
-				},
-				{
-					"route": "/comments/reply",
-					"method": "post",
-					"options": Comments.replyToComment
-				},
-				{
-					"route": "/comments/publish",
-					"method": "post",
-					"options": Comments.publishArticle
-				}
-			]
-		);
-
-		callback(null, server);
-	};
-
 	Comments.addAdminLink = function(custom_header, callback) {
 		custom_header.plugins.push({
 			"route": "/blog-comments",
@@ -170,24 +142,21 @@
 		return custom_header;
 	};
 
-	Comments.addAdminRoute = function(custom_routes, callback) {
-		fs.readFile(path.resolve(__dirname, './public/templates/admin.tpl'), function (err, template) {
-			custom_routes.routes.push({
-				"route": "/blog-comments",
-				"method": "get",
-				"options": function(req, res, callback) {
-					callback({
-						req: req,
-						res: res,
-						route: "/blog-comments",
-						name: "Blog Comments",
-						content: template
-					});
-				}
-			});
+	function renderAdmin(req, res, callback) {
+		res.render('comments/admin', {});
+	}
 
-			callback(null, custom_routes);
+	Comments.init = function(app, middleware, controllers) {
+		fs.readFile(path.resolve(__dirname, './public/templates/comments.tpl'), function (err, data) {
+			Comments.template = data.toString();
 		});
+		
+		app.get('/comments/get/:id/:pagination?', Comments.getCommentData);
+		app.get('/comments/reply', Comments.replyToComment);
+		app.get('/comments/publish', Comments.publishArticle);
+
+		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
+		app.get('/api/admin/blog-comments', renderAdmin);
 	};
 
 }(module));

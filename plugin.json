@@ -6,20 +6,18 @@
 	"library": "./library.js",
 	"hooks": [
 		{
-			"hook": "filter:server.create_routes", "method": "addRoute", "callbacked": true
+			"hook": "filter:server.create_routes", "method": "addRoute"
 		},
 		{
-			"hook": "filter:posts.custom_profile_info", "method": "addLinkbackToArticle", "callbacked": true
+			"hook": "filter:posts.custom_profile_info", "method": "addLinkbackToArticle"
 		},
 		{
-			"hook": "filter:admin.header.build", "method": "addAdminLink", "callbacked": false
-		},
-		{
-			"hook": "filter:admin.create_routes", "method": "addAdminRoute", "callbacked": true
+			"hook": "action:app.load", "method": "init"
 		}
 	],
 	"scripts": [
         "public/lib/main.js"
     ],
-	"staticDir": "./public"
+	"staticDir": "./public",
+	"templates": "./public/templates"
 }
