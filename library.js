@@ -152,8 +152,8 @@
 		});
 		
 		app.get('/comments/get/:id/:pagination?', Comments.getCommentData);
-		app.get('/comments/reply', Comments.replyToComment);
-		app.get('/comments/publish', Comments.publishArticle);
+		app.post('/comments/reply', Comments.replyToComment);
+		app.post('/comments/publish', Comments.publishArticle);
 
 		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
 		app.get('/api/admin/blog-comments', renderAdmin);
