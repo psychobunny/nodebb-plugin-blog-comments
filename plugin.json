@@ -6,7 +6,7 @@
 	"library": "./library.js",
 	"hooks": [
 		{
-			"hook": "filter:server.create_routes", "method": "addRoute"
+			"hook": "filter:admin.header.build", "method": "addAdminLink"
 		},
 		{
 			"hook": "filter:posts.custom_profile_info", "method": "addLinkbackToArticle"

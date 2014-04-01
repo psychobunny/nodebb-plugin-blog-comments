@@ -139,7 +139,7 @@
 			"name": "Blog Comments"
 		});
 
-		return custom_header;
+		callback(null, custom_header);
 	};
 
 	function renderAdmin(req, res, callback) {
