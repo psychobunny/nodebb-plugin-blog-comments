@@ -147,7 +147,7 @@
 	}
 
 	Comments.init = function(app, middleware, controllers) {
-		fs.readFile(path.resolve(__dirname, './public/templates/comments.tpl'), function (err, data) {
+		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
 			Comments.template = data.toString();
 		});
 		
