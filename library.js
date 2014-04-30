@@ -55,7 +55,7 @@
 				});
 
 				res.json({
-					posts: data.posts,
+					posts: posts,
 					postCount: data.postCount,
 					user: data.user,
 					template: Comments.template,
