@@ -62,7 +62,7 @@
 			for (var post in data.posts) {
 				if (data.posts.hasOwnProperty(post)) {
 					data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
-					if (parseInt(data.posts[post].index, 10) === data.postCount - 1) {
+					if (data.posts[post]['blog-comments:url']) {
 						delete data.posts[post];
 					}
 				}
