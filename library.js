@@ -50,6 +50,10 @@
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 				res.header("Access-Control-Allow-Credentials", "true");
 
+				var posts = data.posts.filter(function(post) {
+					return post.deleted === false;
+				});
+
 				res.json({
 					posts: data.posts,
 					postCount: data.postCount,
