@@ -18,6 +18,12 @@
 	"scripts": [
         "public/lib/main.js"
     ],
-	"staticDir": "./public",
+	"staticDirs": {
+		"templates": "./public/templates",
+		"lib": "./public/lib"
+	},
+	"css": [
+		"public/css/main.css"
+	],
 	"templates": "./public/templates"
 }
