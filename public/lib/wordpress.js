@@ -149,8 +149,6 @@
 
 							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = articleData.title_plain;
-
-							console.log(markdown, articleData.title_plain);
 						} else {
 							console.warn('Unable to access API. Please install the JSON API plugin located at: http://wordpress.org/plugins/json-api');
 						}
