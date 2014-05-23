@@ -1,6 +1,6 @@
 # NodeBB Blog Comments
 
-Lets NodeBB act as a comments engine/widget for your blog. Currently supports [Ghost](https://ghost.org/), with plans to support WordPress and others in the near future. Check out a live example of this plugin on [NodeBB's Blog](http://blog.nodebb.org), which is powered by Ghost.
+Lets NodeBB act as a comments engine/widget for your blog. Currently supports both [Ghost](https://ghost.org/), and WordPress. If you'd like to see support for other CMS/blog systems, please submit an issue on our tracker.
 
 The comments are exposed to any plugin you have built into the core, so it is completely possible to have emoticons, embedded video, and/or whatever else you want in the comments section of your blog.
 
@@ -18,7 +18,7 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 
 Who needs screenshots when you got a [live demo](http://blog.nodebb.org)? :D
 
-### Ghost Snippet
+### Ghost Installation
 
 Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere after `{{/post}}` and before `article`. All you have to edit is the first line - put the URL to your NodeBB forum's home page here.
 
@@ -43,12 +43,45 @@ You may optionally put a "# of comments" counter anywhere on your page with the 
 <span id="nodebb-comments-count"></span> Comments
 ```
 
+### Wordpress Installation
+
+First, install the [Wordpress JSON API](http://wordpress.org/plugins/json-api/) plugin. 
+
+Replace the contents of `/wp-content/themes/YOUR_THEME/comments.php` with the following (back-up the old comments.php, just in case):
+
+```html
+<?php
+if ( post_password_required() )
+	return;
+?>
+
+<a id="nodebb/comments"></a>
+<script type="text/javascript">
+var nodeBBURL = 'http://forum.burnaftercompiling.com',
+	articleID = '<?php echo the_ID(); ?>';
+
+(function() {
+var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
+nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
+})();
+</script>
+<noscript>Please enable JavaScript to view comments</noscript>
+```
+
 ### Publishing
 
-Head over to the article that you'd like to publish. The code will detect if you're both an administrator of Ghost and NodeBB (so ensure that you're logged into both) and will display a publish button if so.
+Head over to the article that you'd like to publish. The code will detect if you're both an administrator of your blog and NodeBB (so ensure that you're logged into both) and will display a publish button if so.
+
+
+## Sites using this plugin
+
+* [NodeBB's Blog](http://blog.nodebb.org) (Ghost).
+* [Burn after compiling](http://burnaftercompiling.com) (Wordpress).
+
+Please submit a PR to add your site here :)
 
 ## TODO
 
 * Republishing (for now you can just edit both the article and the published blog).
-* WP compatibility coming soon
 * Pull CSS files from appropriate plugins? Ability to load custom CSS to style widget.
