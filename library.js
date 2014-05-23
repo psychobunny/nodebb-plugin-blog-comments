@@ -105,6 +105,8 @@
 				uid: uid,
 				title: title,
 				content: markdown,
+				tags: [],
+				req: req,
 				cid: cid
 			}, function(err, result) {
 				if(err) {
