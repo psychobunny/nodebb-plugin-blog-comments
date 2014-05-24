@@ -6,8 +6,6 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
-![blog comments](http://i.imgur.com/pPO42Hy.png)
-
 ## Installation
 
 First install the plugin:
@@ -18,7 +16,7 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 
 ## Screenshots
 
-Who needs screenshots when you got a [live demo](http://blog.nodebb.org)? :D
+![blog comments](http://i.imgur.com/pPO42Hy.png)
 
 ### Ghost Installation
 
