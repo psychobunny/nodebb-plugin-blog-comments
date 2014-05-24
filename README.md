@@ -6,6 +6,10 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
+## Screenshots
+
+![blog comments](http://i.imgur.com/pPO42Hy.png)
+
 ## Installation
 
 First install the plugin:
@@ -13,10 +17,6 @@ First install the plugin:
     npm install nodebb-plugin-blog-comments
 
 Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments section in the ACP and select the Category ID you'd like to publish your blog content to (default is Category 1). Make sure you put the correct URL to your blog.
-
-## Screenshots
-
-![blog comments](http://i.imgur.com/pPO42Hy.png)
 
 ### Ghost Installation
 
