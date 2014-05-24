@@ -6,6 +6,8 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
+![blog comments](http://i.imgur.com/pPO42Hy.png)
+
 ## Installation
 
 First install the plugin:
