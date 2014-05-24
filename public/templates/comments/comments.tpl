@@ -50,6 +50,7 @@
 		<button class="btn btn-primary">Publish this article to NodeBB</button>
 		<input type="hidden" name="markdown" id="nodebb-content-markdown" />
 		<input type="hidden" name="title" id="nodebb-content-title" />
+		<input type="hidden" name="tags" id="nodebb-content-tags" />
 		<input type="hidden" name="id" value="{article_id}" />
 		<input type="hidden" name="url" value="{redirect_url}" />
 		<input type="hidden" name="_csrf" value="{token}" />

@@ -141,14 +141,23 @@
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
 							var articleData = JSON.parse(adminXHR.responseText.toString()).post,
-								translator = document.createElement('span');
+								translator = document.createElement('span'),
+								wptags = articleData.tags,
+								tags = [];
 
 							translator.innerHTML = articleData.excerpt;
 
-							var markdown = translator.innerText + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+							var markdown = translator.firstChild.innerHTML + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+
+							for (var tag in wptags) {
+								if (wptags.hasOwnProperty(tag)) {
+									tags.push(wptags[tag].title);
+								}
+							}
 
 							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = articleData.title_plain;
+							document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
 						} else {
 							console.warn('Unable to access API. Please install the JSON API plugin located at: http://wordpress.org/plugins/json-api');
 						}

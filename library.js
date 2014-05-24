@@ -92,6 +92,7 @@
 			title = req.body.title,
 			url = req.body.url,
 			commentID = req.body.id,
+			tags = req.body.tags,
 			uid = req.user ? req.user.uid : 0;
 
 		var cid = meta.config['blog-comments:cid'] || 1;
@@ -105,7 +106,7 @@
 				uid: uid,
 				title: title,
 				content: markdown,
-				tags: [],
+				tags: tags ? JSON.parse(tags) : [],
 				req: req,
 				cid: cid
 			}, function(err, result) {
