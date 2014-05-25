@@ -37,12 +37,6 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/embed.min.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-You may optionally put a "# of comments" counter anywhere on your page with the following code:
-
-```html
-<span id="nodebb-comments-count"></span> Comments
-```
-
 ### Wordpress Installation
 
 First, install the [Wordpress JSON API](http://wordpress.org/plugins/json-api/) plugin. 
@@ -68,6 +62,17 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
 </script>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
+
+### Comments Counter
+
+
+You may optionally put a "# of comments" counter anywhere on the page with the following code:
+
+```html
+<span id="nodebb-comments-count"></span> Comments
+```
+
+A mechanism to query the number of comments on another separate page will be available in a future release.
 
 ### Publishing
 
