@@ -51,7 +51,7 @@ if ( post_password_required() )
 
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
-var nodeBBURL = 'http://forum.burnaftercompiling.com',
+var nodeBBURL = 'http://your.nodebb.com',
 	articleID = '<?php echo the_ID(); ?>';
 
 (function() {
