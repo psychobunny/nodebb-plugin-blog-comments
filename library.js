@@ -33,7 +33,7 @@
 					if (disabled) {
 						next(err, []);
 					} else {
-						topics.getTopicPosts(tid, 0 + req.params.pagination * 10, 9 + req.params.pagination * 9, uid, true, next);
+						topics.getTopicPosts(tid, 'tid:' + tid + ':posts', 0 + req.params.pagination * 10, 9 + req.params.pagination * 9, uid, true, next);
 					}
 				},
 				postCount: function(next) {
