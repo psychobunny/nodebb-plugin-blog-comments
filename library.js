@@ -46,7 +46,16 @@
 					user.isAdministrator(uid, next);
 				}
 			}, function(err, data) {
-				res.header("Access-Control-Allow-Origin", meta.config['blog-comments:url']);
+				var hostUrls = meta.config['blog-comments:url'].explode(','),
+					url;
+
+				hostUrls.forEach(function(hostUrl) {
+					if (hostUrl.trim() === req.get('host')) {
+						url = req.get('host');
+					}
+				});
+
+				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 				res.header("Access-Control-Allow-Credentials", "true");
 
@@ -95,7 +104,16 @@
 			tags = req.body.tags,
 			uid = req.user ? req.user.uid : 0;
 
-		var cid = meta.config['blog-comments:cid'] || 1;
+		var hostUrls = meta.config['blog-comments:url'].explode(','),
+			position;
+
+		hostUrls.forEach(function(hostUrl, i) {
+			if (hostUrl.trim() === req.get('host')) {
+				position = i;
+			}
+		});
+
+		var cid = parseInt(meta.config['blog-comments:cid'].explode(',')[position], 10) || parseInt(meta.config['blog-comments:cid'].explode(',')[0], 10) || 1;
 		
 		user.isAdministrator(uid, function (err, isAdmin) {
 			if (!isAdmin) {
@@ -128,10 +146,21 @@
 	};
 
 	Comments.addLinkbackToArticle = function(post, callback) {
+		var hostUrls = meta.config['blog-comments:url'].explode(','),
+			position;
+
+		hostUrls.forEach(function(hostUrl, i) {
+			if (hostUrl.trim() === req.get('host')) {
+				position = i;
+			}
+		});
+
+		var blogName = meta.config['blog-comments:name'].explode(',')[position];
+
 		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
 			if (url) {
 				post.profile.push({
-					content: "Posted from <strong><a href="+ url +" target='blank'>" + meta.config['blog-comments:name'] + "</a></strong>"
+					content: "Posted from <strong><a href="+ url +" target='blank'>" + blogName + "</a></strong>"
 				});
 			}
 
