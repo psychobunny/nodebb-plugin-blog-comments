@@ -46,7 +46,7 @@
 					user.isAdministrator(uid, next);
 				}
 			}, function(err, data) {
-				var hostUrls = meta.config['blog-comments:url'].explode(','),
+				var hostUrls = meta.config['blog-comments:url'].toString().explode(','),
 					url;
 
 				hostUrls.forEach(function(hostUrl) {
@@ -104,7 +104,7 @@
 			tags = req.body.tags,
 			uid = req.user ? req.user.uid : 0;
 
-		var hostUrls = meta.config['blog-comments:url'].explode(','),
+		var hostUrls = meta.config['blog-comments:url'].toString().explode(','),
 			position;
 
 		hostUrls.forEach(function(hostUrl, i) {
@@ -113,7 +113,7 @@
 			}
 		});
 
-		var cid = parseInt(meta.config['blog-comments:cid'].explode(',')[position], 10) || parseInt(meta.config['blog-comments:cid'].explode(',')[0], 10) || 1;
+		var cid = parseInt(meta.config['blog-comments:cid'].toString().explode(',')[position], 10) || parseInt(meta.config['blog-comments:cid'].toString().explode(',')[0], 10) || 1;
 		
 		user.isAdministrator(uid, function (err, isAdmin) {
 			if (!isAdmin) {
@@ -146,7 +146,7 @@
 	};
 
 	Comments.addLinkbackToArticle = function(post, callback) {
-		var hostUrls = meta.config['blog-comments:url'].explode(','),
+		var hostUrls = meta.config['blog-comments:url'].toString().explode(','),
 			position;
 
 		/*hostUrls.forEach(function(hostUrl, i) {
@@ -155,7 +155,7 @@
 			}
 		});
 
-		var blogName = meta.config['blog-comments:name'].explode(',')[position];*/
+		var blogName = meta.config['blog-comments:name'].toString().explode(',')[position];*/
 
 		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
 			if (url) {
