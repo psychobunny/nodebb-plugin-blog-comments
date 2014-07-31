@@ -149,18 +149,18 @@
 		var hostUrls = meta.config['blog-comments:url'].explode(','),
 			position;
 
-		hostUrls.forEach(function(hostUrl, i) {
+		/*hostUrls.forEach(function(hostUrl, i) {
 			if (hostUrl.trim() === req.get('host')) {
 				position = i;
 			}
 		});
 
-		var blogName = meta.config['blog-comments:name'].explode(',')[position];
+		var blogName = meta.config['blog-comments:name'].explode(',')[position];*/
 
 		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
 			if (url) {
 				post.profile.push({
-					content: "Posted from <strong><a href="+ url +" target='blank'>" + blogName + "</a></strong>"
+					content: "Posted from <strong><a href="+ url +" target='blank'>" + meta.config['blog-comments:name'] + "</a></strong>"
 				});
 			}
 
