@@ -46,7 +46,7 @@
 					user.isAdministrator(uid, next);
 				}
 			}, function(err, data) {
-				var hostUrls = meta.config['blog-comments:url'].split(','),
+				var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
 					url;
 
 				hostUrls.forEach(function(hostUrl) {
@@ -104,7 +104,7 @@
 			tags = req.body.tags,
 			uid = req.user ? req.user.uid : 0;
 
-		var hostUrls = meta.config['blog-comments:url'].split(','),
+		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
 			position;
 
 		hostUrls.forEach(function(hostUrl, i) {
@@ -113,7 +113,8 @@
 			}
 		});
 
-		var cid = parseInt(meta.config['blog-comments:cid'].split(',')[position], 10) || parseInt(meta.config['blog-comments:cid'].split(',')[0], 10) || 1;
+		var cid = meta.config['blog-comments:cid'] || '';
+		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
 		
 		user.isAdministrator(uid, function (err, isAdmin) {
 			if (!isAdmin) {
@@ -146,21 +147,22 @@
 	};
 
 	Comments.addLinkbackToArticle = function(post, callback) {
-		var hostUrls = meta.config['blog-comments:url'].split(','),
+		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
 			position;
-
-		/*hostUrls.forEach(function(hostUrl, i) {
-			if (hostUrl.trim() === req.get('host')) {
-				position = i;
-			}
-		});
-
-		var blogName = meta.config['blog-comments:name'].split(',')[position];*/
 
 		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
 			if (url) {
+				hostUrls.forEach(function(hostUrl, i) {
+					if (hostUrl.trim().indexOf(url) !== -1) {
+						position = i;
+					}
+				});
+
+				var blogName = (meta.config['blog-comments:name'] || '');
+				blogName = parseInt(blogName.split(',')[position], 10) || parseInt(blogName.split(',')[0], 10) || 1;
+
 				post.profile.push({
-					content: "Posted from <strong><a href="+ url +" target='blank'>" + meta.config['blog-comments:name'] + "</a></strong>"
+					content: "Posted from <strong><a href="+ url +" target='blank'>" + blogName + "</a></strong>"
 				});
 			}
 
