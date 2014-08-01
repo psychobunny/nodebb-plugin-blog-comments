@@ -50,10 +50,15 @@
 					url;
 
 				hostUrls.forEach(function(hostUrl) {
-					if (hostUrl.trim() === req.get('host')) {
-						url = req.get('host');
+					if (hostUrl.trim() === req.get('origin')) {
+						url = req.get('origin');
 					}
+
+					console.log(hostUrl.trim(), req.get('origin'));
 				});
+
+				console.log(hostUrls, url);
+
 
 				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -108,7 +113,7 @@
 			position;
 
 		hostUrls.forEach(function(hostUrl, i) {
-			if (hostUrl.trim() === req.get('host')) {
+			if (hostUrl.trim() === req.get('origin')) {
 				position = i;
 			}
 		});
