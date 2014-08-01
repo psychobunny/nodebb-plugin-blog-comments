@@ -78,6 +78,12 @@ A mechanism to query the number of comments on another separate page will be ava
 
 Head over to the article that you'd like to publish. The code will detect if you're both an administrator of your blog and NodeBB (so ensure that you're logged into both) and will display a publish button if so.
 
+You may also create a `publishers` group in NodeBB to allow a group of regular users to have publish rights.
+
+
+### Multiple blogs
+
+You may use a comma-separated entry of blogs in the ACP to support publishing from a network of separate blogs to your forum. You can also choose to put each blog in its own dedicated category, or place them all into one category.
 
 ## Sites using this plugin
 
