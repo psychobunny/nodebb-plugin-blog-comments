@@ -8,6 +8,7 @@
 		posts = module.parent.require('../src/posts.js'),
 		topics = module.parent.require('../src/topics.js'),
 		user = module.parent.require('../src/user.js'),
+		groups = module.parent.require('../src/groups.js'),
 		fs = require('fs'),
 		path = require('path'),
 		async = require('async');
@@ -44,6 +45,9 @@
 				},
 				isAdmin: function(next) {
 					user.isAdministrator(uid, next);
+				},
+				isPublisher: function(next) {
+					groups.isMember(uid, 'publishers', next);
 				}
 			}, function(err, data) {
 				var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
@@ -69,7 +73,7 @@
 					user: data.user,
 					template: Comments.template,
 					token: res.locals.csrf_token,
-					isAdmin: data.isAdmin,
+					isAdmin: !data.isAdmin ? data.isPublisher : data.isAdmin,
 					isLoggedIn: !!uid,
 					tid: tid
 				});
@@ -116,9 +120,16 @@
 		var cid = meta.config['blog-comments:cid'] || '';
 		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
 		
-		user.isAdministrator(uid, function (err, isAdmin) {
-			if (!isAdmin) {
-				res.json({error: "Only Administrators can publish articles"});
+		async.parallel({
+			isAdministrator: function(next) {
+				user.isAdministrator(uid, next);
+			},
+			isPublisher: function(next) {
+				groups.isMember(uid, 'publishers', next);
+			}
+		}, function(err, userStatus) {
+			if (!userStatus.isAdmin && !userStatus.isPublisher) {
+				res.json({error: "Only Administrators or members of the publishers group can publish articles"});
 			}
 
 			topics.post({
