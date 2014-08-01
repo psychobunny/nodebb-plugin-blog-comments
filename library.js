@@ -53,12 +53,7 @@
 					if (hostUrl.trim() === req.get('origin')) {
 						url = req.get('origin');
 					}
-
-					console.log(hostUrl.trim(), req.get('origin'));
 				});
-
-				console.log(hostUrls, url);
-
 
 				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -158,7 +153,7 @@
 		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
 			if (url) {
 				hostUrls.forEach(function(hostUrl, i) {
-					if (hostUrl.trim().indexOf(url) !== -1) {
+					if (url.indexOf(hostUrl.trim().replace(/^https?:\/\//, '')) !== -1) {
 						position = i;
 					}
 				});
