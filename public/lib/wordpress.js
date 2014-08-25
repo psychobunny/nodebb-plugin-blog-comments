@@ -75,11 +75,11 @@
 			}
 
 			if (commentsCategory) {
-				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/' + data.category.slug + '">' + data.category.name + '</a>';
+				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/category/' + data.category.slug + '">' + data.category.name + '</a>';
 			}
 
 			if (commentsAuthor) {
-				commentsAuthor.innerHTML = '<div class="nodebb-author"><img src="' + data.mainPost.user.picture + '/> <a href="' + nodeBBURL + '/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></div>';
+				commentsAuthor.innerHTML = '<div class="nodebb-author"><img src="' + data.mainPost.user.picture + '" /> <a href="' + nodeBBURL + '/user/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></div>';
 			}
 
 			if (pagination) {
