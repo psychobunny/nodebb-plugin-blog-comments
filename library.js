@@ -48,6 +48,12 @@
 				},
 				isPublisher: function(next) {
 					groups.isMember(uid, 'publishers', next);
+				},
+				category: function(next) {
+					topics.getCategoryData(tid, next);
+				},
+				mainPost: function(next) {
+					topics.getMainPost(tid, uid, next);
 				}
 			}, function(err, data) {
 				var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
@@ -75,7 +81,9 @@
 					token: res.locals.csrf_token,
 					isAdmin: !data.isAdmin ? data.isPublisher : data.isAdmin,
 					isLoggedIn: !!uid,
-					tid: tid
+					tid: tid,
+					category: data.category,
+					mainPost: data.mainPost
 				});
 			});
 		});
