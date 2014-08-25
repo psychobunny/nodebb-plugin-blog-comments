@@ -191,3 +191,9 @@
     width: 20px;
     display: inline-block !important;
 }
+
+#nodebb .author img {
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+}
