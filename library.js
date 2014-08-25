@@ -83,7 +83,7 @@
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
-					mainPost: data.mainPost
+					mainPost: data.mainPost[0]
 				});
 			});
 		});
