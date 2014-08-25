@@ -4,7 +4,7 @@
 	var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
 	var pluginURL = nodeBBURL + '/plugins/nodebb-plugin-blog-comments',
-		savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter;
+		savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter, commentsAuthor, commentsCategory;
 
 	var stylesheet = document.createElement("link");
 	stylesheet.setAttribute("rel", "stylesheet");
@@ -52,6 +52,8 @@
 
 			commentsDiv = document.getElementById('nodebb-comments-list');
 			commentsCounter = document.getElementById('nodebb-comments-count');
+			commentsAuthor = document.getElementById('nodebb-comments-author');
+			commentsCategory = document.getElementById('nodebb-comments-category');
 
 			data.relative_path = nodeBBURL;
 			data.redirect_url = articlePath;
@@ -70,6 +72,14 @@
 			
 			if (commentsCounter) {
 				commentsCounter.innerHTML = data.postCount ? (data.postCount - 1) : 0;
+			}
+
+			if (commentsCategory) {
+				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/' + data.category.slug + '">' + data.category.name + '</a>';
+			}
+
+			if (commentsAuthor) {
+				commentsAuthor.innerHTML = '<div class="nodebb-author"><img src="' + data.mainPost.user.picture + '/> <a href="' + nodeBBURL + '/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></div>';
 			}
 
 			if (pagination) {
