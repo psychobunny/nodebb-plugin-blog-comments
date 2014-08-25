@@ -74,6 +74,16 @@ You may optionally put a "# of comments" counter anywhere on the page with the f
 
 A mechanism to query the number of comments on another separate page will be available in a future release.
 
+### Author and Category information
+
+![](http://i.imgur.com/NyLs4LQ.png)
+
+To use NodeBB's category and author information (instead of using Ghost's user/tag system), there are two elements that this plugin searches for:
+
+```html
+Published by <span id="nodebb-comments-author"></span> in <span id="nodebb-comments-category"></span>
+```
+
 ### Publishing
 
 Head over to the article that you'd like to publish. The code will detect if you're both an administrator of your blog and NodeBB (so ensure that you're logged into both) and will display a publish button if so.
