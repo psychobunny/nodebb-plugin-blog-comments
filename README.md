@@ -25,7 +25,7 @@ Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere a
 ```html
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
-var nodeBBURL = 'http://your.nodebb.com',
+var nodeBBURL = '//your.nodebb.com',
 	articleID = '{{post.id}}';
 
 (function() {
