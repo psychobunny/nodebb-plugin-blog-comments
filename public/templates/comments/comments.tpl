@@ -1,26 +1,28 @@
 <!-- IF tid -->
-	<div class="topic-profile-pic user">
+	<!-- IF atTop -->
+		<div class="topic-profile-pic user">
+			<!-- IF isLoggedIn -->
+			<img src="{user.picture}" class="profile-image" />
+			<!-- ELSE -->
+			<img src="http://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
+			<!-- ENDIF isLoggedIn -->
+		</div>
+		<form action="{relative_path}/comments/reply" method="post">
+			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
 		<!-- IF isLoggedIn -->
-		<img src="{user.picture}" class="profile-image" />
+			<small>Signed in as <strong>{user.username}</strong>. <span id="nodebb-error"></span></small>
+			<button class="btn btn-primary">Post a Reply</button>
+			<input type="hidden" name="_csrf" value="{token}" />
+			<input type="hidden" name="tid" value="{tid}" />
+			<input type="hidden" name="url" value="{redirect_url}" />
+		</form>
 		<!-- ELSE -->
-		<img src="http://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
+		</form>
+		<button class="btn btn-primary" id="nodebb-register">Register</button>
+		<button class="btn btn-primary" id="nodebb-login">Login</button>
+		<br />
 		<!-- ENDIF isLoggedIn -->
-	</div>
-	<form action="{relative_path}/comments/reply" method="post">
-		<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
-	<!-- IF isLoggedIn -->
-		<small>Signed in as <strong>{user.username}</strong>. <span id="nodebb-error"></span></small>
-		<button class="btn btn-primary">Post a Reply</button>
-		<input type="hidden" name="_csrf" value="{token}" />
-		<input type="hidden" name="tid" value="{tid}" />
-		<input type="hidden" name="url" value="{redirect_url}" />
-	</form>
-	<!-- ELSE -->
-	</form>
-	<button class="btn btn-primary" id="nodebb-register">Register</button>
-	<button class="btn btn-primary" id="nodebb-login">Login</button>
-	<br />
-	<!-- ENDIF isLoggedIn -->
+	<!-- ENDIF atTop -->
 
 	<ul id="nodebb-comments-list">
 		<!-- BEGIN posts -->
@@ -40,6 +42,32 @@
 		</li>
 		<!-- END posts -->
 	</ul>
+	<br />
+
+	<!-- IF atBottom -->
+		<div class="topic-profile-pic user">
+			<!-- IF isLoggedIn -->
+			<img src="{user.picture}" class="profile-image" />
+			<!-- ELSE -->
+			<img src="http://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
+			<!-- ENDIF isLoggedIn -->
+		</div>
+		<form action="{relative_path}/comments/reply" method="post">
+			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
+		<!-- IF isLoggedIn -->
+			<small>Signed in as <strong>{user.username}</strong>. <span id="nodebb-error"></span></small>
+			<button class="btn btn-primary">Post a Reply</button>
+			<input type="hidden" name="_csrf" value="{token}" />
+			<input type="hidden" name="tid" value="{tid}" />
+			<input type="hidden" name="url" value="{redirect_url}" />
+		</form>
+		<!-- ELSE -->
+		</form>
+		<button class="btn btn-primary" id="nodebb-register">Register</button>
+		<button class="btn btn-primary" id="nodebb-login">Login</button>
+		<br />
+		<!-- ENDIF isLoggedIn -->
+	<!-- ENDIF atBottom -->
 
 	<small class="nodebb-copyright">Powered by <a href="http://nodebb.org" target="_blank">NodeBB</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
 	<button class="btn btn-primary" <!-- IF !posts.length -->style="display: none"<!-- ENDIF !posts.length --> id="nodebb-load-more">Load more comments...</button>
