@@ -73,6 +73,11 @@
 					return post.deleted === false;
 				});
 
+				var top = true;
+				var bottom = false;
+				var compose_location = meta.config['blog-comments:compose-location'];
+				if (compose_location == "bottom"){ bottom = true; top = false;}
+
 				res.json({
 					posts: posts,
 					postCount: data.postCount,
@@ -83,7 +88,9 @@
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
-					mainPost: data.mainPost[0]
+					mainPost: data.mainPost[0],
+					atBottom: bottom,
+					atTop: top
 				});
 			});
 		});
@@ -127,7 +134,7 @@
 
 		var cid = meta.config['blog-comments:cid'] || '';
 		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
-		
+
 		async.parallel({
 			isAdministrator: function(next) {
 				user.isAdministrator(uid, next);
@@ -156,13 +163,13 @@
 					posts.setPostField(result.postData.pid, 'blog-comments:url', url);
 					db.setObjectField('blog-comments', commentID, result.postData.tid);
 
-					res.redirect((req.header('Referer') || '/') + '#nodebb/comments');	
+					res.redirect((req.header('Referer') || '/') + '#nodebb/comments');
 				} else {
 					res.json({error: "Unable to post topic", result: result});
 				}
 			});
 		});
-		
+
 	};
 
 	Comments.addLinkbackToArticle = function(post, callback) {
@@ -186,7 +193,7 @@
 			}
 
 			callback(err, post);
-		});		
+		});
 	};
 
 	Comments.addAdminLink = function(custom_header, callback) {
@@ -207,7 +214,7 @@
 		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
 			Comments.template = data.toString();
 		});
-		
+
 		app.get('/comments/get/:id/:pagination?', Comments.getCommentData);
 		app.post('/comments/reply', Comments.replyToComment);
 		app.post('/comments/publish', Comments.publishArticle);
