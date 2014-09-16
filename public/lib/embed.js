@@ -74,11 +74,11 @@
 				commentsCounter.innerHTML = data.postCount ? (data.postCount - 1) : 0;
 			}
 
-			if (commentsCategory) {
+			if (commentsCategory && data.category) {
 				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/category/' + data.category.slug + '">' + data.category.name + '</a>';
 			}
 
-			if (commentsAuthor) {
+			if (commentsAuthor && data.mainPost) {
 				commentsAuthor.innerHTML = '<span class="nodebb-author"><img src="' + data.mainPost.user.picture + '" /> <a href="' + nodeBBURL + '/user/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></span>';
 			}
 
