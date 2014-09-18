@@ -210,7 +210,7 @@
 		res.render('comments/admin', {});
 	}
 
-	Comments.init = function(app, middleware, controllers) {
+	Comments.init = function(app, middleware, controllers, callback) {
 		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
 			Comments.template = data.toString();
 		});
@@ -221,6 +221,8 @@
 
 		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
 		app.get('/api/admin/blog-comments', renderAdmin);
+
+		callback();
 	};
 
 }(module));
