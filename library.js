@@ -88,7 +88,7 @@
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
-					mainPost: data.mainPost ? data.mainPost[0] : {},
+					mainPost: data.mainPost ? data.mainPost[0] : null,
 					atBottom: bottom,
 					atTop: top
 				});
