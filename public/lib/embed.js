@@ -17,14 +17,14 @@
 
 	function newXHR() {
 		try {
-	        return XHR = new XMLHttpRequest();
-	    } catch (e) {
-	        try {
-	            return XHR = new ActiveXObject("Microsoft.XMLHTTP");
-	        } catch (e) {
-	            return XHR = new ActiveXObject("Msxml2.XMLHTTP");
-	        }
-	    }
+			return XHR = new XMLHttpRequest();
+		} catch (e) {
+			try {
+				return XHR = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {
+				return XHR = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+		}
 	}
 
 	var XHR = newXHR(), pagination = 0, modal;
@@ -150,11 +150,19 @@
 					adminXHR.open('GET', '/ghost/api/v0.1/posts/' + articleID);
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
-							var articleData = JSON.parse(adminXHR.responseText).posts[0],
+							var articleData = JSON.parse(adminXHR.responseText);
+							var markdown;
+							var title;
+							if(articleData.hasOwnProperty("posts")){
+								markdown = articleData.posts[0].markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+								title = articleData.posts[0].title;
+							}
+							else{
 								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
-
+								title = articleData.title;
+							}
 							document.getElementById('nodebb-content-markdown').value = markdown;
-							document.getElementById('nodebb-content-title').value = articleData.title;
+							document.getElementById('nodebb-content-title').value = title;
 						} else {
 							nodebbDiv.innerHTML = 'Welcome ' + data.user.username + ', <a href="/ghost">sign in to Ghost</a> to enable the publish button.</a>';
 						}
