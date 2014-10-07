@@ -12,7 +12,7 @@
 			"hook": "filter:posts.custom_profile_info", "method": "addLinkbackToArticle"
 		},
 		{
-			"hook": "action:app.load", "method": "init"
+			"hook": "static:app.load", "method": "init"
 		}
 	],
 	"scripts": [
