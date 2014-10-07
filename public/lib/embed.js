@@ -154,12 +154,12 @@
 							var markdown;
 							var title;
 							if(articleData.hasOwnProperty("posts")){
-								markdown = articleData.posts[0].markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 								title = articleData.posts[0].title;
+								markdown = articleData.posts[0].markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 							}
 							else{
-								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 								title = articleData.title;
+								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 							}
 							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = title;
