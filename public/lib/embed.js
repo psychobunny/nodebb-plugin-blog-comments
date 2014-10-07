@@ -1,6 +1,6 @@
 (function() {
 	"use strict";
-	
+
 	var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
 	var pluginURL = nodeBBURL + '/plugins/nodebb-plugin-blog-comments',
@@ -33,11 +33,11 @@
 		savedText = contentDiv.value;
 		modal = window.open(nodeBBURL + "/" + type + "/#blog/authenticate","_blank","toolbar=no, scrollbars=no, resizable=no, width=600, height=675");
 		var timer = setInterval(function() {
-			if(modal.closed) {  
+			if(modal.closed) {
 				clearInterval(timer);
 				pagination = 0;
 				reloadComments();
-			}  
+			}
 		}, 500);
 	}
 
@@ -69,7 +69,7 @@
 					}
 				}
 			}
-			
+
 			if (commentsCounter) {
 				commentsCounter.innerHTML = data.postCount ? (data.postCount - 1) : 0;
 			}
@@ -84,7 +84,7 @@
 
 			if (pagination) {
 				html = normalizePost(parse(data, templates.blocks['posts']));
-				commentsDiv.innerHTML = commentsDiv.innerHTML + html;	
+				commentsDiv.innerHTML = commentsDiv.innerHTML + html;
 			} else {
 				html = parse(data, data.template);
 				nodebbDiv.innerHTML = normalizePost(html);
@@ -100,7 +100,7 @@
 					}
 				}
 			}, 100);
-			
+
 			if (savedText) {
 				contentDiv.value = savedText;
 			}
@@ -112,7 +112,7 @@
 					reloadComments();
 				}
 				if (data.posts.length) {
-					loadMore.style.display = 'inline-block';	
+					loadMore.style.display = 'inline-block';
 				}
 
 				if (pagination * 10 + data.posts.length + 1 >= data.postCount) {
@@ -134,7 +134,7 @@
 						}
 
 						document.getElementById('nodebb-error').innerHTML = error;
-					}					
+					}
 				} else {
 					document.getElementById('nodebb-register').onclick = function() {
 						authenticate('register');
@@ -150,7 +150,7 @@
 					adminXHR.open('GET', '/ghost/api/v0.1/posts/' + articleID);
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
-							var articleData = JSON.parse(adminXHR.responseText),
+							var articleData = JSON.parse(adminXHR.responseText).posts[0],
 								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
 							document.getElementById('nodebb-content-markdown').value = markdown;
@@ -166,7 +166,7 @@
 		}
 	};
 
-	
+
 
 
 	function reloadComments() {
@@ -200,7 +200,7 @@
 		if (seconds < 10) {
 			return 'just now';
 		}
-		
+
 		var i = 0, format;
 		while (format = time_formats[i++]) {
 			if (seconds < format[0]) {
