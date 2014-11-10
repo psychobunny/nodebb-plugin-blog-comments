@@ -25,6 +25,9 @@
   "bugs": {
     "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
   },
+  "nbbpm": {
+    "compatibility": "^0.6.0"
+  },
   "readme": "",
   "readmeFilename": "README.md",
   "_id": "nodebb-plugin-blog-comments@0.0.1",

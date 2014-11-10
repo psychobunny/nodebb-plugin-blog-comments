@@ -23,8 +23,5 @@
 		"css": "./public/css",
 		"lib": "./public/lib"
 	},
-	"nbbpm": {
-		"compatibility": "^0.6.0"
-	},
 	"templates": "./public/templates"
 }
