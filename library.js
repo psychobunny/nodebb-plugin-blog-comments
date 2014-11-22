@@ -143,8 +143,8 @@
 				groups.isMember(uid, 'publishers', next);
 			}
 		}, function(err, userStatus) {
-			if (!userStatus.isAdmin && !userStatus.isPublisher) {
-				res.json({error: "Only Administrators or members of the publishers group can publish articles"});
+			if (!userStatus.isAdministrator && !userStatus.isPublisher) {
+				return res.json({error: "Only Administrators or members of the publishers group can publish articles"});
 			}
 
 			topics.post({
@@ -156,7 +156,7 @@
 				cid: cid
 			}, function(err, result) {
 				if(err) {
-					res.json({error: err.message});
+					return res.json({error: err.message});
 				}
 
 				if (result && result.postData && result.postData.tid) {
