@@ -20,7 +20,7 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 
 ### Ghost Installation
 
-Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere after `{{/post}}` and before `article`. All you have to edit is the first line - put the URL to your NodeBB forum's home page here.
+Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere after `{{/post}}` and before `</article>`. All you have to edit is the first line - put the URL to your NodeBB forum's home page here.
 
 ```html
 <a id="nodebb/comments"></a>
