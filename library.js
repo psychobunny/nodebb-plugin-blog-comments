@@ -9,9 +9,10 @@
 		topics = module.parent.require('../src/topics.js'),
 		user = module.parent.require('../src/user.js'),
 		groups = module.parent.require('../src/groups.js'),
-		fs = require('fs'),
-		path = require('path'),
-		async = require('async');
+		fs = module.parent.require('fs'),
+		path = module.parent.require('path'),
+		async = module.parent.require('async'),
+		winston = module.parent.require('winston');
 
 	module.exports = Comments;
 
@@ -64,6 +65,11 @@
 						url = req.get('origin');
 					}
 				});
+
+
+				if (!url) {
+					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
+				}
 
 				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
