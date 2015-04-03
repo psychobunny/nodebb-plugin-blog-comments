@@ -161,15 +161,15 @@
 				req: req,
 				cid: cid
 			}, function(err, result) {
-				if(err) {
-					res.json({error: err.message});
-				}
-
-				if (result && result.postData && result.postData.tid) {
-					posts.setPostField(result.postData.pid, 'blog-comments:url', url);
-					db.setObjectField('blog-comments', commentID, result.postData.tid);
-
-					res.redirect((req.header('Referer') || '/') + '#nodebb/comments');
+				if (!err && result && result.postData && result.postData.tid) {
+					posts.setPostField(result.postData.pid, 'blog-comments:url', url, function(err) {
+						if (err) {
+							return res.json({error: "Unable to post topic", result: result});		
+						}
+						
+						db.setObjectField('blog-comments', commentID, result.postData.tid);
+						res.redirect((req.header('Referer') || '/') + '#nodebb/comments');
+					});
 				} else {
 					res.json({error: "Unable to post topic", result: result});
 				}
