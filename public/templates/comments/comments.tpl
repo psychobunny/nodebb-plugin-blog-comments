@@ -35,7 +35,7 @@
 						</a>
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small>{user.username} commented {posts.timestamp}</small><br />{posts.content}</div>
+						<div class="post-content" itemprop="text"><small><strong>{user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
 					</div>
 				</div>
 			</div>
