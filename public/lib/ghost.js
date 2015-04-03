@@ -124,12 +124,11 @@
 				}
 
 				if (data.user && data.user.uid) {
-					var error = window.location.href.match(/error=[\w-]*/);
+					var error = window.location.href.match(/error=[\S]*/);
 					if (error) {
-						error = error[0].split('=')[1];
-						if (error === 'too-many-posts') {
+						if (error[0].indexOf('too-many-posts') !== -1) {
 							error = 'Please wait before posting so soon.';
-						} else if (error === 'content-too-short') {
+						} else if (error[0].indexOf('content-too-short') !== -1) {
 							error = 'Please post a longer reply.';
 						}
 
@@ -146,8 +145,11 @@
 				}
 			} else {
 				if (data.isAdmin) {
+					var markdown = document.getElementById('nbb-markdown').innerHTML
+					markdown = markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+
 					document.getElementById('nodebb-content-title').value = nbb.title;
-					document.getElementById('nodebb-content-markdown').value = document.getElementById('nbb-markdown').innerHTML;
+					document.getElementById('nodebb-content-markdown').value = markdown;
 					document.getElementById('nodebb-content-tags').value = JSON.stringify(nbb.tags);
 				}
 			}
