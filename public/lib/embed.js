@@ -147,7 +147,7 @@
 			} else {
 				if (data.isAdmin) {
 					document.getElementById('nodebb-content-title').value = nbb.title;
-					document.getElementById('nodebb-content-markdown').value = nbb.markdown;
+					document.getElementById('nodebb-content-markdown').value = document.getElementById('nbb-markdown').innerHTML;
 					document.getElementById('nodebb-content-tags').value = JSON.stringify(nbb.tags);
 				}
 			}
