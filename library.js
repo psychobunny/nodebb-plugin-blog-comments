@@ -44,7 +44,7 @@
 				user: function(next) {
 					user.getUserData(uid, next);
 				},
-				isAdmin: function(next) {
+				isAdministrator: function(next) {
 					user.isAdministrator(uid, next);
 				},
 				isPublisher: function(next) {
@@ -90,7 +90,7 @@
 					user: data.user,
 					template: Comments.template,
 					token: res.locals.csrf_token,
-					isAdmin: !data.isAdmin ? data.isPublisher : data.isAdmin,
+					isAdmin: !data.isAdministrator ? data.isPublisher : data.isAdministrator,
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
@@ -149,8 +149,8 @@
 				groups.isMember(uid, 'publishers', next);
 			}
 		}, function(err, userStatus) {
-			if (!userStatus.isAdmin && !userStatus.isPublisher) {
-				res.json({error: "Only Administrators or members of the publishers group can publish articles"});
+			if (!userStatus.isAdministrator && !userStatus.isPublisher) {
+				return res.json({error: "Only Administrators or members of the publishers group can publish articles"});
 			}
 
 			topics.post({
