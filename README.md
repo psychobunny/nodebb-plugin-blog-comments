@@ -32,7 +32,7 @@ nbb.url = '//your.nodebb.com'; // EDIT THIS
 nbb.articleID = '{{../post.id}}'; nbb.title = '{{../post.title}}';
 nbb.tags = [{{#../post.tags}}"{{name}}",{{/../post.tags}}];
 nbb.script = document.createElement('script'); nbb.script.type = 'text/javascript'; nbb.script.async = true;
-nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/embed.js';
+nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.min.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
@@ -61,7 +61,7 @@ var nodeBBURL = '//your.nodebb.com',
 
 (function() {
 var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
+nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.min.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
 })();
 </script>
