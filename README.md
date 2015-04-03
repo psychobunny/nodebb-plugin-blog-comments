@@ -29,7 +29,7 @@ var nbb = {};
 nbb.url = '//your.nodebb.com'; // EDIT THIS
 
 (function() {
-nbb.articleID = 6; '{{../post.id}}'; nbb.title = '{{../post.title}}';
+nbb.articleID = '{{../post.id}}'; nbb.title = '{{../post.title}}';
 nbb.tags = [{{#../post.tags}}"{{name}}",{{/../post.tags}}];
 nbb.script = document.createElement('script'); nbb.script.type = 'text/javascript'; nbb.script.async = true;
 nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/embed.js';
