@@ -6,6 +6,12 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
+## What's new in 0.3x
+
+* Fixed quite a few server crashes (especially when publishing)
+* Compatible with NodeBB 0.6x+ and Ghost 0.5.10
+* Added tags support for Ghost
+
 ## Screenshots
 
 ![blog comments](http://i.imgur.com/pPO42Hy.png)
