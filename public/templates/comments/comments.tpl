@@ -4,7 +4,7 @@
 			<!-- IF isLoggedIn -->
 			<img src="{user.picture}" class="profile-image" />
 			<!-- ELSE -->
-			<img src="http://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
+			<img src="https://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
 			<!-- ENDIF isLoggedIn -->
 		</div>
 		<form action="{relative_path}/comments/reply" method="post">
