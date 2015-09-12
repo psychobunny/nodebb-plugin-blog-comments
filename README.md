@@ -109,6 +109,7 @@ You may use a comma-separated entry of blogs in the ACP to support publishing fr
 ## Sites using this plugin
 
 * [NodeBB's Blog](http://blog.nodebb.org) (Ghost).
+* [The Unknown Artist Hour](http://theunknownartisthour.com) (Ghost).
 * [Burn after compiling](http://burnaftercompiling.com) (Wordpress).
 
 Please submit a PR to add your site here :)
