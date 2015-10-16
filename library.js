@@ -147,7 +147,7 @@
 			}
 		});
 
-		var cid = meta.config['blog-comments:cid'] || '';
+		var cid = meta.config['blog-comments:cid'].toString() || '';
 		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
 
 		async.parallel({
