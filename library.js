@@ -93,7 +93,7 @@
 					postCount: data.postCount,
 					user: data.user,
 					template: Comments.template,
-					token: res.locals.csrf_token,
+					token: req.csrfToken(),
 					isAdmin: !data.isAdministrator ? data.isPublisher : data.isAdministrator,
 					isLoggedIn: !!uid,
 					tid: tid,
@@ -234,7 +234,7 @@
 			Comments.template = data.toString();
 		});
 
-		app.get('/comments/get/:id/:pagination?', Comments.getCommentData);
+		app.get('/comments/get/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
 		app.post('/comments/reply', Comments.replyToComment);
 		app.post('/comments/publish', Comments.publishArticle);
 
