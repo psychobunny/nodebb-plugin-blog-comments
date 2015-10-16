@@ -26,7 +26,7 @@
     "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
   },
   "nbbpm": {
-    "compatibility": "^0.6.0"
+    "compatibility": "^0.6.0 || ^0.7.0 || ^0.8.0"
   },
   "readme": "",
   "readmeFilename": "README.md",
