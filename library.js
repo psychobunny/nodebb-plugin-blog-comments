@@ -71,6 +71,10 @@
 					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
 				}
 
+				if (url[url.length - 1] === '/') {
+					url = url.substring(0, url.length - 1);
+				}
+
 				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 				res.header("Access-Control-Allow-Credentials", "true");
