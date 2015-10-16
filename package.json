@@ -13,9 +13,11 @@
   "keywords": [
     "nodebb",
     "plugin",
-    "mousetrap",
-    "keyboard",
-    "shortcuts"
+    "blog",
+    "ghost",
+    "wordpress",
+    "commenting",
+    "comments"
   ],
   "author": {
     "name": "psychobunny",
