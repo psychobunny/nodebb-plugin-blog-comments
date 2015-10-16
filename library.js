@@ -61,18 +61,18 @@
 					url;
 
 				hostUrls.forEach(function(hostUrl) {
-					if (hostUrl.trim() === req.get('origin')) {
+					hostUrl = hostUrl.trim();
+					if (hostUrl[hostUrl.length - 1] === '/') {
+						hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+					}
+
+					if (hostUrl === req.get('origin')) {
 						url = req.get('origin');
 					}
 				});
 
-
 				if (!url) {
 					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
-				}
-
-				if (url[url.length - 1] === '/') {
-					url = url.substring(0, url.length - 1);
 				}
 
 				res.header("Access-Control-Allow-Origin", url);
