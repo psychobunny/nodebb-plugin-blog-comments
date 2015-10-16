@@ -134,10 +134,15 @@
 			uid = req.user ? req.user.uid : 0;
 
 		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-			position;
+			position = 0;
 
 		hostUrls.forEach(function(hostUrl, i) {
-			if (hostUrl.trim() === req.get('origin')) {
+			hostUrl = hostUrl.trim();
+			if (hostUrl[hostUrl.length - 1] === '/') {
+				hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+			}
+
+			if (hostUrl === req.get('origin')) {
 				position = i;
 			}
 		});
