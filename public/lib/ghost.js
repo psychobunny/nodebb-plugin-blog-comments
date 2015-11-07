@@ -3,7 +3,7 @@
 	
 	var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
 
-	var pluginURL = nodeBBURL + '/plugins/nodebb-plugin-blog-comments',
+	var pluginURL = nbb.url + '/plugins/nodebb-plugin-blog-comments',
 		savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter, commentsAuthor, commentsCategory;
 
 	var stylesheet = document.createElement("link");
@@ -31,7 +31,7 @@
 
 	function authenticate(type) {
 		savedText = contentDiv.value;
-		modal = window.open(nodeBBURL + "/" + type + "/#blog/authenticate","_blank","toolbar=no, scrollbars=no, resizable=no, width=600, height=675");
+		modal = window.open(nbb.url + "/" + type + "/#blog/authenticate","_blank","toolbar=no, scrollbars=no, resizable=no, width=600, height=675");
 		var timer = setInterval(function() {
 			if(modal.closed) {  
 				clearInterval(timer);
@@ -42,8 +42,8 @@
 	}
 
 	function normalizePost(post) {
-		return post.replace(/href="\/(?=\w)/g, 'href="' + nodeBBURL + '/')
-				.replace(/src="\/(?=\w)/g, 'src="' + nodeBBURL + '/');
+		return post.replace(/href="\/(?=\w)/g, 'href="' + nbb.url + '/')
+				.replace(/src="\/(?=\w)/g, 'src="' + nbb.url + '/');
 	}
 
 	XHR.onload = function() {
@@ -55,9 +55,9 @@
 			commentsAuthor = document.getElementById('nodebb-comments-author');
 			commentsCategory = document.getElementById('nodebb-comments-category');
 
-			data.relative_path = nodeBBURL;
+			data.relative_path = nbb.url;
 			data.redirect_url = articlePath;
-			data.article_id = articleID;
+			data.article_id = nbb.articleID;
 			data.pagination = pagination;
 			data.postCount = parseInt(data.postCount, 10);
 
@@ -75,11 +75,11 @@
 			}
 
 			if (commentsCategory && data.category) {
-				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/category/' + data.category.slug + '">' + data.category.name + '</a>';
+				commentsCategory.innerHTML = '<a href="' + nbb.url + '/category/' + data.category.slug + '">' + data.category.name + '</a>';
 			}
 
 			if (commentsAuthor && data.mainPost) {
-				commentsAuthor.innerHTML = '<span class="nodebb-author"><img src="' + data.mainPost.user.picture + '" /> <a href="' + nodeBBURL + '/user/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></span>';
+				commentsAuthor.innerHTML = '<span class="nodebb-author"><img src="' + data.mainPost.user.picture + '" /> <a href="' + nbb.url + '/user/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></span>';
 			}
 
 			if (pagination) {
@@ -124,12 +124,11 @@
 				}
 
 				if (data.user && data.user.uid) {
-					var error = window.location.href.match(/error=[\w-]*/);
+					var error = window.location.href.match(/error=[\S]*/);
 					if (error) {
-						error = error[0].split('=')[1];
-						if (error === 'too-many-posts') {
+						if (error[0].indexOf('too-many-posts') !== -1) {
 							error = 'Please wait before posting so soon.';
-						} else if (error === 'content-too-short') {
+						} else if (error[0].indexOf('content-too-short') !== -1) {
 							error = 'Please post a longer reply.';
 						}
 
@@ -146,21 +145,12 @@
 				}
 			} else {
 				if (data.isAdmin) {
-					var adminXHR = newXHR();
-					adminXHR.open('GET', '/ghost/api/v0.1/posts/' + articleID);
-					adminXHR.onload = function() {
-						if (adminXHR.status >= 200 && adminXHR.status < 400) {
-							var articleData = JSON.parse(adminXHR.responseText),
-								markdown = articleData.markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+					var markdown = document.getElementById('nbb-markdown').innerHTML
+					markdown = markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
-							document.getElementById('nodebb-content-markdown').value = markdown;
-							document.getElementById('nodebb-content-title').value = articleData.title;
-						} else {
-							nodebbDiv.innerHTML = 'Welcome ' + data.user.username + ', <a href="/ghost">sign in to Ghost</a> to enable the publish button.</a>';
-						}
-					}
-
-					adminXHR.send();
+					document.getElementById('nodebb-content-title').value = nbb.title;
+					document.getElementById('nodebb-content-markdown').value = markdown;
+					document.getElementById('nodebb-content-tags').value = JSON.stringify(nbb.tags);
 				}
 			}
 		}
@@ -170,7 +160,7 @@
 
 
 	function reloadComments() {
-		XHR.open('GET', nodeBBURL + '/comments/get/' + articleID + '/' + pagination, true);
+		XHR.open('GET', nbb.url + '/comments/get/' + nbb.articleID + '/' + pagination, true);
 		XHR.withCredentials = true;
 		XHR.send();
 	}

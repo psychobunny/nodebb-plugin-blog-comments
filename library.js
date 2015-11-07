@@ -9,9 +9,10 @@
 		topics = module.parent.require('../src/topics.js'),
 		user = module.parent.require('../src/user.js'),
 		groups = module.parent.require('../src/groups.js'),
-		fs = require('fs'),
-		path = require('path'),
-		async = require('async');
+		fs = module.parent.require('fs'),
+		path = module.parent.require('path'),
+		async = module.parent.require('async'),
+		winston = module.parent.require('winston');
 
 	module.exports = Comments;
 
@@ -43,7 +44,7 @@
 				user: function(next) {
 					user.getUserData(uid, next);
 				},
-				isAdmin: function(next) {
+				isAdministrator: function(next) {
 					user.isAdministrator(uid, next);
 				},
 				isPublisher: function(next) {
@@ -60,10 +61,19 @@
 					url;
 
 				hostUrls.forEach(function(hostUrl) {
-					if (hostUrl.trim() === req.get('origin')) {
+					hostUrl = hostUrl.trim();
+					if (hostUrl[hostUrl.length - 1] === '/') {
+						hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+					}
+
+					if (hostUrl === req.get('origin')) {
 						url = req.get('origin');
 					}
 				});
+
+				if (!url) {
+					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
+				}
 
 				res.header("Access-Control-Allow-Origin", url);
 				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
@@ -83,12 +93,12 @@
 					postCount: data.postCount,
 					user: data.user,
 					template: Comments.template,
-					token: res.locals.csrf_token,
-					isAdmin: !data.isAdmin ? data.isPublisher : data.isAdmin,
+					token: req.csrfToken(),
+					isAdmin: !data.isAdministrator ? data.isPublisher : data.isAdministrator,
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
-					mainPost: data.mainPost[0],
+					mainPost: data.mainPost ? data.mainPost[0] : null,
 					atBottom: bottom,
 					atTop: top
 				});
@@ -124,15 +134,20 @@
 			uid = req.user ? req.user.uid : 0;
 
 		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-			position;
+			position = 0;
 
 		hostUrls.forEach(function(hostUrl, i) {
-			if (hostUrl.trim() === req.get('origin')) {
+			hostUrl = hostUrl.trim();
+			if (hostUrl[hostUrl.length - 1] === '/') {
+				hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+			}
+
+			if (hostUrl === req.get('origin')) {
 				position = i;
 			}
 		});
 
-		var cid = meta.config['blog-comments:cid'] || '';
+		var cid = meta.config['blog-comments:cid'].toString() || '';
 		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
 
 		async.parallel({
@@ -143,8 +158,8 @@
 				groups.isMember(uid, 'publishers', next);
 			}
 		}, function(err, userStatus) {
-			if (!userStatus.isAdmin && !userStatus.isPublisher) {
-				res.json({error: "Only Administrators or members of the publishers group can publish articles"});
+			if (!userStatus.isAdministrator && !userStatus.isPublisher) {
+				return res.json({error: "Only Administrators or members of the publishers group can publish articles"});
 			}
 
 			topics.post({
@@ -155,15 +170,15 @@
 				req: req,
 				cid: cid
 			}, function(err, result) {
-				if(err) {
-					res.json({error: err.message});
-				}
-
-				if (result && result.postData && result.postData.tid) {
-					posts.setPostField(result.postData.pid, 'blog-comments:url', url);
-					db.setObjectField('blog-comments', commentID, result.postData.tid);
-
-					res.redirect((req.header('Referer') || '/') + '#nodebb/comments');
+				if (!err && result && result.postData && result.postData.tid) {
+					posts.setPostField(result.postData.pid, 'blog-comments:url', url, function(err) {
+						if (err) {
+							return res.json({error: "Unable to post topic", result: result});		
+						}
+						
+						db.setObjectField('blog-comments', commentID, result.postData.tid);
+						res.redirect((req.header('Referer') || '/') + '#nodebb/comments');
+					});
 				} else {
 					res.json({error: "Unable to post topic", result: result});
 				}
@@ -210,12 +225,16 @@
 		res.render('comments/admin', {});
 	}
 
-	Comments.init = function(app, middleware, controllers, callback) {
+	Comments.init = function(params, callback) {
+		var app = params.router,
+			middleware = params.middleware,
+			controllers = params.controllers;
+			
 		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
 			Comments.template = data.toString();
 		});
 
-		app.get('/comments/get/:id/:pagination?', Comments.getCommentData);
+		app.get('/comments/get/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
 		app.post('/comments/reply', Comments.replyToComment);
 		app.post('/comments/publish', Comments.publishArticle);
 

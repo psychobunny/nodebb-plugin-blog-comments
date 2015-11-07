@@ -4,13 +4,13 @@
 			<!-- IF isLoggedIn -->
 			<img src="{user.picture}" class="profile-image" />
 			<!-- ELSE -->
-			<img src="http://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
+			<img src="https://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
 			<!-- ENDIF isLoggedIn -->
 		</div>
 		<form action="{relative_path}/comments/reply" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
 		<!-- IF isLoggedIn -->
-			<small>Signed in as <strong>{user.username}</strong>. <span id="nodebb-error"></span></small>
+			<small>Signed in as <strong>{user.username}</strong>. <strong id="nodebb-error"></strong></small>
 			<button class="btn btn-primary">Post a Reply</button>
 			<input type="hidden" name="_csrf" value="{token}" />
 			<input type="hidden" name="tid" value="{tid}" />
@@ -39,7 +39,7 @@
 						</a>
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small>{user.username} commented {posts.timestamp}</small><br />{posts.content}</div>
+						<div class="post-content" itemprop="text"><small><strong>{user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
 					</div>
 				</div>
 			</div>
@@ -59,7 +59,7 @@
 		<form action="{relative_path}/comments/reply" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
 		<!-- IF isLoggedIn -->
-			<small>Signed in as <strong>{user.username}</strong>. <span id="nodebb-error"></span></small>
+			<small>Signed in as <strong>{user.username}</strong>. <strong id="nodebb-error"></strong></small>
 			<button class="btn btn-primary">Post a Reply</button>
 			<input type="hidden" name="_csrf" value="{token}" />
 			<input type="hidden" name="tid" value="{tid}" />

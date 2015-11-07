@@ -6,6 +6,12 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
+## What's new in 0.3x
+
+* Fixed quite a few server crashes (especially when publishing)
+* Compatible with NodeBB 0.6x+ and Ghost 0.5.10
+* Added tags support for Ghost
+
 ## Screenshots
 
 ![blog comments](http://i.imgur.com/pPO42Hy.png)
@@ -20,22 +26,27 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 
 ### Ghost Installation
 
-Place this anywhere in `yourtheme/post.hbs`, ideally at the bottom - somewhere after `{{/post}}` and before `article`. All you have to edit is the first line - put the URL to your NodeBB forum's home page here.
+Paste this any where in `yourtheme/post.hbs`, somewhere between `{{#post}}` and `{{/post}}`. All you have to edit is line 3 (`nbb.url`) - put the URL to your NodeBB forum's home page here.
 
 ```html
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
-var nodeBBURL = '//your.nodebb.com',
-	articleID = '{{post.id}}';
+var nbb = {};
+nbb.url = '//your.nodebb.com'; // EDIT THIS
 
 (function() {
-var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/embed.min.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
+nbb.articleID = '{{../post.id}}'; nbb.title = '{{../post.title}}';
+nbb.tags = [{{#../post.tags}}"{{name}}",{{/../post.tags}}];
+nbb.script = document.createElement('script'); nbb.script.type = 'text/javascript'; nbb.script.async = true;
+nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
+<script id="nbb-markdown" type="text/markdown">{{{../post.markdown}}}</script>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
+
+If you wish, you can move `<a id="nodebb/comments"></a>` to where you want to place the actual comments widget.
 
 ### Wordpress Installation
 
@@ -98,6 +109,7 @@ You may use a comma-separated entry of blogs in the ACP to support publishing fr
 ## Sites using this plugin
 
 * [NodeBB's Blog](http://blog.nodebb.org) (Ghost).
+* [The Unknown Artist Hour](http://theunknownartisthour.com) (Ghost).
 * [Burn after compiling](http://burnaftercompiling.com) (Wordpress).
 
 Please submit a PR to add your site here :)
