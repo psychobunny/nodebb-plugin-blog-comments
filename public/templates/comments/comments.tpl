@@ -31,7 +31,11 @@
 				<div class="topic-body">
 					<div class="topic-profile-pic">
 						<a href="{relative_path}/user/{user.userslug}">
+							<!-- IF user.picture -->
 							<img src="{user.picture}" alt="{user.username}" class="profile-image" title="{user.username}">
+							<!-- ELSE -->
+							<div class="profile-image" style="background-color: {user:icon.bgColor}" title="{user.username}" alt="{user.username}">{user.icon:text}</div>
+							<!-- ENDIF user.picture -->
 						</a>
 					</div>
 					<div class="topic-text">

@@ -75,8 +75,10 @@
 #nodebb .profile-image {
     width: 52px;
     height: 52px;
-    border-radius: 100%;
+    border-radius: 50%;
     border: 1px solid #EFEFEF;
+    line-height: 52px;
+    font-size: 30px;
 }
 
 #nodebb > ul {
