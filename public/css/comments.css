@@ -78,7 +78,9 @@
     border-radius: 50%;
     border: 1px solid #EFEFEF;
     line-height: 52px;
-    font-size: 30px;
+    font-size: 26px;
+    color: white;
+    text-align: center;
 }
 
 #nodebb > ul {
