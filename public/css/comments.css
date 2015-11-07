@@ -43,6 +43,10 @@
 	left: -85px;
 }
 
+#nodebb .topic-profile-pic a {
+	text-decoration: none;
+}
+
 #nodebb .user {
 	left: -83px; /*why??*/
 }
