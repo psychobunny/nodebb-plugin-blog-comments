@@ -43,6 +43,10 @@
 	left: -85px;
 }
 
+#nodebb .topic-profile-pic a {
+	text-decoration: none;
+}
+
 #nodebb .user {
 	left: -83px; /*why??*/
 }
@@ -75,8 +79,12 @@
 #nodebb .profile-image {
     width: 52px;
     height: 52px;
-    border-radius: 100%;
+    border-radius: 50%;
     border: 1px solid #EFEFEF;
+    line-height: 52px;
+    font-size: 26px;
+    color: white;
+    text-align: center;
 }
 
 #nodebb > ul {
