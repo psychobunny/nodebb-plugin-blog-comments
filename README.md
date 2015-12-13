@@ -11,6 +11,7 @@ Articles are published to a forum category of your choice, and will gain a tag t
 * Fixed quite a few server crashes (especially when publishing)
 * Compatible with NodeBB 0.6x+ and Ghost 0.5.10
 * Added tags support for Ghost
+* Added comment support in general
 
 ## Screenshots
 
@@ -72,6 +73,65 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
 })();
 </script>
 <noscript>Please enable JavaScript to view comments</noscript>
+```
+
+### general 
+Paste this any where that you want load commenting system. All you have to edit is line 3 (`nbb.url`) - put the URL to your NodeBB forum's home page here.
+
+```html
+	<a id="nodebb/comments"></a>
+	<script type="text/javascript">
+	var nodeBBURL = '//your.nodebb.com',
+	//suppose your site is php base, you can alter this for other language.
+	<?php 
+		echo "articleID = " .getId().";";
+		$obj = new stdClass();
+		$obj->title_plain = "";
+		$obj->url="";
+		$obj->tags = [];
+		$obj->markDownContent= "";
+		echo "var articleData =" .json_encode($obj).";";
+	?>
+	
+	(function() {
+	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
+	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/generalphp.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view comments</noscript>
+```
+
+you must have some getId() function on your website, for example:
+
+** for php website **
+
+```php
+    <?php
+        function getId(){
+            $id = 0;
+            // unique id for each page of your website
+            return $id;
+        }
+    ?>    
+```
+
+if you don't have such id, you can use this function :
+
+```php
+    <?php
+        function getId(){
+            return stringToInteger($_SERVER['REQUEST_URI']);
+        }
+        function stringToInteger($string) {
+            $string = md5($string);
+            $output = '1';
+            for ($i = 0; $i < strlen($string); $i++) {
+                $output .= (string) ord($string[$i]);
+            }
+            return (int) $output;
+        }
+    ?>
 ```
 
 ### Comments Counter
