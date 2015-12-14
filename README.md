@@ -75,14 +75,14 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-### general 
-Paste this any where that you want load commenting system. All you have to edit is line 3 (`nbb.url`) - put the URL to your NodeBB forum's home page here.
+### General PHP
+Paste this any where that you want load commenting system. All you have to edit is line 3 (`nodeBBURL`) - put the URL to your NodeBB forum's home page here.
 
 ```html
 	<a id="nodebb/comments"></a>
 	<script type="text/javascript">
 	var nodeBBURL = '//your.nodebb.com',
-	//suppose your site is php base, you can alter this for other language.
+	
 	<?php 
 		echo "articleID = " .getId().";";
 		$obj = new stdClass();
@@ -102,9 +102,9 @@ Paste this any where that you want load commenting system. All you have to edit 
 	<noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-you must have some getId() function on your website, for example:
+You must have some getId() function on your website, for example:
 
-** for php website **
+**For a PHP website **
 
 ```php
     <?php
@@ -116,7 +116,7 @@ you must have some getId() function on your website, for example:
     ?>    
 ```
 
-if you don't have such id, you can use this function :
+If you don't have such ID, you can use this function that generates a unique ID from the URL:
 
 ```php
     <?php
