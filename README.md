@@ -104,7 +104,7 @@ Paste this any where that you want load commenting system. All you have to edit 
 
 You must have some getId() function on your website, for example:
 
-**For a PHP website **
+**For a PHP website**
 
 ```php
     <?php
