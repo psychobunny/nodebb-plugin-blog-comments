@@ -39,7 +39,7 @@
 						</a>
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small><strong>{user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
+						<div class="post-content" itemprop="text"><small><a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a> commented {posts.timestamp}</small><br />{posts.content}</div>
 					</div>
 				</div>
 			</div>
