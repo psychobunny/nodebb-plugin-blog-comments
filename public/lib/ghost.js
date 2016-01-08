@@ -150,6 +150,7 @@
 
 					document.getElementById('nodebb-content-title').value = nbb.title;
 					document.getElementById('nodebb-content-markdown').value = markdown;
+					document.getElementById('nodebb-content-cid').value = nbb.cid || -1;
 					document.getElementById('nodebb-content-tags').value = JSON.stringify(nbb.tags);
 				}
 			}

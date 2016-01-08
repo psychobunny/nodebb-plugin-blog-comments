@@ -34,6 +34,8 @@ Paste this any where in `yourtheme/post.hbs`, somewhere between `{{#post}}` and 
 <script type="text/javascript">
 var nbb = {};
 nbb.url = '//your.nodebb.com'; // EDIT THIS
+nbb.cid = 1;	// OPTIONAL. Forces a Category ID in NodeBB.
+				//  Omit it to fallback to specified IDs in the admin panel.
 
 (function() {
 nbb.articleID = '{{../post.id}}'; nbb.title = '{{../post.title}}';
@@ -64,7 +66,9 @@ if ( post_password_required() )
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
-	articleID = '<?php echo the_ID(); ?>';
+	articleID = '<?php echo the_ID(); ?>',
+	categoryID = 1; // OPTIONAL. Forces a Category ID in NodeBB.
+					 //  Omit it to fallback to specified IDs in the admin panel.
 
 (function() {
 var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
@@ -75,8 +79,8 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-### General PHP
-Paste this any where that you want load commenting system. All you have to edit is line 3 (`nodeBBURL`) - put the URL to your NodeBB forum's home page here.
+### General - PHP example
+Paste this any where that you want load commenting system. All you have to edit is line 3 (`nodeBBURL`) - put the URL to your NodeBB forum's home page here. You can also use any template engine (hbs, eco...) instead of PHP.
 
 ```html
 	<a id="nodebb/comments"></a>
@@ -90,6 +94,8 @@ Paste this any where that you want load commenting system. All you have to edit 
 		$obj->url="";
 		$obj->tags = [];
 		$obj->markDownContent= "";
+		$obj->cid = 1; // OPTIONAL. Forces a Category ID in NodeBB.
+						// Omit it to fallback to specified IDs in the admin panel.
 		echo "var articleData =" .json_encode($obj).";";
 	?>
 	

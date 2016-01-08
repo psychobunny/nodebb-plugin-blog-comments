@@ -151,6 +151,7 @@
 								gTags = articleData.tags,
 								url = articleData.url,
 								title= articleData.title_plain,
+								cid = articleData.cid || -1,
 								tags = [];
 							translator.innerHTML = articleData.markDownContent;
 
@@ -163,6 +164,7 @@
 							}
 							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = title;
+							document.getElementById('nodebb-content-cid').value = cid;
 							document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
 						} else {
 							console.error('Declare articleData variable!');
