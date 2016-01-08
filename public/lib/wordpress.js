@@ -167,6 +167,7 @@
 
 							document.getElementById('nodebb-content-markdown').value = markdown;
 							document.getElementById('nodebb-content-title').value = articleData.title_plain;
+							document.getElementById('nodebb-content-cid').value = categoryID || -1;
 							document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
 						} else {
 							console.warn('Unable to access API. Please install the JSON API plugin located at: http://wordpress.org/plugins/json-api');

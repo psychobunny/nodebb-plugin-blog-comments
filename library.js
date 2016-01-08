@@ -131,24 +131,27 @@
 			url = req.body.url,
 			commentID = req.body.id,
 			tags = req.body.tags,
-			uid = req.user ? req.user.uid : 0;
+			uid = req.user ? req.user.uid : 0,
+			cid = JSON.parse(req.body.cid);
 
-		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-			position = 0;
+		if (cid === -1) {
+			var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
+				position = 0;
 
-		hostUrls.forEach(function(hostUrl, i) {
-			hostUrl = hostUrl.trim();
-			if (hostUrl[hostUrl.length - 1] === '/') {
-				hostUrl = hostUrl.substring(0, hostUrl.length - 1);
-			}
+			hostUrls.forEach(function(hostUrl, i) {
+				hostUrl = hostUrl.trim();
+				if (hostUrl[hostUrl.length - 1] === '/') {
+					hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+				}
 
-			if (hostUrl === req.get('origin')) {
-				position = i;
-			}
-		});
+				if (hostUrl === req.get('origin')) {
+					position = i;
+				}
+			});
 
-		var cid = meta.config['blog-comments:cid'].toString() || '';
-		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
+			cid = meta.config['blog-comments:cid'].toString() || '';
+			cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
+		}
 
 		async.parallel({
 			isAdministrator: function(next) {
