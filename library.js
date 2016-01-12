@@ -110,11 +110,13 @@
 		var content = req.body.content,
 			tid = req.body.tid,
 			url = req.body.url,
+			toPid = req.body.toPid,
 			uid = req.user ? req.user.uid : 0;
 
 		topics.reply({
 			tid: tid,
 			uid: uid,
+			toPid: toPid,
 			content: content
 		}, function(err, postData) {
 			if(err) {
