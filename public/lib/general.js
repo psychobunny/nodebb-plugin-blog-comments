@@ -64,6 +64,8 @@
 			for (var post in data.posts) {
 				if (data.posts.hasOwnProperty(post)) {
 					data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
+					data.posts[post].isReply = data.posts[post].hasOwnProperty('toPid') && parseInt(data.posts[post].toPid) !== parseInt(data.tid) - 1;
+					data.posts[post].parentUsername = data.posts[post].hasOwnProperty('parent') ? data.posts[post].parent.username : '';
 					if (data.posts[post]['blog-comments:url']) {
 						delete data.posts[post];
 					}
@@ -144,6 +146,51 @@
 						authenticate('login');
 					}
 				}
+
+				var nodebbCommentsList = nodebbDiv.querySelector('#nodebb-comments-list');
+				var bindOnClick = function(nodeList, handler) {
+					for (var i = nodeList.length - 1; i >= 0; i--) {
+					  nodeList[i].onclick = handler;
+					}
+				};
+
+				bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/parent"]'), function(event) {
+					var goTo = nodebbCommentsList.querySelector('.topic-item[data-pid="' + event.target.getAttribute('data-topid') + '"] .topic-text')
+					goTo.scrollIntoView(true);
+					goTo.classList.add('highlight');
+					setTimeout(function() {
+						goTo.classList.remove('highlight');
+					}, 1000);
+
+				});
+
+				bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/reply"],[component="post/quote"]'), function(event) {
+					var topicItem = event.target;
+					while (topicItem && !topicItem.classList.contains('topic-item')) {
+						topicItem = topicItem.parentElement;
+					}
+
+					if (topicItem) {
+						var elementForm = topicItem.querySelector('form');
+						var visibleForm = nodebbCommentsList.querySelector('li .topic-item form:not(.hidden)');
+						var formInput = elementForm.querySelector('textarea');
+
+						if (visibleForm && visibleForm !== elementForm) {
+							visibleForm.classList.add('hidden');
+						}
+
+						if (/\/quote$/.test(event.target.getAttribute('component'))) {
+							var postBody = topicItem.querySelector('.post-content .post-body');
+							var quote = (postBody.innerText ? postBody.innerText : postBody.textContent).split('\n').map(function(line) { return line ? '> ' + line : line; }).join('\n');
+							formInput.value = '@' + topicItem.getAttribute('data-userslug') + ' said:\n' + quote + formInput.value;
+						} else {
+							formInput.value = '@' + topicItem.getAttribute('data-userslug') + ': ' + formInput.value
+						}
+
+						elementForm.classList.remove('hidden');
+					}
+				});
+
 			} else {
 				if (data.isAdmin) {
 						if (articleData) {
