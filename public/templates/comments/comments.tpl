@@ -39,7 +39,7 @@
 						</a>
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small><span class="post-tools no-select"><a component="post/reply">reply</a><a component="post/quote">quote</a></span><a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a> commented {posts.timestamp} <!-- IF posts.isReply --> <button component="post/parent" class="reply-label no-select" data-topid="{posts.toPid}"><i class="fa fa-reply"></i> @{posts.parentUsername}</button> <!-- ENDIF posts.isReply --> </small><br /><div class="post-body">{posts.content}</div></div>
+						<div class="post-content" itemprop="text"><small><span class="post-tools no-select"><a component="post/reply">reply</a><a component="post/quote">quote</a></span><a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a> commented {posts.timestamp} <!-- IF posts.isReply --> <!-- IF !posts.deletedReply --> <button component="post/parent" class="reply-label no-select" data-topid="{posts.toPid}"><i class="fa fa-reply"></i> @{posts.parentUsername}</button> <!-- ENDIF !posts.deletedReply --> <!-- ENDIF posts.isReply --> </small><br /><div class="post-body">{posts.content}</div></div>
 					</div>
 				</div>
 				<form action="{relative_path}/comments/reply" method="post" class="sub-reply-input hidden">

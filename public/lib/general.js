@@ -61,13 +61,24 @@
 			data.pagination = pagination;
 			data.postCount = parseInt(data.postCount, 10);
 
-			for (var post in data.posts) {
-				if (data.posts.hasOwnProperty(post)) {
-					data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
-					data.posts[post].isReply = data.posts[post].hasOwnProperty('toPid') && parseInt(data.posts[post].toPid) !== parseInt(data.tid) - 1;
-					data.posts[post].parentUsername = data.posts[post].hasOwnProperty('parent') ? data.posts[post].parent.username : '';
-					if (data.posts[post]['blog-comments:url']) {
-						delete data.posts[post];
+			for (var p in data.posts) {
+				if (data.posts.hasOwnProperty(p)) {
+					var post = data.posts[p];
+					post.timestamp = timeAgo(parseInt(post.timestamp), 10);
+					post.isReply = post.hasOwnProperty('toPid') && parseInt(post.toPid) !== parseInt(data.tid) - 1;
+					post.deletedReply = false;
+					post.parentUsername = '';
+
+					if (post.hasOwnProperty('parent')) {
+						if (post.parent.hasOwnProperty('username')) {
+							post.parentUsername = post.parent.username;
+						} else {
+							post.deletedReply = true;
+						}
+					}
+
+					if (post['blog-comments:url']) {
+						delete data.posts[p];
 					}
 				}
 			}
@@ -153,13 +164,33 @@
 					  nodeList[i].onclick = handler;
 					}
 				};
+				var isInViewport = function(element) {
+					var rect = element.getBoundingClientRect();
+					return (
+					    rect.top >= 0 && rect.left >= 0 &&
+					    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+					    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+					);
+				};
 
 				bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/parent"]'), function(event) {
-					var goTo = nodebbCommentsList.querySelector('.topic-item[data-pid="' + event.target.getAttribute('data-topid') + '"] .topic-text')
-					goTo.scrollIntoView(true);
+					var element = event.target;
+					var goTo = nodebbCommentsList.querySelector('.topic-item[data-pid="' + element.getAttribute('data-topid') + '"]');
+
+					if (!goTo) {
+						goTo = nodebbDiv.querySelector('#nodebb-load-more');
+					}
+
+					if (!isInViewport(goTo)) {
+						goTo.scrollIntoView(false);
+					}
+
 					goTo.classList.add('highlight');
+					element.classList.add('highlight');
+
 					setTimeout(function() {
 						goTo.classList.remove('highlight');
+						element.classList.remove('highlight');
 					}, 1000);
 
 				});
