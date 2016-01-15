@@ -25,6 +25,7 @@
 	color: #333;
 	min-height: 75px;
 	position: relative;
+	transition: background-color 0.6s ease;
 }
 
 #nodebb .topic-body {
@@ -89,7 +90,7 @@
 
 #nodebb > ul {
     margin-bottom: 0px;
-    margin-top: 20px;
+    margin-top: 25px;
     list-style-type: none;
     padding: 0px;
 }
@@ -205,4 +206,77 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 100%;
+}
+
+#nodebb .sub-reply-input {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 10px;
+	padding-bottom: 48px;
+}
+
+#nodebb .no-select {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
+#nodebb .post-tools {
+	float: right;
+	text-transform: lowercase;
+}
+
+#nodebb .post-tools a {
+	padding-right: 10px;
+	cursor: pointer;
+	color: #38C071;
+	text-decoration: none;
+}
+
+#nodebb .reply-label {
+	padding: 1px 5px;
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #333;
+	background-color: #fff;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	white-space: nowrap;
+	transition: background-color 0.6s ease;
+	-webkit-appearance: button;
+	-moz-appearance: button;
+}
+
+#nodebb .reply-label i {
+	pointer-events: none;
+}
+
+#nodebb .reply-label:hover {
+	background-color: #E6E6E6;
+}
+
+#nodebb .hidden {
+	display: none;
+}
+
+#nodebb-load-more {
+	transition: background-color 0.6s ease;
+}
+
+#nodebb .highlight {
+	background-color: rgba(240, 173, 78, 0.75);
+}
+
+#nodebb .btn.btn-primary.highlight {
+	border-color: rgba(240, 173, 78, 0.75);
+	background-color: rgba(240, 173, 78, 0.75);
+}
+
+#nodebb .post-content blockquote {
+	font-size: 12px;
+	padding: 10px 20px;
+	margin: 0 0 20px;
+	font-size: 17.5px;
+	border-left: 5px solid #eee;
 }
