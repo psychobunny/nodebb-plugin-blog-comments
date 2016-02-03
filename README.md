@@ -66,6 +66,7 @@ if ( post_password_required() )
 <a id="nodebb/comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
+	wordpressURL = '<?php get_site_url(); ?>',
 	articleID = '<?php echo the_ID(); ?>',
 	categoryID = 1; // OPTIONAL. Forces a Category ID in NodeBB.
 					 //  Omit it to fallback to specified IDs in the admin panel.
