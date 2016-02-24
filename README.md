@@ -30,7 +30,7 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 Paste this any where in `yourtheme/post.hbs`, somewhere between `{{#post}}` and `{{/post}}`. All you have to edit is line 3 (`nbb.url`) - put the URL to your NodeBB forum's home page here.
 
 ```html
-<a id="nodebb/comments"></a>
+<a id="nodebb-comments"></a>
 <script type="text/javascript">
 var nbb = {};
 nbb.url = '//your.nodebb.com'; // EDIT THIS
@@ -49,7 +49,7 @@ nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-If you wish, you can move `<a id="nodebb/comments"></a>` to where you want to place the actual comments widget.
+If you wish, you can move `<a id="nodebb-comments"></a>` to where you want to place the actual comments widget.
 
 ### Wordpress Installation
 
@@ -63,7 +63,7 @@ if ( post_password_required() )
 	return;
 ?>
 
-<a id="nodebb/comments"></a>
+<a id="nodebb-comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
 	wordpressURL = '<?php get_site_url(); ?>',
@@ -84,7 +84,7 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
 Paste this any where that you want load commenting system. All you have to edit is line 3 (`nodeBBURL`) - put the URL to your NodeBB forum's home page here. You can also use any template engine (hbs, eco...) instead of PHP.
 
 ```html
-	<a id="nodebb/comments"></a>
+	<a id="nodebb-comments"></a>
 	<script type="text/javascript">
 	var nodeBBURL = '//your.nodebb.com',
 	
