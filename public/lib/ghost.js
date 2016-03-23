@@ -12,7 +12,8 @@
 	stylesheet.setAttribute("href", pluginURL + '/css/comments.css');
 
 	document.getElementsByTagName("head")[0].appendChild(stylesheet);
-	document.getElementById('nodebb-comments').insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
+	var nodebbComments = document.getElementById('nodebb-comments') || document.getElementByID('nodebb/comments');
+	nodebbComments.insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
 	nodebbDiv = document.getElementById('nodebb');
 
 	function newXHR() {
