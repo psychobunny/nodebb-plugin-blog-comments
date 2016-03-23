@@ -46,7 +46,7 @@ nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-If you wish, you can move `<a id="nodebb/comments"></a>` to where you want to place the actual comments widget.
+If you wish, you can move `<a id="nodebb-comments"></a>` to where you want to place the actual comments widget.
 
 ### Wordpress Installation
 
@@ -60,7 +60,7 @@ if ( post_password_required() )
 	return;
 ?>
 
-<a id="nodebb/comments"></a>
+<a id="nodebb-comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
 	articleID = '<?php echo the_ID(); ?>';
