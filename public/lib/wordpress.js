@@ -12,7 +12,7 @@
 	stylesheet.setAttribute("href", pluginURL + '/css/comments.css');
 
 	document.getElementsByTagName("head")[0].appendChild(stylesheet);
-	document.getElementById('nodebb/comments').insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
+	document.getElementById('nodebb-comments').insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
 	nodebbDiv = document.getElementById('nodebb');
 
 	function newXHR() {
