@@ -145,7 +145,7 @@
 				}
 			} else {
 				if (data.isAdmin) {
-					var markdown = document.getElementById('nbb-markdown').innerHTML
+					var markdown = unescape(document.getElementById('nbb-markdown').innerHTML);
 					markdown = markdown.split('\n\n').slice(0,2).join('\n\n') + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
 					document.getElementById('nodebb-content-title').value = nbb.title;
