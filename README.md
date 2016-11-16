@@ -45,7 +45,7 @@ nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
-<script id="nbb-markdown" type="text/markdown">{{{../post.markdown}}}</script>
+<script id="nbb-markdown" type="text/markdown">{{../post.markdown}}</script>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
