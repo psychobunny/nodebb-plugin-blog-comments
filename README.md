@@ -38,14 +38,15 @@ nbb.cid = 1;	// OPTIONAL. Forces a Category ID in NodeBB.
 				//  Omit it to fallback to specified IDs in the admin panel.
 
 (function() {
-nbb.articleID = '{{../post.id}}'; nbb.title = '{{../post.title}}';
+nbb.articleID = '{{../post.id}}';
 nbb.tags = [{{#../post.tags}}"{{name}}",{{/../post.tags}}];
 nbb.script = document.createElement('script'); nbb.script.type = 'text/javascript'; nbb.script.async = true;
 nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
-<script id="nbb-markdown" type="text/markdown">{{../post.markdown}}</script>
+<span id="nbb-title" style="display:none">{{../post.title}}</span>
+<span id="nbb-markdown" style="display:none">{{../post.markdown}}</span>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
@@ -53,7 +54,7 @@ If you wish, you can move `<a id="nodebb-comments"></a>` to where you want to pl
 
 ### Wordpress Installation
 
-First, install the [Wordpress JSON API](http://wordpress.org/plugins/json-api/) plugin. 
+First, install the [Wordpress JSON API](http://wordpress.org/plugins/json-api/) plugin.
 
 Replace the contents of `/wp-content/themes/YOUR_THEME/comments.php` with the following (back-up the old comments.php, just in case):
 
@@ -87,8 +88,8 @@ Paste this any where that you want load commenting system. All you have to edit 
 	<a id="nodebb-comments"></a>
 	<script type="text/javascript">
 	var nodeBBURL = '//your.nodebb.com',
-	
-	<?php 
+
+	<?php
 		echo "articleID = " .getId().";";
 		$obj = new stdClass();
 		$obj->title_plain = "";
@@ -99,7 +100,7 @@ Paste this any where that you want load commenting system. All you have to edit 
 						// Omit it to fallback to specified IDs in the admin panel.
 		echo "var articleData =" .json_encode($obj).";";
 	?>
-	
+
 	(function() {
 	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
 	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/generalphp.js';
@@ -120,7 +121,7 @@ You must have some getId() function on your website, for example:
             // unique id for each page of your website
             return $id;
         }
-    ?>    
+    ?>
 ```
 
 If you don't have such ID, you can use this function that generates a unique ID from the URL:
