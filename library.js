@@ -72,7 +72,7 @@
 				});
 
 				if (!url) {
-					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
+					winston.warn('[nodebb-plugin-blog-comments2] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
 				}
 
 				res.header("Access-Control-Allow-Origin", url);
@@ -176,9 +176,9 @@
 				if (!err && result && result.postData && result.postData.tid) {
 					posts.setPostField(result.postData.pid, 'blog-comments:url', url, function(err) {
 						if (err) {
-							return res.json({error: "Unable to post topic", result: result});		
+							return res.json({error: "Unable to post topic", result: result});
 						}
-						
+
 						db.setObjectField('blog-comments', commentID, result.postData.tid);
 						res.redirect((req.header('Referer') || '/') + '#nodebb-comments');
 					});
@@ -232,7 +232,7 @@
 		var app = params.router,
 			middleware = params.middleware,
 			controllers = params.controllers;
-			
+
 		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
 			Comments.template = data.toString();
 		});

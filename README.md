@@ -21,7 +21,7 @@ Articles are published to a forum category of your choice, and will gain a tag t
 
 First install the plugin:
 
-    npm install nodebb-plugin-blog-comments
+    npm install nodebb-plugin-blog-comments2
 
 Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments section in the ACP and select the Category ID you'd like to publish your blog content to (default is Category 1). Make sure you put the correct URL to your blog.
 
@@ -41,7 +41,7 @@ nbb.cid = 1;	// OPTIONAL. Forces a Category ID in NodeBB.
 nbb.articleID = '{{../post.id}}';
 nbb.tags = [{{#../post.tags}}"{{name}}",{{/../post.tags}}];
 nbb.script = document.createElement('script'); nbb.script.type = 'text/javascript'; nbb.script.async = true;
-nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
+nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/ghost.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
@@ -74,7 +74,7 @@ var nodeBBURL = '//your.nodebb.com',
 
 (function() {
 var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
+nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments2/lib/wordpress.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
 })();
 </script>
@@ -103,7 +103,7 @@ Paste this any where that you want load commenting system. All you have to edit 
 
 	(function() {
 	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/generalphp.js';
+	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments2/lib/generalphp.js';
 	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
 	})();
 	</script>
