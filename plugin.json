@@ -1,8 +1,8 @@
 {
-	"id": "nodebb-plugin-blog-comments",
-	"name": "NodeBB Blog Comments",
+	"id": "nodebb-plugin-blog-comments2",
+	"name": "NodeBB Blog Comments2",
 	"description": "Lets NodeBB act as a comments engine/widget for your blog.",
-	"url": "https://github.com/psychobunny/nodebb-plugin-blog-comments",
+	"url": "https://github.com/revir/nodebb-plugin-blog-comments2",
 	"library": "./library.js",
 	"hooks": [
 		{

@@ -1,5 +1,5 @@
 {
-  "name": "nodebb-plugin-blog-comments",
+  "name": "nodebb-plugin-blog-comments2",
   "version": "0.5.4",
   "description": "NodeBB Blog Comments (Ghost / WP Commenting Engine)",
   "main": "library.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments"
+    "url": "https://github.com/revir/nodebb-plugin-blog-comments2"
   },
   "keywords": [
     "nodebb",
@@ -20,18 +20,16 @@
     "comments"
   ],
   "author": {
-    "name": "psychobunny",
-    "email": "psycho.bunny@hotmail.com"
+    "name": "River",
+    "email": "revir.qing@gmail.com"
   },
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
+    "url": "https://github.com/revir/nodebb-plugin-blog-comments2/issues"
   },
   "nbbpm": {
-    "compatibility": "^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0"
+    "compatibility": "^0.6.0 || ^0.7.0 || ^0.8.0 || ^0.9.0 || ^1.0.0 || ^1.2.0 || ^1.3.0"
   },
   "readme": "",
-  "readmeFilename": "README.md",
-  "_id": "nodebb-plugin-blog-comments@0.0.1",
-  "_from": "nodebb-plugin-blog-comments@~0.0.1"
+  "readmeFilename": "README.md"
 }
