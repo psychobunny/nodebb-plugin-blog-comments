@@ -16,18 +16,18 @@
 
 	module.exports = Comments;
 
-	Comments.getTopicIDByCommentID = function(commentID, callback) {
-		db.getObjectField('blog-comments', commentID, function(err, tid) {
+	Comments.getTopicIDByCommentID = function(commentID, blogger, callback) {
+		db.getObjectField('blog-comments:'+blogger, commentID, function(err, tid) {
 			callback(err, tid);
 		});
 	};
 
-	Comments.getCommentData = function(req, res, callback) {
+	Comments.getCommentData = function(req, res) {
 		var commentID = req.params.id,
-			pagination = req.params.pagination ? req.params.pagination : 0,
+			blogger = req.params.blogger || 'default',
 			uid = req.user ? req.user.uid : 0;
 
-		Comments.getTopicIDByCommentID(commentID, function(err, tid) {
+		Comments.getTopicIDByCommentID(commentID, blogger, function(err, tid) {
 			var disabled = false;
 
 			async.parallel({
@@ -131,6 +131,7 @@
 			url = req.body.url,
 			commentID = req.body.id,
 			tags = req.body.tags,
+			blogger = req.body.blogger || 'default',
 			uid = req.user ? req.user.uid : 0,
 			cid = JSON.parse(req.body.cid);
 
@@ -179,7 +180,7 @@
 							return res.json({error: "Unable to post topic", result: result});
 						}
 
-						db.setObjectField('blog-comments', commentID, result.postData.tid);
+						db.setObjectField('blog-comments:'+blogger, commentID, result.postData.tid);
 						res.redirect((req.header('Referer') || '/') + '#nodebb-comments');
 					});
 				} else {
@@ -237,7 +238,7 @@
 			Comments.template = data.toString();
 		});
 
-		app.get('/comments/get/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
+		app.get('/comments/get/:blogger/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
 		app.post('/comments/reply', Comments.replyToComment);
 		app.post('/comments/publish', Comments.publishArticle);
 

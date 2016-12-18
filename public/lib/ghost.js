@@ -151,6 +151,7 @@
 					document.getElementById('nodebb-content-title').value = document.getElementById('nbb-title').innerText;
 					document.getElementById('nodebb-content-markdown').value = markdown;
 					document.getElementById('nodebb-content-cid').value = nbb.cid || -1;
+					document.getElementById('nodebb-content-blogger').value = nbb.blogger;
 					document.getElementById('nodebb-content-tags').value = JSON.stringify(nbb.tags);
 				}
 			}
@@ -161,7 +162,7 @@
 
 
 	function reloadComments() {
-		XHR.open('GET', nbb.url + '/comments/get/' + nbb.articleID + '/' + pagination, true);
+		XHR.open('GET', nbb.url + '/comments/get/' + (nbb.blogger || 'default') + '/' + nbb.articleID + '/' + pagination, true);
 		XHR.withCredentials = true;
 		XHR.send();
 	}
