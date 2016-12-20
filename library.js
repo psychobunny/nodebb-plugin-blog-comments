@@ -172,6 +172,7 @@
 				content: markdown,
 				tags: tags ? JSON.parse(tags) : [],
 				req: req,
+				externalLink: url,
 				cid: cid
 			}, function(err, result) {
 				if (!err && result && result.postData && result.postData.tid) {
