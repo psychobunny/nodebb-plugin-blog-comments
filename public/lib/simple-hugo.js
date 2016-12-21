@@ -3,34 +3,44 @@
 
     var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
     var scriptDiv = document.getElementById('nodebb-comments-script');
+    var articleEl = document.getElementsByTagName('article')[0];
     var ourl = scriptDiv.getAttribute('ourl');
     var ocid = scriptDiv.getAttribute('ocid');
     var blogger = scriptDiv.getAttribute('blogger');
 
-    // get tags and content;
-    var tags = [];
-    var metaContent, metaTitle;
     var metaEl = document.getElementsByTagName('meta');
+    var metaType;
     for (var i = 0; i < metaEl.length; i++) {
-        if (metaEl[i].getAttribute('property') === 'article:tag') {
-            tags.push(metaEl[i].getAttribute('content'));
+        if (metaEl[i].getAttribute('property') === 'og:type') {
+            metaType = metaEl[i].getAttribute('content');
         }
-        if (metaEl[i].getAttribute('property') === 'og:description') {
-            metaContent = metaEl[i].getAttribute('content');
-        }
-        if (metaEl[i].getAttribute('property') === 'og:title') {
-            metaTitle = metaEl[i].getAttribute('content');
-        }
+    }
+    if (metaType !== 'article' || !articleEl) {
+        console.warn("It's not the article page", metaType);
+        return;
     }
 
     // get article's title in url.
     var articleUTitle = window.location.pathname.split('/').slice(-2)[0];
 
-    if (!ourl || !ocid || !articleUTitle || !blogger || !metaContent) {
-        console.warn('information is imcomplete.', ourl, ocid, articleUTitle, blogger, metaContent);
+    // get title and content from the article
+    var articleTitleEl = articleEl.getElementsByClassName('post-title')[0];
+    var articleTitle = articleTitleEl ? articleTitleEl.innerText : '';
+    var articleContent = [];
+    var pagraphs = articleEl.getElementsByTagName('p');
+    for (var j = 0; j < pagraphs.length; j++) {
+        // only get the first and second paragraph.
+        if (j ===0 || j===1){
+            articleContent.push(pagraphs[j].innerText);
+        }
+    }
+    articleContent = articleContent.join('\n\n');
+
+    if (!ourl || !ocid || !articleUTitle || !blogger || !articleTitle || !articleContent) {
+        console.warn('information is imcomplete.', ourl, ocid, articleUTitle, blogger, articleTitle, articleContent);
         return;
     } else {
-        console.log('information: ', ourl, ocid, articleUTitle, blogger, metaContent);
+        console.log('information: ', ourl, ocid, articleUTitle, blogger, articleTitle, articleContent);
     }
 
     var pluginURL = ourl + '/plugins/nodebb-plugin-blog-comments2',
@@ -181,13 +191,14 @@
                 }
             } else {
                 if (data.isAdmin) {
-                    var markdown = metaContent + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
+                    var markdown = articleContent + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
-                    document.getElementById('nodebb-content-title').value = metaTitle;
+                    document.getElementById('nodebb-content-title').value = articleTitle;
                     document.getElementById('nodebb-content-markdown').value = markdown;
                     document.getElementById('nodebb-content-cid').value = ocid;
                     document.getElementById('nodebb-content-blogger').value = blogger;
-                    document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
+                    //TODO: set tags.
+                    // document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
                 }
             }
         }

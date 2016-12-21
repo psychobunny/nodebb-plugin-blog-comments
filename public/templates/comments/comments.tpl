@@ -73,7 +73,7 @@
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atBottom -->
 
-	<small class="nodebb-copyright">Powered by <a href="http://nodebb.org" target="_blank">V2MM</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
+	<small class="nodebb-copyright">Powered by <a href="https://v2mm.tech" target="_blank">V2MM</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
 	<button class="btn btn-primary" <!-- IF !posts.length -->style="display: none"<!-- ENDIF !posts.length --> id="nodebb-load-more">Load more comments...</button>
 <!-- ELSE -->
 	Commenting has been disabled.
