@@ -172,7 +172,8 @@
 				content: markdown,
 				tags: tags ? JSON.parse(tags) : [],
 				req: req,
-				externalLink: url,
+				externalLink: url,  // save externalLink and externalComment to topic, only v2mm theme can do this.
+				externalComment: markdown,
 				cid: cid
 			}, function(err, result) {
 				if (!err && result && result.postData && result.postData.tid) {
