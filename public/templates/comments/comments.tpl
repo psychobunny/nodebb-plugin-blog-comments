@@ -1,13 +1,17 @@
 <!-- IF tid -->
 	<!-- IF atTop -->
-		<div class="topic-profile-pic user">
+		<div class="topic-profile-pic user first-image">
 			<!-- IF isLoggedIn -->
-			<img src="{user.picture}" class="profile-image" />
+			<!-- IF user.picture -->
+			<img data-uid="{user.uid}" src="{user.picture}" class="profile-image" title="{user.username}" />
+			<!-- ELSE -->
+			<div class="profile-image" style="background-color: {user.icon:bgColor};" title="{user.username}">{user.icon:text}</div>
+			<!-- ENDIF user.picture -->
 			<!-- ELSE -->
 			<img src="https://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
 			<!-- ENDIF isLoggedIn -->
 		</div>
-		<form action="{relative_path}/comments/reply" method="post">
+		<form action="{relative_path}/comments/reply" class="clearfix" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
 		<!-- IF isLoggedIn -->
 			<small>Signed in as <strong>{user.username}</strong>. <strong id="nodebb-error"></strong></small>
@@ -76,7 +80,7 @@
 	<small class="nodebb-copyright">Powered by <a href="https://v2mm.tech" target="_blank">V2MM</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
 	<button class="btn btn-primary" <!-- IF !posts.length -->style="display: none"<!-- ENDIF !posts.length --> id="nodebb-load-more">Load more comments...</button>
 <!-- ELSE -->
-	Commenting has been disabled.
+	V2MM Commenting has been disabled.
 	<!-- IF isAdmin -->
 	<form action="{relative_path}/comments/publish" method="post">
 		<button class="btn btn-primary">Publish this article to V2MM</button>
