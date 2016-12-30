@@ -100,7 +100,8 @@
 					category: data.category,
 					mainPost: data.mainPost ? data.mainPost[0] : null,
 					atBottom: bottom,
-					atTop: top
+					atTop: top,
+					siteTitle: meta.config.title
 				});
 			});
 		});

@@ -79,13 +79,13 @@
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atBottom -->
 
-	<small class="nodebb-copyright">Powered by <a href="https://v2mm.tech" target="_blank">V2MM</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
+	<small class="nodebb-copyright">Powered by <a href="{relative_path}" target="_blank">{siteTitle}</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
 	<button class="btn btn-primary" <!-- IF !posts.length -->style="display: none"<!-- ENDIF !posts.length --> id="nodebb-load-more">Load more comments...</button>
 <!-- ELSE -->
-	V2MM Commenting has been disabled.
+	{siteTitle} Commenting has been disabled.
 	<!-- IF isAdmin -->
 	<form action="{relative_path}/comments/publish" method="post">
-		<button class="btn btn-primary">Publish this article to V2MM</button>
+		<button class="btn btn-primary">Publish this article to {siteTitle}</button>
 		<input type="hidden" name="markdown" id="nodebb-content-markdown" />
 		<input type="hidden" name="title" id="nodebb-content-title" />
 		<input type="hidden" name="cid" id="nodebb-content-cid" />
