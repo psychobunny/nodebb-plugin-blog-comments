@@ -1,16 +1,18 @@
 <!-- IF tid -->
 	<!-- IF atTop -->
 		<div class="topic-profile-pic user first-image">
-			<!-- IF isLoggedIn -->
-			<!-- IF user.picture -->
-			<img data-uid="{user.uid}" src="{user.picture}" class="profile-image" title="{user.username}" />
+
+			<!-- IF !isLoggedIn -->
+				<img src="https://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
 			<!-- ELSE -->
-			<div class="profile-image" style="background-color: {user.icon:bgColor};" title="{user.username}">{user.icon:text}</div>
-			<!-- ENDIF user.picture -->
-			<!-- ELSE -->
-			<img src="https://1.gravatar.com/avatar/177d180983be7a2c95a4dbe7451abeba?s=95&d=&r=PG" class="profile-image" />
-			<!-- ENDIF isLoggedIn -->
+				<!-- IF user.picture -->
+				<img data-uid="{user.uid}" src="{user.picture}" class="profile-image" title="{user.username}" />
+				<!-- ELSE -->
+				<div class="profile-image" style="background-color: {user.icon:bgColor};" title="{user.username}">{user.icon:text}</div>
+				<!-- ENDIF user.picture -->
+			<!-- ENDIF !isLoggedIn -->
 		</div>
+
 		<form action="{relative_path}/comments/reply" class="clearfix" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
 		<!-- IF isLoggedIn -->
