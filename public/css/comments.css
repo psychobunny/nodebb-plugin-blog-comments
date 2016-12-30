@@ -7,7 +7,7 @@
 
 #nodebb {
 	margin-top: 50px;
-	min-height: 300px;
+	/*min-height: 300px;*/
 }
 #nodebb .well {
     min-height: 20px;
