@@ -1,17 +1,18 @@
+This plugin is a folk from [NodeBB Blog Comments](https://github.com/psychobunny/nodebb-plugin-blog-comments), I just added some more features and fixed some bugs to it.
+
+* Support multiple blogs, use `articleID` and `blogger` to distinguish posts from different blogs, so this is kinda break change to the original nodebb-plugin-blog-comments.
+* Simple script for ghost, hugo, pelican etc, just add a `<script>` node at any place of the page, will support more blog platforms later.
+* Use `siteTitle` instead of NodeBB in the `comments.tpl`.
+* Fixed some bugs, like escaped title and content problems, profile image display, etc.
+
 # NodeBB Blog Comments
 
-Lets NodeBB act as a comments engine/widget for your blog. Currently supports both [Ghost](https://ghost.org/) and [WordPress](http://wordpress.org/). There is a separate repo for [PencilBlue](https://github.com/theunknownartisthour/nodebb-comments-pencilblue) support. If you'd like to see support for other CMS/blog systems, please submit an issue on our tracker.
+The original [NodeBB Blog Comments](https://github.com/psychobunny/nodebb-plugin-blog-comments) lets NodeBB act as a comments engine/widget for your blog. It supports both [Ghost](https://ghost.org/) and [WordPress](http://wordpress.org/).
 
 The comments are exposed to any plugin you have built into the core, so it is completely possible to have emoticons, embedded video, and/or whatever else you want in the comments section of your blog.
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
-## What's new in 0.3x
-
-* Fixed quite a few server crashes (especially when publishing)
-* Compatible with NodeBB 0.6x+ and Ghost 0.5.10
-* Added tags support for Ghost
-* Added comment support in general
 
 ## Screenshots
 
@@ -35,7 +36,7 @@ Paste this any where in `yourtheme/post.hbs`, somewhere between `{{#post}}` and 
 var nbb = {};
 nbb.url = '//your.nodebb.com'; // EDIT THIS
 nbb.cid = 1;	// OPTIONAL. Forces a Category ID in NodeBB.
-				//  Omit it to fallback to specified IDs in the admin panel.
+nbb.blogger = 'blogger_name';	//  Omit it to fallback to 'default'.
 
 (function() {
 nbb.articleID = '{{../post.id}}';
@@ -51,6 +52,39 @@ nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/ghost.js';
 ```
 
 If you wish, you can move `<a id="nodebb-comments"></a>` to where you want to place the actual comments widget.
+
+See demo at [hgkat's blog](http://hgkat.com), her blog is using this script to connect with [V2MM](https://v2mm.tech).
+
+### Simple Ghost Installation
+Since some blogs might installed with docker, couldn't change the theme file, I create this simple script which can be added at any place of the html.
+
+Just add this any where on your blog's page:
+
+```
+<script id='nodebb-comments-script' ourl="//your.nodebb.com" ocid="1" blogger='name' src="//your.nodebb.com/plugins/nodebb-plugin-blog-comments2/lib/simple-ghost.js"></script>
+```
+Note: ocid is the category id in your NodeBB, blogger is set for distinguish posts from different blogs.
+
+See demo at [Wave's blog](http://blog.lovejog.com), his blog is using this script to connect with [V2MM](https://v2mm.tech).
+
+### Simple Hugo Installation
+
+```
+<script id='nodebb-comments-script' ourl="//your.nodebb.com" ocid="1" blogger='name' src="//your.nodebb.com/plugins/nodebb-plugin-blog-comments2/lib/simple-hugo.js"></script>
+```
+
+See demo at [Leyafo's blog](http://www.leyafo.com/), his blog is using this script to connect with [V2MM](https://v2mm.tech).
+
+### Simple Pelican Installation
+
+```
+<script id='nodebb-comments-script' ourl="//your.nodebb.com" ocid="1" blogger='name' src="//your.nodebb.com/plugins/nodebb-plugin-blog-comments2/lib/simple-pelican.js"></script>
+```
+
+See demo at [Cycleuser's blog](http://blog.cycleuser.org), his blog is using this script to connect with [V2MM](https://v2mm.tech).
+
+**Wordpress plugin and any other plugins in PHP, I haven't test them yet, as I don't have those blogs.**
+If your blog is wordpress, and would like to connect with [V2MM](https://v2mm.tech), I would be glad to set up this script for you.
 
 ### Wordpress Installation
 
@@ -168,23 +202,3 @@ Published by <span id="nodebb-comments-author"></span> in <span id="nodebb-comme
 Head over to the article that you'd like to publish. The code will detect if you're both an administrator of your blog and NodeBB (so ensure that you're logged into both) and will display a publish button if so.
 
 You may also create a `publishers` group in NodeBB to allow a group of regular users to have publish rights.
-
-
-### Multiple blogs
-
-You may use a comma-separated entry of blogs in the ACP to support publishing from a network of separate blogs to your forum. You can also choose to put each blog in its own dedicated category, or place them all into one category.
-
-## Sites using this plugin
-
-* [NodeBB's Blog](http://blog.nodebb.org) (Ghost).
-* [The Unknown Artist Hour](http://theunknownartisthour.com) (Ghost).
-* [Burn after compiling](http://burnaftercompiling.com) (Wordpress).
-* [Strange Adventures In](https://strangeadventures.in) (Ghost).
-* [V2MM](https://v2mm.tech) (Ghost).
-
-Please submit a PR to add your site here :)
-
-## TODO
-
-* Republishing (for now you can just edit both the article and the published blog).
-* Pull CSS files from appropriate plugins? Ability to load custom CSS to style widget.
