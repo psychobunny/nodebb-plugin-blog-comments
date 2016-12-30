@@ -5,6 +5,9 @@ This plugin is a folk from [NodeBB Blog Comments](https://github.com/psychobunny
 * Use `siteTitle` instead of NodeBB in the `comments.tpl`.
 * Fixed some bugs, like escaped title and content problems, profile image display, etc.
 
+The multiple blogs feature is great, you can see at here: https://v2mm.tech/category/46/blog
+There are already some blogs conntected with [V2MM](https://v2mm.tech).
+
 # NodeBB Blog Comments
 
 The original [NodeBB Blog Comments](https://github.com/psychobunny/nodebb-plugin-blog-comments) lets NodeBB act as a comments engine/widget for your blog. It supports both [Ghost](https://ghost.org/) and [WordPress](http://wordpress.org/).
