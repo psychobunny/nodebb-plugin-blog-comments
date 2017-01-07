@@ -42,7 +42,7 @@
     if (!commentPositionDiv) {
         commentPositionDiv = document.createElement('div');
         commentPositionDiv.setAttribute('id', 'nodebb-comments');
-        articleEl.parentElement.insertBefore(commentPositionDiv, document.getElementById('ds-thread'));
+        articleEl.parentElement.insertBefore(commentPositionDiv, document.getElementsByClassName('ds-thread')[0]);
     }
     commentPositionDiv.insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
     nodebbDiv = document.getElementById('nodebb');

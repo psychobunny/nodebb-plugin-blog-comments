@@ -56,7 +56,7 @@
             console.error('Couldnot find the comments element');
             return;
         }
-        commentsEl.insertBefore(commentPositionDiv, document.getElementById('ds-thread'));
+        commentsEl.insertBefore(commentPositionDiv, document.getElementsByClassName('ds-thread')[0]);
     }
     commentPositionDiv.insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
     nodebbDiv = document.getElementById('nodebb');
