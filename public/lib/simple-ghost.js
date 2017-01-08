@@ -51,7 +51,7 @@
     var ytStyle = document.createElement("link");
     ytStyle.setAttribute("rel", "stylesheet");
     ytStyle.setAttribute("type", "text/css");
-    ytStyle.setAttribute("href", ourl + '/plugins/nodebb-plugin-youtube-embed/static/style.less');
+    ytStyle.setAttribute("href", pluginURL + '/css/youtube-embed-video.css');
     document.getElementsByTagName("head")[0].appendChild(ytStyle);
 
     var commentPositionDiv = document.getElementById('nodebb-comments');

@@ -50,7 +50,7 @@
     var lazyYTScript = document.createElement("script");
     lazyYTScript.async = true;
     lazyYTScript.setAttribute("type", "text/javascript");
-    lazyYTScript.setAttribute("src", ourl + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
+    lazyYTScript.setAttribute("src", pluginURL + '/css/youtube-embed-video.css');
     document.getElementsByTagName("head")[0].appendChild(lazyYTScript);
 
     var ytStyle = document.createElement("link");
