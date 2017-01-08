@@ -10,8 +10,22 @@
 	stylesheet.setAttribute("rel", "stylesheet");
 	stylesheet.setAttribute("type", "text/css");
 	stylesheet.setAttribute("href", pluginURL + '/css/comments.css');
-
 	document.getElementsByTagName("head")[0].appendChild(stylesheet);
+
+	// fix youtube embed video
+
+	var lazyYTScript = document.createElement("script");
+	lazyYTScript.async = true;
+    lazyYTScript.setAttribute("type", "text/javascript");
+    lazyYTScript.setAttribute("src", nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
+    document.getElementsByTagName("head")[0].appendChild(lazyYTScript);
+
+    var ytStyle = document.createElement("link");
+	ytStyle.setAttribute("rel", "stylesheet");
+	ytStyle.setAttribute("type", "text/css");
+	ytStyle.setAttribute("href", nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/style.less');
+	document.getElementsByTagName("head")[0].appendChild(ytStyle);
+
 	document.getElementById('nodebb-comments').insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
 	nodebbDiv = document.getElementById('nodebb');
 

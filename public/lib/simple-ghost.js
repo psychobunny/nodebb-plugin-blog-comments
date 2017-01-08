@@ -40,8 +40,20 @@
     stylesheet.setAttribute("rel", "stylesheet");
     stylesheet.setAttribute("type", "text/css");
     stylesheet.setAttribute("href", pluginURL + '/css/comments.css');
-
     document.getElementsByTagName("head")[0].appendChild(stylesheet);
+
+    var lazyYTScript = document.createElement("script");
+    lazyYTScript.async = true;
+    lazyYTScript.setAttribute("type", "text/javascript");
+    lazyYTScript.setAttribute("src", ourl + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
+    document.getElementsByTagName("head")[0].appendChild(lazyYTScript);
+
+    var ytStyle = document.createElement("link");
+    ytStyle.setAttribute("rel", "stylesheet");
+    ytStyle.setAttribute("type", "text/css");
+    ytStyle.setAttribute("href", ourl + '/plugins/nodebb-plugin-youtube-embed/static/style.less');
+    document.getElementsByTagName("head")[0].appendChild(ytStyle);
+
     var commentPositionDiv = document.getElementById('nodebb-comments');
     if (!commentPositionDiv) {
         commentPositionDiv = document.createElement('div');
