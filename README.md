@@ -106,6 +106,7 @@ if ( post_password_required() )
 var nodeBBURL = '//your.nodebb.com',
 	wordpressURL = '<?php get_site_url(); ?>',
 	articleID = '<?php echo the_ID(); ?>',
+    blogger = 'name'; //OPTIONAL. Assign an blogger name to disdinguish different blogger. Omit it to fallback to 'default'
 	categoryID = 1; // OPTIONAL. Forces a Category ID in NodeBB.
 					 //  Omit it to fallback to specified IDs in the admin panel.
 

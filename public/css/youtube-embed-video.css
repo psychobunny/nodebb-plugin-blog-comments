@@ -1,0 +1,132 @@
+iframe.lazytube {
+  border: 0;
+}
+
+@media(min-width: 768px){
+  iframe.lazytube {
+    height: calc(59vh / 1.5);
+    width: calc(47vh * 1.5);
+  }
+}
+
+.lazyYT-container {
+  direction:ltr;
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0 0 56.25% 0;
+  overflow: hidden;
+  background-color: @body-bg;
+  margin-bottom: 10px;
+}
+
+.lazyYT-container iframe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/*
+ * Video Title (YouTube style)
+ */
+
+.lazyYT-container .html5-info-bar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 30px;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.8);
+  -webkit-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+     -moz-transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+          transition: opacity 0.25s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.lazyYT-container .html5-title {
+  padding-right: 6px;
+  padding-left: 12px;
+}
+
+.lazyYT-container .html5-title-text-wrapper {
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+  word-wrap: normal;
+  white-space: nowrap;
+}
+
+.lazyYT-container .html5-title-text {
+  width: 100%;
+  font-size: 13px;
+  line-height: 30px;
+  color: #ccc;
+  text-decoration: none;
+}
+
+.lazyYT-container .html5-title-text:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/*
+ * Thumbnail
+ */
+
+.ytp-thumbnail {
+  padding-bottom: inherit;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+       -o-background-size: cover;
+          background-size: cover;
+}
+
+/*
+ * Play button (YouTube style)
+ */
+.ytp-large-play-button-bg:hover {
+  fill: red;
+}
+.ytp-large-play-button {
+  cursor: pointer;
+  position: absolute;
+  top: 50% !important;
+  left: 50% !important;
+  width: 86px !important;
+  height: 60px !important;
+  padding: 0 !important;
+  margin: -29px 0 0 -42px !important;
+  font-size: normal !important;
+  font-weight: normal !important;
+  line-height: 1 !important;
+  background-color: transparent;
+  border-width: 0px;
+/*   transition: opacity 0.25s cubic-bezier(0.0, 0.0, 0.2, 1); */
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+  transition-delay: initial;
+}
+
+.ytp-large-play-button-svg {
+  opacity: .9;
+  fill: #1f1f1f;
+}
+
+.lazyYT-image-loaded:hover .ytp-large-play-button-svg,
+.ytp-large-play-button:focus .ytp-large-play-button-svg {
+  opacity: 1;
+  fill: #cc181e;
+}
+
+.js-lazyYT {
+  max-width: 100%;
+}

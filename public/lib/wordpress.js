@@ -169,6 +169,7 @@
 							document.getElementById('nodebb-content-title').value = articleData.title_plain;
 							document.getElementById('nodebb-content-cid').value = categoryID || -1;
 							document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
+							document.getElementById('nodebb-content-blogger').value = window.blogger || 'default';
 						} else {
 							console.warn('Unable to access API. Please install the JSON API plugin located at: http://wordpress.org/plugins/json-api');
 						}
@@ -181,7 +182,7 @@
 	};
 
 	function reloadComments() {
-		XHR.open('GET', nodeBBURL + '/comments/get/' + articleID + '/' + pagination, true);
+		XHR.open('GET', nodeBBURL + '/comments/get/' + (window.blogger || 'default') + '/' + articleID + '/' + pagination, true);
 		XHR.withCredentials = true;
 		XHR.send();
 	}
