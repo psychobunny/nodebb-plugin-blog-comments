@@ -19,12 +19,14 @@
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05) inset;
 }
 #nodebb .topic-item {
-	font-family: Roboto,Helvetica,Arial,sans-serif;
-	font-size: 14px;
-	line-height: 1.42857;
-	color: #333;
-	min-height: 75px;
-	position: relative;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #333;
+    min-height: 75px;
+    position: relative;
+
+    transition: background-color 0.6s ease;
 }
 
 #nodebb .topic-body {
@@ -174,6 +176,19 @@
     float: right;
 }
 
+#nodebb-load-more {
+  transition: background-color 0.6s ease;
+}
+
+#nodebb .highlight {
+  background-color: rgba(240, 173, 78, 0.75);
+}
+
+#nodebb .btn.btn-primary.highlight {
+  border-color: rgba(240, 173, 78, 0.75);
+    background-color: rgba(240, 173, 78, 0.75);
+}
+
 #nodebb iframe {
 	border: 0;
 }
@@ -205,4 +220,65 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 100%;
+}
+
+/*add for reply and quota*/
+#nodebb .sub-reply-input {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 48px;
+}
+
+#nodebb .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#nodebb .post-tools {
+    float: right;
+    text-transform: lowercase;
+}
+
+#nodebb .post-tools a {
+    padding-right: 10px;
+    cursor: pointer;
+    color: #38C071;
+    text-decoration: none;
+}
+
+#nodebb .reply-label {
+    padding: 1px 5px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    transition: background-color 0.6s ease;
+}
+
+#nodebb .reply-label:hover {
+    background-color: #E6E6E6;
+}
+
+#nodebb .hidden {
+    display: none;
+}
+
+#nodebb .highlight {
+    background-color: rgba(240, 173, 78, 0.75);
+}
+
+#nodebb .post-content blockquote {
+    font-size: 12px;
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 17.5px;
+    border-left: 5px solid #eee;
 }

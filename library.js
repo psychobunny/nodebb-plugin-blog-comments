@@ -82,6 +82,11 @@
 				var posts = data.posts.filter(function(post) {
 					return post.deleted === false;
 				});
+				posts.forEach(function(post){
+					post.isReply = post.hasOwnProperty('toPid') && parseInt(post.toPid) !== parseInt(data.tid) - 1;
+					post.parentUsername = post.parent ? post.parent.username || '' : '';
+					post.deletedReply = (post.parent && !post.parent.username) ? true : false;
+				});
 
 				var top = true;
 				var bottom = false;
@@ -111,11 +116,13 @@
 		var content = req.body.content,
 			tid = req.body.tid,
 			url = req.body.url,
+			toPid = req.body.toPid,
 			uid = req.user ? req.user.uid : 0;
 
 		topics.reply({
 			tid: tid,
 			uid: uid,
+			toPid: toPid,
 			content: content
 		}, function(err, postData) {
 			if(err) {

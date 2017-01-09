@@ -33,7 +33,7 @@
 	<ul id="nodebb-comments-list">
 		<!-- BEGIN posts -->
 		<li <!-- IF pagination --> class="nodebb-post-fadein" <!-- ENDIF pagination --> <!-- IF !posts.index --> class="nodebb-post-fadein" <!-- ENDIF !posts.index --> >
-			<div class="topic-item">
+			<div class="topic-item" data-pid="{posts.pid}" data-userslug="{user.userslug}">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
 						<a href="{relative_path}/user/{user.userslug}">
@@ -47,14 +47,33 @@
 					<div class="topic-text">
 						<div class="post-content" itemprop="text">
 							<small>
+								<span class="post-tools no-select">
+									<a component="post/reply" style="color: inherit; text-decoration: none;">reply</a>
+									<a component="post/quote" style="color: inherit; text-decoration: none;">quote</a>
+									<!-- <a component="post/quote"><i class="fa fa-quote-left"></i> quote</a> -->
+								</span>
 								<a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a>
 								<span title="{posts.timestampISO}">commented {posts.timestamp}</span>
+								<!-- IF posts.isReply -->
+								<!-- IF !posts.deletedReply -->
+									<button component="post/parent" class="reply-label no-select" data-topid="{posts.toPid}"><i class="fa fa-reply"></i> @{posts.parentUsername}</button>
+								<!-- ENDIF !posts.deletedReply -->
+								<!-- ENDIF posts.isReply -->
 							</small>
 							<br />
-							{posts.content}
+							<div class="post-body">{posts.content}</div>
 						</div>
 					</div>
 				</div>
+
+				<form action="{relative_path}/comments/reply" method="post" class="sub-reply-input hidden">
+ 					<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
+ 					<button class="btn btn-primary">Reply to {user.username}</button>
+ 					<input type="hidden" name="_csrf" value="{token}" />
+ 					<input type="hidden" name="tid" value="{tid}" />
+ 					<input type="hidden" name="toPid" value="{posts.pid}" />
+ 					<input type="hidden" name="url" value="{redirect_url}" />
+ 				</form>
 			</div>
 		</li>
 		<!-- END posts -->
