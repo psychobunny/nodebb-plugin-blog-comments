@@ -142,7 +142,14 @@
 
 					document.getElementById('nodebb-login').onclick = function() {
 						authenticate('login');
-					}
+					};
+
+					// hide post tools.
+					var nodeList = document.getElementsByClassName('nodebb-post-tools');
+					for (var i = nodeList.length - 1; i >= 0; i--) {
+                      nodeList[i].style.display = 'none';
+                    }
+
 				}
 			} else {
 				if (data.isAdmin) {

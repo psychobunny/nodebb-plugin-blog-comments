@@ -47,7 +47,7 @@
 					<div class="topic-text">
 						<div class="post-content" itemprop="text">
 							<small>
-								<span class="post-tools no-select">
+								<span class="nodebb-post-tools post-tools no-select">
 									<a component="post/reply" style="color: inherit; text-decoration: none;">reply</a>
 									<a component="post/quote" style="color: inherit; text-decoration: none;">quote</a>
 									<!-- <a component="post/quote"><i class="fa fa-quote-left"></i> quote</a> -->

@@ -34,8 +34,10 @@
 	loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments.css');
 
 	// fix youtube embed video
-	loadScript(nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
-	loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/youtube-embed-video.css');
+	if (window.jQuery) {
+		loadScript(nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
+		loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/youtube-embed-video.css');
+	}
 
 	var posDiv = document.getElementById('nodebb-comments');
 	loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/common.js', function () {
