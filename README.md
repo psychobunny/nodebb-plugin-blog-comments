@@ -119,67 +119,6 @@ nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments2/lib/wordpress.js';
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
-### General - PHP example
-Paste this any where that you want load commenting system. All you have to edit is line 3 (`nodeBBURL`) - put the URL to your NodeBB forum's home page here. You can also use any template engine (hbs, eco...) instead of PHP.
-
-```html
-	<a id="nodebb-comments"></a>
-	<script type="text/javascript">
-	var nodeBBURL = '//your.nodebb.com',
-
-	<?php
-		echo "articleID = " .getId().";";
-		$obj = new stdClass();
-		$obj->title_plain = "";
-		$obj->url="";
-		$obj->tags = [];
-		$obj->markDownContent= "";
-		$obj->cid = 1; // OPTIONAL. Forces a Category ID in NodeBB.
-						// Omit it to fallback to specified IDs in the admin panel.
-		echo "var articleData =" .json_encode($obj).";";
-	?>
-
-	(function() {
-	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments2/lib/generalphp.js';
-	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
-	})();
-	</script>
-	<noscript>Please enable JavaScript to view comments</noscript>
-```
-
-You must have some getId() function on your website, for example:
-
-**For a PHP website**
-
-```php
-    <?php
-        function getId(){
-            $id = 0;
-            // unique id for each page of your website
-            return $id;
-        }
-    ?>
-```
-
-If you don't have such ID, you can use this function that generates a unique ID from the URL:
-
-```php
-    <?php
-        function getId(){
-            return stringToInteger($_SERVER['REQUEST_URI']);
-        }
-        function stringToInteger($string) {
-            $string = md5($string);
-            $output = '1';
-            for ($i = 0; $i < strlen($string); $i++) {
-                $output .= (string) ord($string[$i]);
-            }
-            return (int) $output;
-        }
-    ?>
-```
-
 ### Comments Counter
 
 
