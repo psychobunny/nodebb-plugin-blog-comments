@@ -212,6 +212,11 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                 });
 
                 bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/reply"],[component="post/quote"]'), function(event) {
+                    if (!data.user || !data.user.uid) {
+                        authenticate('login');
+                        return;
+                    }
+
                     var topicItem = event.target;
                     while (topicItem && !topicItem.classList.contains('topic-item')) {
                         topicItem = topicItem.parentElement;
