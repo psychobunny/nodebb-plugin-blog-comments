@@ -9,6 +9,11 @@
 	margin-top: 50px;
 	/*min-height: 300px;*/
 }
+
+#nodebb a {
+    border: none;
+}
+
 #nodebb .well {
     min-height: 20px;
     padding: 24px;

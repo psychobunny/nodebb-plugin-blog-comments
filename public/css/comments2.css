@@ -1,0 +1,31 @@
+@import url("comments.css");
+/*A second style used by Pelican and hexo blog.*/
+
+#nodebb {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+#nodebb .topic-profile-pic.first-image {
+    display: none;
+}
+
+#nodebb .topic-profile-pic {
+    float: left;
+    margin-left: 15px;
+    left: 0;
+}
+
+#nodebb .topic-text {
+    margin-left: 70px;
+    width: auto;
+    float: none;
+}
+
+#nodebb .topic-text p {
+    margin: 10px 0 10px 0;
+}
+
+#nodebb > ul {
+    margin-right: 0;
+}
