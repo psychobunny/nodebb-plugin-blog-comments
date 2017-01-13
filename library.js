@@ -103,7 +103,7 @@
 					isLoggedIn: !!uid,
 					tid: tid,
 					category: data.category,
-					mainPost: data.mainPost ? data.mainPost[0] : null,
+					mainPost: data.mainPost,
 					atBottom: bottom,
 					atTop: top,
 					siteTitle: meta.config.title
