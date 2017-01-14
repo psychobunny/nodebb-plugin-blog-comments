@@ -1,0 +1,20 @@
+@import url("comments2.css");
+/*A second style used by wordpress blog.*/
+
+#nodebb .form-control {
+    color: inherit;
+    background-color: inherit;
+}
+
+#nodebb > ul > li {
+    background-color: inherit;
+    border: 1px solid #5d5d5d;
+}
+
+#nodebb .topic-item {
+    color: inherit;
+}
+
+#nodebb .topic-text {
+    color: inherit;
+}

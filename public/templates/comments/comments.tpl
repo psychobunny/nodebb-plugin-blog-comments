@@ -22,6 +22,7 @@
 			<input type="hidden" name="tid" value="{tid}" />
 			<input type="hidden" name="url" value="{redirect_url}" />
 		</form>
+		<br />
 		<!-- ELSE -->
 		</form>
 		<button class="btn btn-primary" id="nodebb-register">Register</button>
