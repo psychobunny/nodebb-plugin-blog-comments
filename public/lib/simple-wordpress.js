@@ -61,7 +61,7 @@
         console.log('[nodebb-plugin-blog-comments2] information: ', nbb);
     }
 
-    loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments2.css');
+    loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments3.css');
     // fix youtube embed video
     loadScript(nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
     loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/youtube-embed-video.css');
