@@ -29,7 +29,7 @@
 		<button class="btn btn-primary" id="nodebb-login">Login</button>
 
 		<!-- This button is here just for making the css margin right -->
-		<button class="btn" style="visibility: hidden;"> </button>
+		<button style="visibility: hidden; padding-top: 8px;"> </button>
 
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atTop -->
@@ -107,7 +107,7 @@
 		<button class="btn btn-primary" id="nodebb-login">Login</button>
 
 		<!-- This button is here just for making the css margin right -->
-		<button class="btn" style="visibility: hidden;"> </button>
+		<button style="visibility: hidden; padding-top: 8px;"> </button>
 
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atBottom -->
