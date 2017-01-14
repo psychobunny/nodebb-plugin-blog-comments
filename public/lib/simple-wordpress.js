@@ -52,7 +52,7 @@
     }
 
     // get article's title in url.
-    nbb.articleID = window.location.pathname.split('/').slice(-2)[0];
+    nbb.articleID = btoa(location.pathname);
 
     if (!nbb.url || !nbb.cid || !nbb.articleID || !nbb.blogger || !nbb.articleContent) {
         console.warn('[nodebb-plugin-blog-comments2] information is imcomplete.', nbb);
