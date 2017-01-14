@@ -102,7 +102,10 @@
 		</form>
 		<button class="btn btn-primary" id="nodebb-register">Register</button>
 		<button class="btn btn-primary" id="nodebb-login">Login</button>
-		<br />
+
+		<!-- This button is here just for making the css margin right -->
+		<button class="btn" style="visibility: hidden;"> </button>
+
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atBottom -->
 
