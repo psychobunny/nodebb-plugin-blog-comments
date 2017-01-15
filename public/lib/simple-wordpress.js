@@ -76,7 +76,7 @@
             console.error('Couldnot find the comments element');
             return;
         }
-        commentsEl.insertBefore(commentPositionDiv, document.getElementById('respond'));
+        commentsEl.insertBefore(commentPositionDiv);
     }
 
     loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/common.js', function () {
