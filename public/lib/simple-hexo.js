@@ -56,6 +56,17 @@
         return;
     }
 
+    if (!nbb.articleContent) {
+        var articleContent = [];
+        var pagraphs = articleEl.getElementsByTagName('p');
+        for (var j = 0; j < pagraphs.length; j++) {
+            if (j ===0 || j===1){
+                articleContent.push(pagraphs[j].innerText);
+            }
+        }
+        nbb.articleContent = articleContent.join('\n\n');
+    }
+
     // get article's title in url.
     // var articleUTitle = location.pathname.replace(/\//g, '-');
     // Note: hexo's pathname contains Chinese, it doesn't work just encodeURI, must transform to base64;
@@ -82,7 +93,7 @@
             console.error('Couldnot find the comments element');
             return;
         }
-        commentsEl.insertBefore(commentPositionDiv, document.getElementsByClassName('ds-thread')[0]);
+        commentsEl.insertBefore(commentPositionDiv, null);
     }
 
     loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/common.js', function () {
