@@ -71,7 +71,10 @@
         commentPositionDiv = document.createElement('div');
         commentPositionDiv.setAttribute('id', 'nodebb-comments');
 
-        var commentsEl = document.getElementsByClassName('commentlist')[0] || document.getElementById('comments');
+        var commentsEl = document.getElementsByClassName('commentlist')[0]
+            || document.getElementById('comments')
+            || document.getElementById('respond'); // fix on bennythink's blog;
+
         if (!commentsEl) {
             console.error('Couldnot find the comments element');
             return;
