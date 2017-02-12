@@ -61,13 +61,15 @@
 
     loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments2.css');
 
-    // moell's blog don't has jQuery, can't fix youtube embed video right now.
+    // fix youtube embed video
+    loadScript(nbb.url + '/plugins/nodebb-plugin-youtube-embed/static/lib/lazyYT.js');
+    loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/youtube-embed-video.css');
 
     var commentPositionDiv = document.getElementById('nodebb-comments');
     if (!commentPositionDiv) {
         commentPositionDiv = document.createElement('div');
         commentPositionDiv.setAttribute('id', 'nodebb-comments');
-        articleEl.parentElement.insertBefore(commentPositionDiv, document.getElementsByClassName('ds-thread')[0]);
+        articleEl.appendChild(commentPositionDiv);
     }
 
     loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/common.js', function () {
