@@ -278,6 +278,7 @@
 
 #nodebb .highlight {
     background-color: rgba(240, 173, 78, 0.75);
+    margin: 0; /* fix margin on hexo next theme */
 }
 
 #nodebb .post-content blockquote {
