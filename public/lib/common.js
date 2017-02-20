@@ -1,7 +1,7 @@
 var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
     "use strict";
 
-    var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
+    var articlePath = nbb.articlePath || (window.location.protocol + '//' + window.location.host + window.location.pathname);
 
     var savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter, commentsAuthor, commentsCategory;
 

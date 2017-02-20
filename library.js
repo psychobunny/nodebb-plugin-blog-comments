@@ -112,6 +112,46 @@
 		});
 	};
 
+	function get_redirect_url(url, err) {
+		var rurl = url + '#nodebb-comments';
+		if (url.indexOf('#') !== -1) {
+			// compatible for mmmw's blog, he uses hash in url;
+			rurl = url;
+		}
+
+		if(err) {
+			rurl = url + '?error=' + err.message + '#nodebb-comments';
+			if (url.indexOf('#') !== -1) {
+				rurl = url.split('#')[0] + '?error=' + err.message + '#' + url.split('#')[1];
+			}
+		}
+		return rurl;
+	}
+
+	Comments.toggleUpvotePost = function (req, res, callback) {
+		var toPid = req.body.toPid,
+		    isUpvote = req.body.isUpvote,
+			uid = req.user ? req.user.uid : 0;
+
+		var func = isUpvote ? 'upvote' : 'unvote';
+
+		posts[func](toPid, uid, function (err, result) {
+			res.json({error: err, result: result});
+		});
+	};
+
+	Comments.toggleBookmarkPost = function () {
+		var toPid = req.body.toPid,
+			isBookmark = req.body.isBookmark,
+			uid = req.user ? req.user.uid : 0;
+
+		var func = isBookmark ? 'bookmark' : 'unbookmark';
+
+		posts[func](toPid, uid, function (err, result) {
+			res.json({error: err, result: result});
+		});
+	};
+
 	Comments.replyToComment = function(req, res, callback) {
 		var content = req.body.content,
 			tid = req.body.tid,
@@ -125,11 +165,7 @@
 			toPid: toPid,
 			content: content
 		}, function(err, postData) {
-			if(err) {
-				return res.redirect(url + '?error=' + err.message + '#nodebb-comments');
-			}
-
-			res.redirect(url + '#nodebb-comments');
+			res.redirect(get_redirect_url(url, err));
 		});
 	};
 
@@ -191,7 +227,13 @@
 						}
 
 						db.setObjectField('blog-comments:'+blogger, commentID, result.postData.tid);
-						res.redirect((req.header('Referer') || '/') + '#nodebb-comments');
+						var rurl = (req.header('Referer') || '/') + '#nodebb-comments';
+						if (url.indexOf('#') !== -1) {
+							// compatible for mmmw's blog, he uses hash in url;
+							rurl = url;
+						}
+
+						res.redirect(rurl);
 					});
 				} else {
 					res.json({error: "Unable to post topic", result: result});
