@@ -16,6 +16,40 @@
 
 	module.exports = Comments;
 
+	function CORSSafeReq (req) {
+		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
+			url;
+
+		hostUrls.forEach(function(hostUrl) {
+			hostUrl = hostUrl.trim();
+			if (hostUrl[hostUrl.length - 1] === '/') {
+				hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+			}
+
+			if (hostUrl === req.get('origin')) {
+				url = req.get('origin');
+			}
+		});
+
+		if (!url) {
+			winston.warn('[nodebb-plugin-blog-comments2] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
+		}
+		return url;
+	}
+
+	function CORSFilter (req, res) {
+		var url = CORSSafeReq(req);
+
+		if (!url) {
+			return;
+		}
+
+		res.header("Access-Control-Allow-Origin", url);
+		res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+		res.header("Access-Control-Allow-Credentials", "true");
+		return res;
+	}
+
 	Comments.getTopicIDByCommentID = function(commentID, blogger, callback) {
 		db.getObjectField('blog-comments:'+blogger, commentID, function(err, tid) {
 			callback(err, tid);
@@ -57,27 +91,7 @@
 					topics.getMainPost(tid, uid, next);
 				}
 			}, function(err, data) {
-				var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-					url;
-
-				hostUrls.forEach(function(hostUrl) {
-					hostUrl = hostUrl.trim();
-					if (hostUrl[hostUrl.length - 1] === '/') {
-						hostUrl = hostUrl.substring(0, hostUrl.length - 1);
-					}
-
-					if (hostUrl === req.get('origin')) {
-						url = req.get('origin');
-					}
-				});
-
-				if (!url) {
-					winston.warn('[nodebb-plugin-blog-comments2] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
-				}
-
-				res.header("Access-Control-Allow-Origin", url);
-				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-				res.header("Access-Control-Allow-Credentials", "true");
+				CORSFilter(req, res);
 
 				var posts = data.posts.filter(function(post) {
 					return post.deleted === false;
@@ -128,27 +142,35 @@
 		return rurl;
 	}
 
-	Comments.toggleUpvotePost = function (req, res, callback) {
+	Comments.votePost = function (req, res, callback) {
+		if (!CORSSafeReq(req)) {
+			return;
+		}
 		var toPid = req.body.toPid,
-		    isUpvote = req.body.isUpvote,
+		    isUpvote = JSON.parse(req.body.isUpvote),
 			uid = req.user ? req.user.uid : 0;
 
 		var func = isUpvote ? 'upvote' : 'unvote';
 
 		posts[func](toPid, uid, function (err, result) {
-			res.json({error: err, result: result});
+			CORSFilter(req, res);
+			res.json({error: err && err.message, result: result});
 		});
 	};
 
-	Comments.toggleBookmarkPost = function () {
+	Comments.bookmarkPost = function (req, res, callback) {
+		if (!CORSSafeReq(req)) {
+			return;
+		}
 		var toPid = req.body.toPid,
-			isBookmark = req.body.isBookmark,
+			isBookmark = JSON.parse(req.body.isBookmark),
 			uid = req.user ? req.user.uid : 0;
 
 		var func = isBookmark ? 'bookmark' : 'unbookmark';
 
 		posts[func](toPid, uid, function (err, result) {
-			res.json({error: err, result: result});
+			CORSFilter(req, res);
+			res.json({error: err && err.message, result: result});
 		});
 	};
 
@@ -293,6 +315,8 @@
 		app.get('/comments/get/:blogger/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
 		app.post('/comments/reply', Comments.replyToComment);
 		app.post('/comments/publish', Comments.publishArticle);
+		app.post('/comments/vote', Comments.votePost);
+		app.post('/comments/bookmark', Comments.bookmarkPost);
 
 		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
 		app.get('/api/admin/blog-comments', renderAdmin);

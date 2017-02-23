@@ -34,10 +34,10 @@
 		<!-- ENDIF isLoggedIn -->
 	<!-- ENDIF atTop -->
 
-	<ul id="nodebb-comments-list">
+	<ul id="nodebb-comments-list" data-mainpid="{mainPost.pid}">
 		<!-- BEGIN posts -->
 		<li <!-- IF pagination --> class="nodebb-post-fadein" <!-- ENDIF pagination --> <!-- IF !posts.index --> class="nodebb-post-fadein" <!-- ENDIF !posts.index --> >
-			<div class="topic-item" data-pid="{posts.pid}" data-userslug="{user.userslug}">
+			<div class="topic-item" data-pid="{posts.pid}" data-userslug="{user.userslug}" data-uid="{posts.uid}">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
 						<a href="{relative_path}/user/{user.userslug}">
@@ -52,15 +52,31 @@
 						<div class="post-content" itemprop="text">
 							<small>
 								<span class="nodebb-post-tools post-tools no-select">
-									<a component="post/reply" style="color: inherit; text-decoration: none;">reply</a>
-									<a component="post/quote" style="color: inherit; text-decoration: none;">quote</a>
+									<a component="post/reply" style="color: inherit; text-decoration: none;" title="Reply">
+										<i class="icon-reply"></i>
+									</a>
+									<a component="post/quote" style="color: inherit; text-decoration: none;" title="Quote">
+										<i class="icon-quote-right"></i>
+									</a>
+									<a component="post/bookmark" data-bookmarked="{posts.bookmarked}" style="color: inherit; text-decoration: none;" title="Mark">
+										<i class="i-bookmark <!-- IF posts.bookmarked --> icon-heart <!-- ELSE --> icon-heart-empty <!-- ENDIF posts.bookmarked -->"></i>
+									</a>
+									<a component="post/upvote" data-upvoted="{posts.upvoted}" date-votes="{posts.votes}" style="color: inherit; text-decoration: none;" title="Upvote">
+										<i class="i-upvote <!-- IF posts.upvoted --> icon-thumbs-up-alt <!-- ELSE --> icon-thumbs-up <!-- ENDIF posts.upvoted -->"></i>
+									</a>
+									<span class="upvote-count <!-- IF !posts.votes --> hidden <!-- ENDIF !posts.votes -->">
+										{posts.votes}
+									</span>
+
 									<!-- <a component="post/quote"><i class="fa fa-quote-left"></i> quote</a> -->
 								</span>
 								<a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a>
 								<span title="{posts.timestampISO}">commented {posts.timestamp}</span>
 								<!-- IF posts.isReply -->
 								<!-- IF !posts.deletedReply -->
-									<button component="post/parent" class="reply-label no-select" data-topid="{posts.toPid}"><i class="fa fa-reply"></i> @{posts.parentUsername}</button>
+									<button component="post/parent" class="reply-label no-select" data-topid="{posts.toPid}">
+										<i class="icon-reply"></i> @{posts.parentUsername}
+									</button>
 								<!-- ENDIF !posts.deletedReply -->
 								<!-- ENDIF posts.isReply -->
 							</small>

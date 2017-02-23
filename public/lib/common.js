@@ -10,17 +10,45 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
 
     function newXHR() {
         try {
-            return XHR = new XMLHttpRequest();
+            return new XMLHttpRequest();
         } catch (e) {
             try {
-                return XHR = new ActiveXObject("Microsoft.XMLHTTP");
+                return new ActiveXObject("Microsoft.XMLHTTP");
             } catch (e) {
-                return XHR = new ActiveXObject("Msxml2.XMLHTTP");
+                return new ActiveXObject("Msxml2.XMLHTTP");
             }
         }
     }
 
+    function xget (xhr, path) {
+        xhr.open('GET', path, true);
+        xhr.withCredentials = true;
+        xhr.send();
+        return xhr;
+    }
+
+    function xpost (xhr, path, data) {
+        //构造表单数据
+        var encodedString = '';
+        for (var prop in data) {
+            if (data.hasOwnProperty(prop)) {
+                if (encodedString.length > 0) {
+                    encodedString += '&';
+                }
+                encodedString += encodeURI(prop + '=' + data[prop]);
+            }
+        }
+        xhr.open('POST', path, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.withCredentials = true;
+        //发送数据
+        xhr.send(encodedString);
+        return xhr;
+    }
+
     var XHR = newXHR(), pagination = 0, modal;
+    var voteXHR = newXHR();
+    var bookmarkXHR = newXHR();
 
     function authenticate(type) {
         savedText = contentDiv.value;
@@ -211,7 +239,7 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
 
                 });
 
-                bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/reply"],[component="post/quote"]'), function(event) {
+                bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/reply"],[component="post/quote"],[component="post/bookmark"],[component="post/upvote"]'), function(event) {
                     if (!data.user || !data.user.uid) {
                         authenticate('login');
                         return;
@@ -226,22 +254,35 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                         var elementForm = topicItem.querySelector('form');
                         var visibleForm = nodebbCommentsList.querySelector('li .topic-item form:not(.hidden)');
                         var formInput = elementForm.querySelector('textarea');
+                        var pid = topicItem.getAttribute('data-pid');
+                        var uid = topicItem.getAttribute('data-uid');
+                        var bookmarked = JSON.parse(this.getAttribute('data-bookmarked'));
+                        var upvoted = JSON.parse(this.getAttribute('data-upvoted'));
 
                         if (visibleForm && visibleForm !== elementForm) {
                             visibleForm.classList.add('hidden');
                         }
 
-                        if (/\/quote$/.test(event.target.getAttribute('component'))) {
+                        if (/\/quote$/.test(this.getAttribute('component'))) {
                             var postBody = topicItem.querySelector('.post-content .post-body');
                             var quote = (postBody.innerText ? postBody.innerText : postBody.textContent).split('\n').map(function(line) { return line ? '> ' + line : line; }).join('\n');
                             formInput.value = '@' + topicItem.getAttribute('data-userslug') + ' said:\n' + quote + formInput.value;
-                        } else {
+                            elementForm.classList.remove('hidden');
+                        } else if (/\/reply$/.test(this.getAttribute('component'))) {
                             formInput.value = '@' + topicItem.getAttribute('data-userslug') + ': ' + formInput.value;
+                            elementForm.classList.remove('hidden');
+                        } else if (/\/upvote$/.test(this.getAttribute('component'))) {
+                            if(data.user.uid != uid) {
+                                upvotePost(topicItem, pid, upvoted);
+                            }
+                        } else if (/\/bookmark$/.test(this.getAttribute('component'))) {
+                            bookmarkPost(topicItem, pid, bookmarked);
                         }
 
-                        elementForm.classList.remove('hidden');
+
                     }
                 });
+
             } else {
                 if (data.isAdmin) {
                     var markdown, articleTitle;
@@ -268,10 +309,66 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
         }
     };
 
+    voteXHR.onload = function () {
+        if (voteXHR.status >= 200 && voteXHR.status < 400) {
+            var data = JSON.parse(voteXHR.responseText);
+            if (data.error) {
+                console.error(data.error);
+            } else {
+                var votes = data.result.post.votes;
+                var el = voteXHR.topicItem.querySelector('.i-upvote');
+                var link = bookmarkXHR.topicItem.querySelector('[component="post/upvote"]');
+                if (voteXHR.isUpvote) {
+                    el.classList.add('icon-thumbs-up-alt');
+                    el.classList.remove('icon-thumbs-up');
+                    link.setAttribute('data-upvoted', true);
+                } else {
+                    el.classList.remove('icon-thumbs-up-alt');
+                    el.classList.add('icon-thumbs-up');
+                    link.setAttribute('data-upvoted', false);
+                }
+            }
+        }
+
+    };
+    bookmarkXHR.onload = function () {
+        if (bookmarkXHR.status >= 200 && bookmarkXHR.status < 400) {
+            var data = JSON.parse(bookmarkXHR.responseText);
+            if (data.error) {
+                console.error(data.error);
+            } else {
+                var el = bookmarkXHR.topicItem.querySelector('.i-bookmark');
+                var link = bookmarkXHR.topicItem.querySelector('[component="post/bookmark"]');
+                if (bookmarkXHR.isBookmark) {
+                    el.classList.add('icon-heart');
+                    el.classList.remove('icon-heart-empty');
+                    link.setAttribute('data-bookmarked', true);
+                } else {
+                    el.classList.remove('icon-heart');
+                    el.classList.add('icon-heart-empty');
+                    link.setAttribute('data-bookmarked', false);
+                }
+
+            }
+
+        }
+
+    };
+
     function reloadComments() {
-        XHR.open('GET', nbb.url + '/comments/get/' + (nbb.blogger || 'default') + '/' + nbb.articleID + '/' + pagination, true);
-        XHR.withCredentials = true;
-        XHR.send();
+        xget(XHR, nbb.url + '/comments/get/' + (nbb.blogger || 'default') + '/' + nbb.articleID + '/' + pagination);
+    }
+
+    function upvotePost (topicItem, pid, upvoted) {
+        voteXHR.topicItem = topicItem;
+        voteXHR.isUpvote = !upvoted;
+        xpost(voteXHR, nbb.url + '/comments/vote', {toPid: pid, isUpvote: !upvoted});
+    }
+
+    function bookmarkPost (topicItem, pid, bookmarked) {
+        bookmarkXHR.topicItem = topicItem;
+        bookmarkXHR.isBookmark = !bookmarked;
+        xpost(bookmarkXHR, nbb.url + '/comments/bookmark', {toPid: pid, isBookmark: !bookmarked});
     }
 
     reloadComments();
