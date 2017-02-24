@@ -310,6 +310,7 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
     };
 
     voteXHR.onload = function () {
+        voteXHR.isBusy = false;
         if (voteXHR.status >= 200 && voteXHR.status < 400) {
             var data = JSON.parse(voteXHR.responseText);
             if (data.error) {
@@ -317,21 +318,29 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
             } else {
                 var votes = data.result.post.votes;
                 var el = voteXHR.topicItem.querySelector('.i-upvote');
-                var link = bookmarkXHR.topicItem.querySelector('[component="post/upvote"]');
+                var link = voteXHR.topicItem.querySelector('[component="post/upvote"]');
+                var countEl = voteXHR.topicItem.querySelector('.upvote-count');
                 if (voteXHR.isUpvote) {
                     el.classList.add('icon-thumbs-up-alt');
                     el.classList.remove('icon-thumbs-up');
                     link.setAttribute('data-upvoted', true);
+                    countEl.classList.remove('hidden');
+                    countEl.innerText = votes;
                 } else {
                     el.classList.remove('icon-thumbs-up-alt');
                     el.classList.add('icon-thumbs-up');
                     link.setAttribute('data-upvoted', false);
+                    if (votes == 0) {
+                        countEl.classList.add('hidden');
+                    }
+                    countEl.innerText = votes;
                 }
             }
         }
 
     };
     bookmarkXHR.onload = function () {
+        bookmarkXHR.isBusy = false;
         if (bookmarkXHR.status >= 200 && bookmarkXHR.status < 400) {
             var data = JSON.parse(bookmarkXHR.responseText);
             if (data.error) {
@@ -340,12 +349,12 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                 var el = bookmarkXHR.topicItem.querySelector('.i-bookmark');
                 var link = bookmarkXHR.topicItem.querySelector('[component="post/bookmark"]');
                 if (bookmarkXHR.isBookmark) {
-                    el.classList.add('icon-heart');
-                    el.classList.remove('icon-heart-empty');
+                    el.classList.add('icon-bookmark');
+                    el.classList.remove('icon-bookmark-empty');
                     link.setAttribute('data-bookmarked', true);
                 } else {
-                    el.classList.remove('icon-heart');
-                    el.classList.add('icon-heart-empty');
+                    el.classList.remove('icon-bookmark');
+                    el.classList.add('icon-bookmark-empty');
                     link.setAttribute('data-bookmarked', false);
                 }
 
@@ -360,12 +369,16 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
     }
 
     function upvotePost (topicItem, pid, upvoted) {
+        if (voteXHR.isBusy) return;
+        voteXHR.isBusy = true;
         voteXHR.topicItem = topicItem;
         voteXHR.isUpvote = !upvoted;
         xpost(voteXHR, nbb.url + '/comments/vote', {toPid: pid, isUpvote: !upvoted});
     }
 
     function bookmarkPost (topicItem, pid, bookmarked) {
+        if (bookmarkXHR.isBusy) return;
+        bookmarkXHR.isBusy = true;
         bookmarkXHR.topicItem = topicItem;
         bookmarkXHR.isBookmark = !bookmarked;
         xpost(bookmarkXHR, nbb.url + '/comments/bookmark', {toPid: pid, isBookmark: !bookmarked});

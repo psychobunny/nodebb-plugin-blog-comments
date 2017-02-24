@@ -249,10 +249,29 @@
 }
 
 #nodebb .post-tools a {
-    padding-right: 10px;
+    padding-right: 15px;
     cursor: pointer;
-    color: #38C071;
     text-decoration: none;
+}
+
+#nodebb .post-tools a i.icon-bookmark{
+    color: #38C071;
+}
+
+#nodebb .post-tools a i.icon-thumbs-up-alt{
+    color: #38C071;
+}
+
+#nodebb .post-tools a .upvote-count{
+    position: absolute;
+    word-break: initial;
+    top: 10px;
+    right: 0;
+    color: white;
+    background-color: lightgray;
+    padding: 0px 2px 0 8px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
 }
 
 #nodebb .reply-label {

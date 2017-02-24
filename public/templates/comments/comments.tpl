@@ -59,15 +59,14 @@
 										<i class="icon-quote-right"></i>
 									</a>
 									<a component="post/bookmark" data-bookmarked="{posts.bookmarked}" style="color: inherit; text-decoration: none;" title="Mark">
-										<i class="i-bookmark <!-- IF posts.bookmarked --> icon-heart <!-- ELSE --> icon-heart-empty <!-- ENDIF posts.bookmarked -->"></i>
+										<i class="i-bookmark <!-- IF posts.bookmarked --> icon-bookmark <!-- ELSE --> icon-bookmark-empty <!-- ENDIF posts.bookmarked -->"></i>
 									</a>
-									<a component="post/upvote" data-upvoted="{posts.upvoted}" date-votes="{posts.votes}" style="color: inherit; text-decoration: none;" title="Upvote">
+									<a component="post/upvote" data-upvoted="{posts.upvoted}" date-votes="{posts.votes}" style="color: inherit; text-decoration: none; margin-right: 5px;" title="Upvote">
 										<i class="i-upvote <!-- IF posts.upvoted --> icon-thumbs-up-alt <!-- ELSE --> icon-thumbs-up <!-- ENDIF posts.upvoted -->"></i>
+										<span class="upvote-count <!-- IF !posts.votes --> hidden <!-- ENDIF !posts.votes -->">
+											{posts.votes}
+										</span>
 									</a>
-									<span class="upvote-count <!-- IF !posts.votes --> hidden <!-- ENDIF !posts.votes -->">
-										{posts.votes}
-									</span>
-
 									<!-- <a component="post/quote"><i class="fa fa-quote-left"></i> quote</a> -->
 								</span>
 								<a href="{relative_path}/user/{user.userslug}" style="color: inherit; text-decoration: none;"><strong>{user.username}</strong></a>
