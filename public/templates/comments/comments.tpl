@@ -1,4 +1,21 @@
 <!-- IF tid -->
+	<div class="top-tool-box">
+		<a href="#" class='basicShareBtn'
+		    data-shareUrl='{redirect_url}'
+		    title="Share"
+		>
+			<i class="i-share icon-share" aria-hidden="true"></i>
+		</a>
+
+		<a component="post/bookmark" style="color: inherit; text-decoration: none;" title="Mark">
+			<i class="i-bookmark icon-bookmark"></i>
+		</a>
+		<a component="post/upvote" style="color: inherit; text-decoration: none; margin-right: 5px;" title="Upvote">
+			<i class="i-upvote icon-thumbs-up-alt"></i>
+			<span class="upvote-count">
+			</span>
+		</a>
+	</div>
 	<!-- IF atTop -->
 		<div class="topic-profile-pic user first-image">
 

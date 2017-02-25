@@ -14,6 +14,7 @@
 
 #nodebb a {
     border: none;
+    color: inherit;
 }
 
 #nodebb .well {
@@ -246,6 +247,7 @@
 #nodebb .post-tools {
     float: right;
     text-transform: lowercase;
+    margin-top: 4px;  /* to algin with left div, i dont know why they are not aligned. */
 }
 
 #nodebb .post-tools a {
@@ -254,22 +256,45 @@
     text-decoration: none;
 }
 
-#nodebb .post-tools a i.icon-bookmark{
+#nodebb a i.icon-bookmark{
     color: #38C071;
 }
 
-#nodebb .post-tools a i.icon-thumbs-up-alt{
+#nodebb a i.icon-thumbs-up-alt{
     color: #38C071;
 }
 
 #nodebb .post-tools a .upvote-count{
     position: absolute;
     word-break: initial;
-    top: 10px;
+    top: 13px;
     right: 0;
     color: white;
     background-color: lightgray;
     padding: 0px 2px 0 8px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+
+#nodebb .top-tool-box {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 40px;
+    color: dimgray;
+    position: relative;
+    line-height: 1; /* to avoid different page line-height. */
+}
+
+#nodebb .top-tool-box a {
+    cursor: pointer;
+}
+
+#nodebb .top-tool-box a .upvote-count{
+    position: absolute;
+    word-break: initial;
+    color: white;
+    background-color: lightgray;
+    padding: 0 8px 0 15px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
 }

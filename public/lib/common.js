@@ -49,6 +49,7 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
     var XHR = newXHR(), pagination = 0, modal;
     var voteXHR = newXHR();
     var bookmarkXHR = newXHR();
+    var mainPost;
 
     function authenticate(type) {
         savedText = contentDiv.value;
@@ -117,7 +118,6 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
             data.article_id = nbb.articleID;
             data.pagination = pagination;
             data.postCount = parseInt(data.postCount, 10);
-
             for (var post in data.posts) {
                 if (data.posts.hasOwnProperty(post)) {
                     data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
@@ -145,6 +145,12 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
             } else {
                 html = parse(data, data.template);
                 nodebbDiv.innerHTML = normalizePost(html);
+
+                if (data.mainPost) {
+                    mainPost=data.mainPost;
+                    onUpvoted(nodebbDiv.querySelector('.top-tool-box'), mainPost.upvoted, mainPost.votes);
+                    onBookmarked(nodebbDiv.querySelector('.top-tool-box'), mainPost.bookmarked);
+                }
             }
 
             contentDiv = document.getElementById('nodebb-content');
@@ -239,13 +245,16 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
 
                 });
 
-                bindOnClick(nodebbCommentsList.querySelectorAll('[component="post/reply"],[component="post/quote"],[component="post/bookmark"],[component="post/upvote"]'), function(event) {
+                bindOnClick(nodebbDiv.querySelectorAll('[component="post/reply"],[component="post/quote"],[component="post/bookmark"],[component="post/upvote"]'), function(event) {
                     if (!data.user || !data.user.uid) {
                         authenticate('login');
                         return;
                     }
 
                     var topicItem = event.target;
+                    var bookmarked = JSON.parse(this.getAttribute('data-bookmarked'));
+                    var upvoted = JSON.parse(this.getAttribute('data-upvoted'));
+
                     while (topicItem && !topicItem.classList.contains('topic-item')) {
                         topicItem = topicItem.parentElement;
                     }
@@ -256,8 +265,6 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                         var formInput = elementForm.querySelector('textarea');
                         var pid = topicItem.getAttribute('data-pid');
                         var uid = topicItem.getAttribute('data-uid');
-                        var bookmarked = JSON.parse(this.getAttribute('data-bookmarked'));
-                        var upvoted = JSON.parse(this.getAttribute('data-upvoted'));
 
                         if (visibleForm && visibleForm !== elementForm) {
                             visibleForm.classList.add('hidden');
@@ -278,9 +285,17 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                         } else if (/\/bookmark$/.test(this.getAttribute('component'))) {
                             bookmarkPost(topicItem, pid, bookmarked);
                         }
+                    } else {
 
-
+                        if (/\/upvote$/.test(this.getAttribute('component'))) {
+                            if(data.user.uid != mainPost.uid) {
+                                upvotePost(nodebbDiv.querySelector('.top-tool-box'), mainPost.pid, upvoted);
+                            }
+                        } else if (/\/bookmark$/.test(this.getAttribute('component'))) {
+                            bookmarkPost(nodebbDiv.querySelector('.top-tool-box'), mainPost.pid, bookmarked);
+                        }
                     }
+
                 });
 
             } else {
@@ -309,36 +324,52 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
         }
     };
 
+    function onUpvoted (topicItem, isUpvote, votes) {
+        var el = topicItem.querySelector('.i-upvote');
+        var link = topicItem.querySelector('[component="post/upvote"]');
+        var countEl = topicItem.querySelector('.upvote-count');
+        if (isUpvote) {
+            el.classList.add('icon-thumbs-up-alt');
+            el.classList.remove('icon-thumbs-up');
+            link.setAttribute('data-upvoted', true);
+            countEl.classList.remove('hidden');
+            countEl.innerText = votes;
+        } else {
+            el.classList.remove('icon-thumbs-up-alt');
+            el.classList.add('icon-thumbs-up');
+            link.setAttribute('data-upvoted', false);
+            if (votes == 0) {
+                countEl.classList.add('hidden');
+            }
+            countEl.innerText = votes;
+        }
+    }
+
     voteXHR.onload = function () {
         voteXHR.isBusy = false;
         if (voteXHR.status >= 200 && voteXHR.status < 400) {
             var data = JSON.parse(voteXHR.responseText);
             if (data.error) {
                 console.error(data.error);
-            } else {
-                var votes = data.result.post.votes;
-                var el = voteXHR.topicItem.querySelector('.i-upvote');
-                var link = voteXHR.topicItem.querySelector('[component="post/upvote"]');
-                var countEl = voteXHR.topicItem.querySelector('.upvote-count');
-                if (voteXHR.isUpvote) {
-                    el.classList.add('icon-thumbs-up-alt');
-                    el.classList.remove('icon-thumbs-up');
-                    link.setAttribute('data-upvoted', true);
-                    countEl.classList.remove('hidden');
-                    countEl.innerText = votes;
-                } else {
-                    el.classList.remove('icon-thumbs-up-alt');
-                    el.classList.add('icon-thumbs-up');
-                    link.setAttribute('data-upvoted', false);
-                    if (votes == 0) {
-                        countEl.classList.add('hidden');
-                    }
-                    countEl.innerText = votes;
-                }
+            } else if (data.result) {
+                onUpvoted(voteXHR.topicItem, voteXHR.isUpvote, data.result.post.votes);
             }
         }
-
     };
+
+    function onBookmarked (topicItem, isBookmark) {
+        var el = topicItem.querySelector('.i-bookmark');
+        var link = topicItem.querySelector('[component="post/bookmark"]');
+        if (isBookmark) {
+            el.classList.add('icon-bookmark');
+            el.classList.remove('icon-bookmark-empty');
+            link.setAttribute('data-bookmarked', true);
+        } else {
+            el.classList.remove('icon-bookmark');
+            el.classList.add('icon-bookmark-empty');
+            link.setAttribute('data-bookmarked', false);
+        }
+    }
     bookmarkXHR.onload = function () {
         bookmarkXHR.isBusy = false;
         if (bookmarkXHR.status >= 200 && bookmarkXHR.status < 400) {
@@ -346,22 +377,9 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
             if (data.error) {
                 console.error(data.error);
             } else {
-                var el = bookmarkXHR.topicItem.querySelector('.i-bookmark');
-                var link = bookmarkXHR.topicItem.querySelector('[component="post/bookmark"]');
-                if (bookmarkXHR.isBookmark) {
-                    el.classList.add('icon-bookmark');
-                    el.classList.remove('icon-bookmark-empty');
-                    link.setAttribute('data-bookmarked', true);
-                } else {
-                    el.classList.remove('icon-bookmark');
-                    el.classList.add('icon-bookmark-empty');
-                    link.setAttribute('data-bookmarked', false);
-                }
-
+                onBookmarked(bookmarkXHR.topicItem, bookmarkXHR.isBookmark);
             }
-
         }
-
     };
 
     function reloadComments() {
