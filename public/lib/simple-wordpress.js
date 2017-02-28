@@ -32,6 +32,9 @@
     }
 
     var nbb = {tags: []};
+    nbb.loadScript = loadScript;
+    nbb.loadCSS = loadCSS;
+
     var scriptDiv = document.getElementById('nodebb-comments-script');
     nbb.url = scriptDiv.getAttribute('ourl');
     nbb.cid = scriptDiv.getAttribute('ocid');

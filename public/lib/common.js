@@ -150,6 +150,12 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                     mainPost=data.mainPost;
                     onUpvoted(nodebbDiv.querySelector('.top-tool-box'), mainPost.upvoted, mainPost.votes);
                     onBookmarked(nodebbDiv.querySelector('.top-tool-box'), mainPost.bookmarked);
+
+                    nbb.loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/needsharebutton.js', function () {
+                        new needShareDropdown(nodebbDiv.querySelector('.top-tool-box .need-more-share2'));
+
+                    });
+
                 }
             }
 

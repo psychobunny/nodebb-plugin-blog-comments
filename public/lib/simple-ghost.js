@@ -36,6 +36,8 @@
     nbb.url = scriptDiv.getAttribute('ourl');
     nbb.cid = scriptDiv.getAttribute('ocid');
     nbb.blogger = scriptDiv.getAttribute('blogger');
+    nbb.loadScript = loadScript;
+    nbb.loadCSS = loadCSS;
 
     // get tags and content;
     var metaEl = document.getElementsByTagName('meta');

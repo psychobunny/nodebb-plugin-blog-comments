@@ -1,6 +1,6 @@
 <!-- IF tid -->
 	<div class="top-tool-box">
-		<a href="#" class='basicShareBtn'
+		<a href="" class='need-more-share2'
 		    data-shareUrl='{redirect_url}'
 		    title="Share"
 		>

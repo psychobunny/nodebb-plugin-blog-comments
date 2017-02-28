@@ -32,6 +32,8 @@
     }
 
     var nbb = {};
+    nbb.loadScript = loadScript;
+    nbb.loadCSS = loadCSS;
 
     var scriptDiv = document.getElementById('nodebb-comments-script');
     var articleEl = document.getElementsByTagName('article')[0];

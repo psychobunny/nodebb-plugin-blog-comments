@@ -31,6 +31,9 @@
 		document.getElementsByTagName("head")[0].appendChild(stylesheet);
 	}
 
+	nbb.loadScript = loadScript;
+	nbb.loadCSS = loadCSS;
+
 	loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments.css');
 
 	// fix youtube embed video
