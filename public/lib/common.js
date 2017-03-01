@@ -174,7 +174,7 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                 contentDiv.value = savedText;
             }
 
-            if (data.tid) {
+            if (data.isValid) {
                 var loadMore = document.getElementById('nodebb-load-more');
                 loadMore.onclick = function() {
                     pagination++;

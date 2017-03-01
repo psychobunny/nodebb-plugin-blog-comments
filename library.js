@@ -118,6 +118,7 @@
 					tid: tid,
 					category: data.category,
 					mainPost: data.mainPost,
+					isValid: !!data.mainPost && !!tid,
 					atBottom: bottom,
 					atTop: top,
 					siteTitle: meta.config.title

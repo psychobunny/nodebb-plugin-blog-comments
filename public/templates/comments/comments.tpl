@@ -1,4 +1,4 @@
-<!-- IF tid -->
+<!-- IF isValid -->
 	<div class="top-tool-box">
 		<a href="" class='need-more-share2'
 		    data-shareUrl='{redirect_url}'
@@ -161,4 +161,4 @@
 		<input type="hidden" name="_csrf" value="{token}" />
 	</form>
 	<!-- ENDIF isAdmin -->
-<!-- ENDIF tid -->
+<!-- ENDIF isValid -->
