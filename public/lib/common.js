@@ -356,7 +356,8 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
         if (voteXHR.status >= 200 && voteXHR.status < 400) {
             var data = JSON.parse(voteXHR.responseText);
             if (data.error) {
-                console.error(data.error);
+                console.error('Something terrible happened! Please contact River on V2MM.tech and report the error, please I beg you, appreciate so much!',
+                 data.error);
             } else if (data.result) {
                 onUpvoted(voteXHR.topicItem, voteXHR.isUpvote, data.result.post.votes);
             }
@@ -381,7 +382,8 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
         if (bookmarkXHR.status >= 200 && bookmarkXHR.status < 400) {
             var data = JSON.parse(bookmarkXHR.responseText);
             if (data.error) {
-                console.error(data.error);
+                console.error('Something terrible happened! Please contact River on V2MM.tech and report the error, please I beg you, appreciate so much!',
+                    data.error);
             } else {
                 onBookmarked(bookmarkXHR.topicItem, bookmarkXHR.isBookmark);
             }
