@@ -40,6 +40,9 @@
     nbb.cid = scriptDiv.getAttribute('ocid');
     nbb.blogger = scriptDiv.getAttribute('blogger');
 
+    nbb.loadScript = loadScript;
+    nbb.loadCSS = loadCSS;
+
     // get article's title in url.
     nbb.articleID = location.pathname.split('/').slice(-1)[0].replace('.html', '');
 
