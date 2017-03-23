@@ -317,7 +317,8 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                     if (nbb.articleTitle) {
                         articleTitle = nbb.articleTitle;
                     } else {
-                        articleTitle = document.getElementById('nbb-title').innerText;
+                        var telement = document.getElementById('nbb-title');
+                        articleTitle = telement ? telement.innerText : document.title;
                     }
 
                     document.getElementById('nodebb-content-title').value = articleTitle;

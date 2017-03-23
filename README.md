@@ -1,8 +1,10 @@
 This plugin is a folk from [NodeBB Blog Comments](https://github.com/psychobunny/nodebb-plugin-blog-comments), I just added some more features and fixed some bugs to it.
 
 * Support multiple blogs, use `articleID` and `blogger` to distinguish posts from different blogs, so this is kinda break change to the original nodebb-plugin-blog-comments.
-* Simple script for ghost, hugo, pelican etc, just add a `<script>` node at any place of the page, will support more blog platforms later.
+* Simple script for ghost, hugo, pelican etc, and a general script for any other blogs, just add a `<script>` node at any place of the page, will support more blog platforms later.
 * Use `siteTitle` instead of NodeBB in the `comments.tpl`.
+* Support social sites sharing plugin and upvote and bookmark actions.
+* Two css styles for comments.
 * Fixed some bugs, like escaped title and content problems, profile image display, etc.
 
 The multiple blogs feature is great, you can see at here: https://v2mm.tech/category/46/blog
@@ -19,7 +21,12 @@ Articles are published to a forum category of your choice, and will gain a tag t
 
 ## Screenshots
 
-![blog comments](http://i.imgur.com/pPO42Hy.png)
+* Style 1
+![style1](style1.png)
+
+* Style 2
+![style2](style2.png)
+
 
 ## Installation
 
@@ -28,6 +35,39 @@ First install the plugin:
     npm install nodebb-plugin-blog-comments2
 
 Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments section in the ACP and select the Category ID you'd like to publish your blog content to (default is Category 1). Make sure you put the correct URL to your blog.
+
+### General Use
+
+Put this script to anywhere in your blog's article page, either in head or body, fill the variables, see explanations below.
+
+```
+<script type="text/javascript">
+$(document).ready(function() {
+   var nbb = window.nbb = {};
+   nbb.url = '//yournodebb.com'; // your forum url.
+   nbb.cid = 79;   // the category where to publish.
+   nbb.blogger = 'yourname';   // the name to distingush with different blog, omit it to fallback to 'default'.
+   nbb.commentsCSS = nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments2.css'; // which style you prefer, omit it to fallback to the default comments.css
+   nbb.articleID = <Function to get the unique article id>   // To get the unique article id, see explations below.
+   nbb.articleTitle = document.title;                       // To get the article title, document.title is the default.
+   nbb.commentElement = document.getElementById('nodebb-comments');  // Where you put the comments widget, "nodebb-comments" element is the default.
+
+   nbb.articleContent = <Function to get the excerpt of the article> // Write a function to get the post content.
+
+   nbb.script = document.createElement('script');
+   nbb.script.type = 'text/javascript';
+   nbb.script.async = true;
+   nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/general.js';  // load general.js async.
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
+});
+</script>
+```
+
+If you wish, you can create `<a id="nodebb-comments"></a>` to where you want to place the actual comments widget.
+
+Also, there are some special scripts for some common blog platform. But in various blog themes, these scripts cannot guarantee to be true.
+For example, `simple-wordpress.js` can't be used on any wordpress websites.
+If you encounter any error, use `general.js` instead or put an issue to me.
 
 ### Ghost Installation
 
