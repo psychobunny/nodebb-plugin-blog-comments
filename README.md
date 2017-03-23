@@ -40,7 +40,7 @@ Activate the plugin in the ACP and reboot NodeBB. Head over to the Blog Comments
 
 Put this script to anywhere in your blog's article page, either in head or body, fill the variables, see explanations below.
 
-```
+```html
 <script type="text/javascript">
 $(document).ready(function() {
    var nbb = window.nbb = {};
