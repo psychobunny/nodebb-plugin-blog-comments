@@ -34,7 +34,8 @@
 	nbb.loadScript = loadScript;
 	nbb.loadCSS = loadCSS;
 
-	loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments.css');
+
+	loadCSS(nbb.commentsCSS || (nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/comments.css'));
 
 	// fix youtube embed video
 	if (window.jQuery) {
@@ -42,9 +43,20 @@
 		loadCSS(nbb.url + '/plugins/nodebb-plugin-blog-comments2/css/youtube-embed-video.css');
 	}
 
-	var posDiv = document.getElementById('nodebb-comments');
+	var commentPositionDiv = document.getElementById('nodebb-comments');
+    if (!commentPositionDiv) {
+        commentPositionDiv = document.createElement('div');
+        commentPositionDiv.setAttribute('id', 'nodebb-comments');
+
+        if (!nbb.commentElement) {
+            console.error('Couldnot find the comments element');
+            return;
+        }
+        nbb.commentElement.appendChild(commentPositionDiv);
+    }
+
 	loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/common.js', function () {
-		blogComments2Common(posDiv, nbb);
+		blogComments2Common(commentPositionDiv, nbb);
 	});
 
 }());
