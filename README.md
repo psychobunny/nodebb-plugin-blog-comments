@@ -144,7 +144,7 @@ if ( post_password_required() )
 <a id="nodebb-comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
-	wordpressURL = '<?php get_site_url(); ?>',
+	wordpressURL = '<?php echo get_site_url(); ?>',
 	articleID = '<?php echo the_ID(); ?>',
 	blogger = 'name', //OPTIONAL. Assign an blogger name to disdinguish different blogger. Omit it to fallback to 'default'
 	articleType = '<?php echo get_post_type() ?>',
