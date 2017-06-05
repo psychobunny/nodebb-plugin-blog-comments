@@ -144,11 +144,11 @@ if ( post_password_required() )
 <a id="nodebb-comments"></a>
 <script type="text/javascript">
 var nodeBBURL = '//your.nodebb.com',
-	wordpressURL = '<?php get_site_url(); ?>',
+	wordpressURL = '<?php echo get_site_url(); ?>',
 	articleID = '<?php echo the_ID(); ?>',
-    blogger = 'name'; //OPTIONAL. Assign an blogger name to disdinguish different blogger. Omit it to fallback to 'default'
-	categoryID = 1; // OPTIONAL. Forces a Category ID in NodeBB.
-					 //  Omit it to fallback to specified IDs in the admin panel.
+	blogger = 'name', //OPTIONAL. Assign an blogger name to disdinguish different blogger. Omit it to fallback to 'default'
+	articleType = '<?php echo get_post_type() ?>',
+	categoryID = -1; // If -1, will use category in NodeBB ACP.  Put in a category number to force that category.
 
 (function() {
 var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;

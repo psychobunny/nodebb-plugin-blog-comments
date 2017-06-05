@@ -154,7 +154,7 @@
 			} else {
 				if (data.isAdmin) {
 					var adminXHR = newXHR();
-					adminXHR.open('GET', wordpressURL + '?json=get_post&post_id=' + articleID);
+					adminXHR.open('GET', wordpressURL + '?json=get_post&post_type='+articleType+'&post_id=' + articleID);
 					adminXHR.onload = function() {
 						if (adminXHR.status >= 200 && adminXHR.status < 400) {
 							var articleData = JSON.parse(adminXHR.responseText.toString()).post,
