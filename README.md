@@ -102,7 +102,7 @@ Paste this any where that you want load commenting system. All you have to edit 
 	
 	(function() {
 	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/generalphp.js';
+	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/general.js';
 	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
 	})();
 	</script>
