@@ -16,8 +16,8 @@
 		}
 	],
 	"scripts": [
-        "public/lib/main.js"
-    ],
+		"public/lib/main.js"
+	],
 	"staticDirs": {
 		"templates": "./public/templates",
 		"css": "./public/css",
