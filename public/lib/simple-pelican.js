@@ -57,7 +57,7 @@
     var articleTitleEl = articleEl.getElementsByClassName('post-title')[0];
     nbb.articleTitle = articleTitleEl ? articleTitleEl.innerText : '';
     var articleContent = [];
-    var pagraphs = articleEl.getElementsByTagName('p, h4, h5');
+    var pagraphs = articleEl.querySelectorAll('p, h4, h5');
     for (var j = 0; j < pagraphs.length; j++) {
         // only get the first and second paragraph.
         if (j ===0 || j===1){
