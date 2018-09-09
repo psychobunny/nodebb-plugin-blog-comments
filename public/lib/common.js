@@ -152,7 +152,7 @@ var blogComments2Common = function (commentPositionDiv, nbb, kwargs) {
                     onBookmarked(nodebbDiv.querySelector('.top-tool-box'), mainPost.bookmarked);
 
                     nbb.loadScript(nbb.url + '/plugins/nodebb-plugin-blog-comments2/lib/needsharebutton.js', function () {
-                        new needShareDropdown(nodebbDiv.querySelector('.top-tool-box .need-more-share2'));
+                        new needShareButton(nodebbDiv.querySelector('.top-tool-box .need-more-share2'));
 
                     });
 
