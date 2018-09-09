@@ -1,4 +1,4 @@
-@import url("needsharebutton.css");
+@import url("needsharebutton.min.css");
 
 #nodebb *, #nodebb *:before, #nodebb *:after {
     -webkit-box-sizing: border-box;
