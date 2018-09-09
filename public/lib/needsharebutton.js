@@ -482,6 +482,8 @@
        var openedEl = document.querySelector('.need-share-button-opened');
        if (!closest(event.target, '.need-share-button-opened')) {
          if (openedEl) {
+					  event.preventDefault();
+					 
             openedEl.classList.remove('need-share-button-opened');
 
             // hide wechat code image when close the dropdown.
@@ -491,6 +493,7 @@
          } else {
             var el = closest(event.target, root.elem);
             if (el) {
+							 event.preventDefault();
                if (!el.classList.contains('need-share-button-opened')) {
                  createDropdown(el);
                  setTimeout(function () {
