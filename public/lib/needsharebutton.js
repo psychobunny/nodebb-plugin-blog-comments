@@ -483,7 +483,7 @@
        if (!closest(event.target, '.need-share-button-opened')) {
          if (openedEl) {
 					  event.preventDefault();
-					 
+
             openedEl.classList.remove('need-share-button-opened');
 
             // hide wechat code image when close the dropdown.
@@ -503,7 +503,11 @@
                }
             }
          }
-       }
+       } else {
+				 if (closest(event.target, root.elem)) {
+					 event.preventDefault();
+				 }
+			 }
      });
 
   };
