@@ -3,12 +3,12 @@
 
 	var Comments = {};
 
-	var db = module.parent.require('../src/database.js'),
-		meta = module.parent.require('../src/meta.js'),
-		posts = module.parent.require('../src/posts.js'),
-		topics = module.parent.require('../src/topics.js'),
-		user = module.parent.require('../src/user.js'),
-		groups = module.parent.require('../src/groups.js'),
+	var db = require.main.require('./src/database'),
+		meta = require.main.require('./src/meta'),
+		posts = require.main.require('./src/posts'),
+		topics = require.main.require('./src/topics'),
+		user = require.main.require('./src/user'),
+		groups = require.main.require('./src/groups'),
 		fs = module.parent.require('fs'),
 		path = module.parent.require('path'),
 		async = module.parent.require('async'),
