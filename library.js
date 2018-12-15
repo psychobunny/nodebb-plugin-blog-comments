@@ -93,7 +93,7 @@
 					postCount: data.postCount,
 					user: data.user,
 					template: Comments.template,
-					token: req.csrfToken(),
+					token: req.csrfToken && req.csrfToken(),
 					isAdmin: !data.isAdministrator ? data.isPublisher : data.isAdministrator,
 					isLoggedIn: !!uid,
 					tid: tid,
