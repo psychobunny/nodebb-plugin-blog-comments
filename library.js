@@ -80,7 +80,7 @@
 				res.header("Access-Control-Allow-Credentials", "true");
 
 				var posts = data.posts.filter(function(post) {
-					return post.deleted === false;
+					return !post.deleted;
 				});
 
 				var top = true;
