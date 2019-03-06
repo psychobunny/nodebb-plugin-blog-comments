@@ -6,6 +6,22 @@ The comments are exposed to any plugin you have built into the core, so it is co
 
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
+
+## Upgrading to 0.6x
+
+Getting `Unexpected end of JSON input` for `/comments/publish`? On your blog's post template (ex. `post.hbs` for Ghost) where you have installed the blog comments script, find the following line:
+
+```
+<script id="nbb-markdown" type="text/markdown">{{../post.markdown}}</script>
+```
+
+and above, add:
+
+```
+<script id="nbb-title" type="text/markdown">{{../post.title}}</script>
+```
+
+
 ## What's new in 0.3x
 
 * Fixed quite a few server crashes (especially when publishing)
@@ -45,8 +61,8 @@ nbb.script.src = nbb.url + '/plugins/nodebb-plugin-blog-comments/lib/ghost.js';
 (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb.script);
 })();
 </script>
-<span id="nbb-title" style="display:none">{{../post.title}}</span>
-<span id="nbb-markdown" style="display:none">{{../post.markdown}}</span>
+<script id="nbb-title" type="text/markdown">{{../post.title}}</script>
+<script id="nbb-markdown" type="text/markdown">{{../post.markdown}}</script>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
 
