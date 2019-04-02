@@ -3,16 +3,18 @@
 
 	var Comments = {};
 
-	var db = require.main.require('./src/database'),
-		meta = require.main.require('./src/meta'),
-		posts = require.main.require('./src/posts'),
-		topics = require.main.require('./src/topics'),
-		user = require.main.require('./src/user'),
-		groups = require.main.require('./src/groups'),
-		fs = module.parent.require('fs'),
-		path = module.parent.require('path'),
-		async = module.parent.require('async'),
-		winston = module.parent.require('winston');
+	var db = require.main.require('./src/database');
+	var meta = require.main.require('./src/meta');
+	var posts = require.main.require('./src/posts');
+	var topics = require.main.require('./src/topics');
+	var user = require.main.require('./src/user');
+	var groups = require.main.require('./src/groups');
+	var fs = module.parent.require('fs');
+	var path = module.parent.require('path');
+	var async = module.parent.require('async');
+	var winston = module.parent.require('winston');
+	var nconf = module.parent.require('nconf');
+	var relativePath = nconf.get('relative_path');
 
 	module.exports = Comments;
 
@@ -80,8 +82,15 @@
 				res.header("Access-Control-Allow-Credentials", "true");
 
 				var posts = data.posts.filter(function(post) {
+					if (post.user.picture) {
+						post.user.picture = post.user.picture.replace(relativePath, '');
+					}
 					return !post.deleted;
 				});
+
+				if (user.picture) {
+					user.picture = user.picture.replace(relativePath, '');
+				}
 
 				var top = true;
 				var bottom = false;
