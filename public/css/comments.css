@@ -207,6 +207,6 @@
 	border-radius: 100%;
 }
 
-#nodebb .post-content {
+#nodebb-comments-list .post-content {
 	display: inline;
 }
