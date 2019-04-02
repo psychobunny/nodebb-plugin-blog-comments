@@ -206,3 +206,7 @@
 	height: 20px;
 	border-radius: 100%;
 }
+
+#nodebb .post-content {
+	display: inline;
+}
