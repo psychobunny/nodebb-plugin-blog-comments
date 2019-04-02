@@ -88,8 +88,8 @@
 					return !post.deleted;
 				});
 
-				if (user.picture) {
-					user.picture = user.picture.replace(relativePath, '');
+				if (data.user.picture) {
+					data.user.picture = data.user.picture.replace(relativePath, '');
 				}
 
 				var top = true;
