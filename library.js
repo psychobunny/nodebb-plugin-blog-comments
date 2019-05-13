@@ -124,7 +124,8 @@
 		topics.reply({
 			tid: tid,
 			uid: uid,
-			content: content
+			content: content,
+			req: req,
 		}, function(err, postData) {
 			if(err) {
 				return res.redirect(url + '?error=' + err.message + '#nodebb-comments');
