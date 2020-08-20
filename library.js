@@ -248,8 +248,8 @@
 		});
 
 		app.get('/comments/get/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
-		app.post('/comments/reply', Comments.replyToComment);
-		app.post('/comments/publish', Comments.publishArticle);
+		app.post('/comments/reply', middleware.applyCSRF, Comments.replyToComment);
+		app.post('/comments/publish', middleware.applyCSRF, Comments.publishArticle);
 
 		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
 		app.get('/api/admin/blog-comments', renderAdmin);
