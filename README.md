@@ -70,8 +70,6 @@ If you wish, you can move `<a id="nodebb-comments"></a>` to where you want to pl
 
 ### Wordpress Installation
 
-First, install the [Wordpress JSON API](http://wordpress.org/plugins/json-api/) plugin.
-
 Replace the contents of `/wp-content/themes/YOUR_THEME/comments.php` with the following (back-up the old comments.php, just in case):
 
 ```html
