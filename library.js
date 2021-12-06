@@ -17,7 +17,7 @@ const groups = require.main.require('./src/groups');
 const Comments = module.exports;
 
 Comments.init = async function (params) {
-	const { router, middleware } = params.router;
+	const { router, middleware } = params;
 	const routeHelpers = require.main.require('./src/routes/helpers');
 
 	Comments.template = await fs.promises.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), { encoding: 'utf-8' });
