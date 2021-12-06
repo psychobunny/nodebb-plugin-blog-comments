@@ -28,7 +28,12 @@
     "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
   },
   "nbbpm": {
-    "compatibility": "^1.12.0"
+    "compatibility": "^1.17.0"
+  },
+  "devDependencies": {
+    "eslint": "8.3.0",
+    "eslint-config-nodebb": "0.1.1",
+    "eslint-plugin-import": "2.25.3"
   },
   "readme": "",
   "readmeFilename": "README.md",

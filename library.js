@@ -1,261 +1,184 @@
-(function(module) {
-	"use strict";
+'use strict';
 
-	var Comments = {};
+const fs = require('fs');
+const path = require('path');
 
-	var db = require.main.require('./src/database');
-	var meta = require.main.require('./src/meta');
-	var posts = require.main.require('./src/posts');
-	var topics = require.main.require('./src/topics');
-	var user = require.main.require('./src/user');
-	var groups = require.main.require('./src/groups');
-	var fs = module.parent.require('fs');
-	var path = module.parent.require('path');
-	var async = module.parent.require('async');
-	var winston = module.parent.require('winston');
-	var nconf = module.parent.require('nconf');
-	var relativePath = nconf.get('relative_path');
+const winston = module.parent.require('winston');
+const nconf = module.parent.require('nconf');
+const relativePath = nconf.get('relative_path');
 
-	module.exports = Comments;
+const db = require.main.require('./src/database');
+const meta = require.main.require('./src/meta');
+const posts = require.main.require('./src/posts');
+const topics = require.main.require('./src/topics');
+const user = require.main.require('./src/user');
+const groups = require.main.require('./src/groups');
 
-	Comments.getTopicIDByCommentID = function(commentID, callback) {
-		db.getObjectField('blog-comments', commentID, function(err, tid) {
-			callback(err, tid);
-		});
-	};
+const Comments = module.exports;
 
-	Comments.getCommentData = function(req, res, callback) {
-		var commentID = req.params.id,
-			pagination = req.params.pagination ? req.params.pagination : 0,
-			uid = req.user ? req.user.uid : 0;
+Comments.init = async function (params) {
+	const { router, middleware } = params.router;
+	const routeHelpers = require.main.require('./src/routes/helpers');
 
-		Comments.getTopicIDByCommentID(commentID, function(err, tid) {
-			var disabled = false;
+	Comments.template = await fs.promises.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), { encoding: 'utf-8' });
 
-			async.parallel({
-				posts: function(next) {
-					if (disabled) {
-						next(err, []);
-					} else {
-						topics.getTopicPosts(tid, 'tid:' + tid + ':posts', 0 + req.params.pagination * 10, 9 + req.params.pagination * 9, uid, true, next);
-					}
-				},
-				postCount: function(next) {
-					topics.getTopicField(tid, 'postcount', next);
-				},
-				user: function(next) {
-					user.getUserData(uid, next);
-				},
-				isAdministrator: function(next) {
-					user.isAdministrator(uid, next);
-				},
-				isPublisher: function(next) {
-					groups.isMember(uid, 'publishers', next);
-				},
-				category: function(next) {
-					topics.getCategoryData(tid, next);
-				},
-				mainPost: function(next) {
-					topics.getMainPost(tid, uid, next);
-				}
-			}, function(err, data) {
-				var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-					url;
+	router.get('/comments/get/:id/:pagination?', middleware.applyCSRF, routeHelpers.tryRoute(Comments.getCommentData));
+	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
+	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
 
-				hostUrls.forEach(function(hostUrl) {
-					hostUrl = hostUrl.trim();
-					if (hostUrl[hostUrl.length - 1] === '/') {
-						hostUrl = hostUrl.substring(0, hostUrl.length - 1);
-					}
+	routeHelpers.setupAdminPageRoute(router, '/blog-comments', middleware, [], (req, res) => {
+		res.render('comments/admin', {});
+	});
+};
 
-					if (hostUrl === req.get('origin')) {
-						url = req.get('origin');
-					}
-				});
+Comments.getTopicIDByCommentID = async function (commentID) {
+	return await db.getObjectField('blog-comments', commentID);
+};
 
-				if (!url) {
-					winston.warn('[nodebb-plugin-blog-comments] Origin (' + req.get('origin') + ') does not match hostUrls: ' + hostUrls.join(', '));
-				} else {				
-					res.header("Access-Control-Allow-Origin", url);
-				}
+Comments.getCommentData = async function (req, res, next) {
+	const commentID = req.params.id;
+	const pagination = req.params.pagination ? req.params.pagination : 0;
 
-				res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-				res.header("Access-Control-Allow-Credentials", "true");
+	const tid = await Comments.getTopicIDByCommentID(commentID);
+	const topicData = await topics.getTopicData(tid);
+	if (!topicData) {
+		return next();
+	}
+	const start = pagination * 10;
+	const stop = start + 9;
+	const [postData, userData, isAdmin, isPublisher, categoryData, mainPost] = await Promise.all([
+		topics.getTopicPosts(topicData, `tid:${tid}:posts`, start, stop, req.uid, true),
+		user.getUserData(req.uid),
+		user.isAdministrator(req.uid),
+		groups.isMember(req.uid, 'publishers'),
+		topics.getCategoryData(tid),
+		topics.getMainPost(tid, req.uid),
+	]);
 
-				var posts = data.posts.filter(function(post) {
-					if (post.user.picture) {
-						post.user.picture = post.user.picture.replace(relativePath, '');
-					}
-					return !post.deleted;
-				});
+	const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
+	let url;
 
-				if (data.user.picture) {
-					data.user.picture = data.user.picture.replace(relativePath, '');
-				}
-
-				var top = true;
-				var bottom = false;
-				var compose_location = meta.config['blog-comments:compose-location'];
-				if (compose_location == "bottom"){ bottom = true; top = false;}
-
-				res.json({
-					posts: posts,
-					postCount: data.postCount,
-					user: data.user,
-					template: Comments.template,
-					token: req.csrfToken && req.csrfToken(),
-					isAdmin: !data.isAdministrator ? data.isPublisher : data.isAdministrator,
-					isLoggedIn: !!uid,
-					tid: tid,
-					category: data.category,
-					mainPost: data.mainPost ? data.mainPost[0] : null,
-					atBottom: bottom,
-					atTop: top
-				});
-			});
-		});
-	};
-
-	Comments.replyToComment = function(req, res, callback) {
-		var content = req.body.content,
-			tid = req.body.tid,
-			url = req.body.url,
-			uid = req.user ? req.user.uid : 0;
-
-		topics.reply({
-			tid: tid,
-			uid: uid,
-			content: content,
-			req: req,
-		}, function(err, postData) {
-			if(err) {
-				return res.redirect(url + '?error=' + err.message + '#nodebb-comments');
-			}
-
-			res.redirect(url + '#nodebb-comments');
-		});
-	};
-
-	Comments.publishArticle = function(req, res, callback) {
-		var markdown = req.body.markdown,
-			title = req.body.title,
-			url = req.body.url,
-			commentID = req.body.id,
-			tags = req.body.tags,
-			uid = req.user ? req.user.uid : 0,
-			cid = JSON.parse(req.body.cid);
-
-		if (cid === -1) {
-			var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-				position = 0;
-
-			hostUrls.forEach(function(hostUrl, i) {
-				hostUrl = hostUrl.trim();
-				if (hostUrl[hostUrl.length - 1] === '/') {
-					hostUrl = hostUrl.substring(0, hostUrl.length - 1);
-				}
-
-				if (hostUrl === req.get('origin')) {
-					position = i;
-				}
-			});
-
-			cid = meta.config['blog-comments:cid'].toString() || '';
-			cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
+	hostUrls.forEach((hostUrl) => {
+		hostUrl = hostUrl.trim();
+		if (hostUrl[hostUrl.length - 1] === '/') {
+			hostUrl = hostUrl.substring(0, hostUrl.length - 1);
 		}
 
-		async.parallel({
-			isAdministrator: function(next) {
-				user.isAdministrator(uid, next);
-			},
-			isPublisher: function(next) {
-				groups.isMember(uid, 'publishers', next);
-			}
-		}, function(err, userStatus) {
-			if (!userStatus.isAdministrator && !userStatus.isPublisher) {
-				return res.json({error: "Only Administrators or members of the publishers group can publish articles"});
-			}
+		if (hostUrl === req.get('origin')) {
+			url = req.get('origin');
+		}
+	});
 
-			topics.post({
-				uid: uid,
-				title: title,
-				content: markdown,
-				tags: tags ? JSON.parse(tags) : [],
-				req: req,
-				cid: cid
-			}, function(err, result) {
-				if (!err && result && result.postData && result.postData.tid) {
-					posts.setPostField(result.postData.pid, 'blog-comments:url', url, function(err) {
-						if (err) {
-							return res.json({error: "Unable to post topic", result: result});		
-						}
-						
-						db.setObjectField('blog-comments', commentID, result.postData.tid);
-						res.redirect((req.header('Referer') || '/') + '#nodebb-comments');
-					});
-				} else {
-					res.json({error: "Unable to post topic", result: result});
-				}
-			});
-		});
-
-	};
-
-	Comments.addLinkbackToArticle = function(post, callback) {
-		var hostUrls = (meta.config['blog-comments:url'] || '').split(','),
-			position;
-
-		posts.getPostField(post.pid, 'blog-comments:url', function(err, url) {
-			if (url) {
-				hostUrls.forEach(function(hostUrl, i) {
-					if (url.indexOf(hostUrl.trim().replace(/^https?:\/\//, '')) !== -1) {
-						position = i;
-					}
-				});
-
-				var blogName = (meta.config['blog-comments:name'] || '');
-				blogName = parseInt(blogName.split(',')[position], 10) || parseInt(blogName.split(',')[0], 10) || 1;
-
-				post.profile.push({
-					content: "Posted from <strong><a href="+ url +" target='blank'>" + blogName + "</a></strong>"
-				});
-			}
-
-			callback(err, post);
-		});
-	};
-
-	Comments.addAdminLink = function(custom_header, callback) {
-		custom_header.plugins.push({
-			"route": "/blog-comments",
-			"icon": "fa-book",
-			"name": "Blog Comments"
-		});
-
-		callback(null, custom_header);
-	};
-
-	function renderAdmin(req, res, callback) {
-		res.render('comments/admin', {});
+	if (url) {
+		res.header('Access-Control-Allow-Origin', url);
+	} else {
+		winston.warn(`[nodebb-plugin-blog-comments] Origin (${req.get('origin')}) does not match hostUrls: ${hostUrls.join(', ')}`);
 	}
 
-	Comments.init = function(params, callback) {
-		var app = params.router,
-			middleware = params.middleware,
-			controllers = params.controllers;
-			
-		fs.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), function (err, data) {
-			Comments.template = data.toString();
+	res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+	res.header('Access-Control-Allow-Credentials', 'true');
+
+	const posts = postData.filter((post) => {
+		if (post.user && post.user.picture && !post.user.picture.startsWith('http')) {
+			post.user.picture = post.user.picture.replace(relativePath, '');
+		}
+		return !post.deleted;
+	});
+
+	if (userData.picture && !userData.picture.startsWith('http')) {
+		userData.picture = userData.picture.replace(relativePath, '');
+	}
+	const compose_location = meta.config['blog-comments:compose-location'] || 'top';
+	const top = compose_location === 'top';
+	const bottom = compose_location === 'bottom';
+
+	res.json({
+		posts: posts,
+		postCount: topicData.postcount,
+		user: userData,
+		template: Comments.template,
+		token: req.csrfToken && req.csrfToken(),
+		isAdmin: !isAdmin ? isPublisher : isAdmin,
+		isLoggedIn: req.loggedIn,
+		tid: tid,
+		category: categoryData,
+		mainPost: mainPost,
+		atTop: top,
+		atBottom: bottom,
+	});
+};
+
+Comments.replyToComment = async function (req, res) {
+	const { content, tid, url } = req.body;
+	try {
+		await topics.reply({
+			tid: tid,
+			uid: req.uid,
+			content: content,
+			req: req,
+		});
+		res.redirect(`${url}#nodebb-comments`);
+	} catch (err) {
+		return res.redirect(`${url}?error=${err.message}#nodebb-comments`);
+	}
+};
+
+Comments.publishArticle = async function (req, res) {
+	const { markdown, title, url, tags } = req.body;
+	const commentID = req.body.id;
+	let cid = JSON.parse(req.body.cid);
+
+	if (cid === -1) {
+		const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
+		let position = 0;
+
+		hostUrls.forEach((hostUrl, i) => {
+			hostUrl = hostUrl.trim();
+			if (hostUrl[hostUrl.length - 1] === '/') {
+				hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+			}
+
+			if (hostUrl === req.get('origin')) {
+				position = i;
+			}
 		});
 
-		app.get('/comments/get/:id/:pagination?', middleware.applyCSRF, Comments.getCommentData);
-		app.post('/comments/reply', middleware.applyCSRF, Comments.replyToComment);
-		app.post('/comments/publish', middleware.applyCSRF, Comments.publishArticle);
+		cid = meta.config['blog-comments:cid'].toString() || '';
+		cid = parseInt(cid.split(',')[position], 10) || parseInt(cid.split(',')[0], 10) || 1;
+	}
 
-		app.get('/admin/blog-comments', middleware.admin.buildHeader, renderAdmin);
-		app.get('/api/admin/blog-comments', renderAdmin);
+	const [isAdmin, isPublisher] = await Promise.all([
+		user.isAdministrator(req.uid),
+		groups.isMember(req.uid, 'publishers'),
+	]);
 
-		callback();
-	};
+	if (!isAdmin && !isPublisher) {
+		return res.json({ error: 'Only Administrators or members of the publishers group can publish articles' });
+	}
+	try {
+		const result = topics.post({
+			uid: req.uid,
+			title: title,
+			content: markdown,
+			tags: tags ? JSON.parse(tags) : [],
+			req: req,
+			cid: cid,
+		});
+		if (result && result.postData && result.postData.tid) {
+			await posts.setPostField(result.postData.pid, 'blog-comments:url', url);
+			await db.setObjectField('blog-comments', commentID, result.postData.tid);
+			res.redirect(`${(req.header('Referer') || '/')}#nodebb-comments`);
+		}
+	} catch (err) {
+		res.json({ error: `Unable to post topic ${err.message}` });
+	}
+};
 
-}(module));
+Comments.addAdminLink = function (custom_header) {
+	custom_header.plugins.push({
+		route: '/blog-comments',
+		icon: 'fa-book',
+		name: 'Blog Comments',
+	});
+	return custom_header;
+};

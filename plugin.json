@@ -6,13 +6,10 @@
 	"library": "./library.js",
 	"hooks": [
 		{
-			"hook": "filter:admin.header.build", "method": "addAdminLink"
-		},
-		{
-			"hook": "filter:posts.custom_profile_info", "method": "addLinkbackToArticle"
-		},
-		{
 			"hook": "static:app.load", "method": "init"
+		},
+		{
+			"hook": "filter:admin.header.build", "method": "addAdminLink"
 		}
 	],
 	"scripts": [
