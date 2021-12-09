@@ -156,7 +156,7 @@ Comments.publishArticle = async function (req, res) {
 		return res.json({ error: 'Only Administrators or members of the publishers group can publish articles' });
 	}
 	try {
-		const result = topics.post({
+		const result = await topics.post({
 			uid: req.uid,
 			title: title,
 			content: markdown,
