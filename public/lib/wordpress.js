@@ -155,7 +155,7 @@
 								wptags = articleData.tags,
 								tags = [];
 
-							translator.innerHTML = articleData.excerpt;
+							translator.innerHTML = articleData.excerpt.rendered;
 
 							var markdown = translator.firstChild.innerHTML + '\n\n**Click [here]('+articlePath+') to see the full blog post**';
 
