@@ -7,6 +7,13 @@ The comments are exposed to any plugin you have built into the core, so it is co
 Articles are published to a forum category of your choice, and will gain a tag that links it back to the original article.
 
 
+## What's new in 0.8x
+
+* The WP-JSON plugin is no longer required. This plugin will now use the built-in JSON API.
+* The comments snippet has changed, please update your integration code as necessary
+* Fixed a bug that caused errors when no [ACAO](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) header was defined
+
+
 ## Upgrading to 0.6x
 
 Getting `Unexpected end of JSON input` for `/comments/publish`? On your blog's post template (ex. `post.hbs` for Ghost) where you have installed the blog comments script, find the following line:
