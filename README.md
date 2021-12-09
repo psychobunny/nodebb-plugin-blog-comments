@@ -80,17 +80,17 @@ if ( post_password_required() )
 
 <a id="nodebb-comments"></a>
 <script type="text/javascript">
-var nodeBBURL = '//your.nodebb.com',
-	wordpressURL = '<?php get_site_url(); ?>',
-	articleID = '<?php echo the_ID(); ?>',
-	categoryID = 1; // OPTIONAL. Forces a Category ID in NodeBB.
-					 //  Omit it to fallback to specified IDs in the admin panel.
+	const nodeBBURL = '//your.nodebb.com';
+	const wordpressURL = '<?php get_site_url(); ?>';
+	const articleID = \''.get_the_ID().'\';
+	const categoryID = null; 	// OPTIONAL. Forces a Category ID in NodeBB.
+								//  Omit it to fallback to specified IDs in the admin panel.
 
-(function() {
-var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
-nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
-})();
+	(function() {
+	var nbb = document.createElement('script'); nbb.type = 'text/javascript'; nbb.async = true;
+	nbb.src = nodeBBURL + '/plugins/nodebb-plugin-blog-comments/lib/wordpress.js';
+	(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(nbb);
+	})();
 </script>
 <noscript>Please enable JavaScript to view comments</noscript>
 ```
