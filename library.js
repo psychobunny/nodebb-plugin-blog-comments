@@ -41,9 +41,7 @@ Comments.getCommentData = async function (req, res, next) {
 
 	const tid = await Comments.getTopicIDByCommentID(commentID);
 	const topicData = await topics.getTopicData(tid);
-	if (!topicData) {
-		return next();
-	}
+
 	const start = pagination * 10;
 	const stop = start + 9;
 	const [postData, userData, isAdmin, isPublisher, categoryData, mainPost] = await Promise.all([
@@ -55,22 +53,27 @@ Comments.getCommentData = async function (req, res, next) {
 		topics.getMainPost(tid, req.uid),
 	]);
 
-	const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
-	let url;
+	let postData = [], categoryData = null, mainPost = null;
+	if (topicData) {
+		[postData, categoryData, mainPost] = await Promise.all([
+			topics.getTopicPosts(topicData, `tid:${tid}:posts`, start, stop, req.uid, true),
+			topics.getCategoryData(tid),
+			topics.getMainPost(tid, req.uid),
+		]);
+	}
 
-	hostUrls.forEach((hostUrl) => {
+	const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
+	const url = hostUrls.find((hostUrl) => {
 		hostUrl = hostUrl.trim();
 		if (hostUrl[hostUrl.length - 1] === '/') {
 			hostUrl = hostUrl.substring(0, hostUrl.length - 1);
 		}
 
-		if (hostUrl === req.get('origin')) {
-			url = req.get('origin');
-		}
+		return (hostUrl === req.get('origin'))
 	});
 
 	if (url) {
-		res.header('Access-Control-Allow-Origin', url);
+		res.header('Access-Control-Allow-Origin', req.get('origin'));
 	} else {
 		winston.warn(`[nodebb-plugin-blog-comments] Origin (${req.get('origin')}) does not match hostUrls: ${hostUrls.join(', ')}`);
 	}
@@ -88,9 +91,9 @@ Comments.getCommentData = async function (req, res, next) {
 	if (userData.picture && !userData.picture.startsWith('http')) {
 		userData.picture = userData.picture.replace(relativePath, '');
 	}
+
 	const compose_location = meta.config['blog-comments:compose-location'] || 'top';
 	const top = compose_location === 'top';
-	const bottom = compose_location === 'bottom';
 
 	res.json({
 		posts: posts,
@@ -104,7 +107,7 @@ Comments.getCommentData = async function (req, res, next) {
 		category: categoryData,
 		mainPost: mainPost,
 		atTop: top,
-		atBottom: bottom,
+		atBottom: !top,
 	});
 };
 
