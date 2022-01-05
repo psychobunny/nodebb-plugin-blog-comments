@@ -831,7 +831,6 @@
 				break;
 			}
 		}
-		console.log(keysToReparse);
 
 		return parseUndefined ? parse(template, keysToReparse, '') : template;
 	}
