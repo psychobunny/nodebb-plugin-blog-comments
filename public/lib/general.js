@@ -83,10 +83,12 @@
 			}
 
 			if (pagination) {
-				console.log(data, templates.blocks);
+				console.log(data, window.templates.blocks);
 				// var html = templates.parse(template, data);
-				html = normalizePost(parse(data, templates.blocks['posts']));
-				commentsDiv.innerHTML = commentsDiv.innerHTML + html;	
+				// html = window.templates.parse(data.template, data);
+
+				html = parse(data, templates.blocks['posts']);
+				commentsDiv.innerHTML = commentsDiv.innerHTML + normalizePost(html);
 			} else {
 				html = window.templates.parse(data.template, data);
 				nodebbDiv.innerHTML = normalizePost(html);
