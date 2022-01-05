@@ -30,13 +30,6 @@
 			<div class="topic-item">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
-						<a href="{relative_path}/user/{user.userslug}">
-							<!-- IF user.picture -->
-							<img src="{user.picture}" alt="{user.username}" class="profile-image" title="{user.username}" />
-							<!-- ELSE -->
-							<div class="profile-image">{user.icon:text}</div>
-							<!-- ENDIF user.picture -->
-						</a>
 					</div>
 					<div class="topic-text">
 						<div class="post-content" itemprop="text"><small><strong>{user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
