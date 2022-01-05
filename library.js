@@ -42,8 +42,8 @@ Comments.getCommentData = async function (req, res, next) {
 	const tid = await Comments.getTopicIDByCommentID(commentID);
 	const topicData = await topics.getTopicData(tid);
 
-	const start = pagination * 3;
-	const stop = start + 2;
+	const start = pagination * 10;
+	const stop = start + 9;
 	const [userData, isAdmin, isPublisher] = await Promise.all([
 		user.getUserData(req.uid),
 		user.isAdministrator(req.uid),
