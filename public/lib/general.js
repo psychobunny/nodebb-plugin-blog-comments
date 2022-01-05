@@ -479,7 +479,6 @@
 	module.exports.__express = express;
 
 	if ('undefined' !== typeof window) {
-		console.log("nice!");
 		window.templates = module.exports;
 	}
 
@@ -579,8 +578,8 @@
 				html = normalizePost(parse(data, templates.blocks['posts']));
 				commentsDiv.innerHTML = commentsDiv.innerHTML + html;	
 			} else {
-				console.log(data, data.template, templates);
-				html = templates.parse(data.template, data);
+				console.log(data, data.template, window.templates);
+				html = window.templates.parse(data.template, data);
 				// html = parse(data, data.template);
 				nodebbDiv.innerHTML = normalizePost(html);
 			}
