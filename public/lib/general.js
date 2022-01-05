@@ -144,32 +144,31 @@
 						authenticate('login');
 					}
 				}
-			} else {
-				if (data.isAdmin) {
-						if (articleData) {
-							var translator = document.createElement('span'),
-								gTags = articleData.tags,
-								url = articleData.url,
-								title= articleData.title_plain,
-								cid = articleData.cid || -1,
-								tags = [];
-							translator.innerHTML = articleData.markDownContent;
-
-							var markdown = translator.firstChild.innerHTML + '\n\n**Click [here]('+ url +') to see the full blog post**';
-
-							for (var tag in gTags) {
-								if (gTags.hasOwnProperty(tag)) {
-									tags.push(gTags[tag].title);
-								}
-							}
-							document.getElementById('nodebb-content-markdown').value = markdown;
-							document.getElementById('nodebb-content-title').value = title;
-							document.getElementById('nodebb-content-cid').value = cid;
-							document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
-						} else {
-							console.error('Declare articleData variable!');
-						}
+			} else if (data.isAdmin) {
+				if (!articleData) {
+					console.error('Declare articleData variable!');
+					return;
 				}
+
+				var translator = document.createElement('span'),
+					gTags = articleData.tags,
+					url = articleData.url,
+					title= articleData.title_plain,
+					cid = articleData.cid || -1,
+					tags = [];
+				translator.innerHTML = articleData.markDownContent;
+
+				var markdown = translator.firstChild.innerHTML + '\n\n**Click [here]('+ url +') to see the full blog post**';
+
+				for (var tag in gTags) {
+					if (gTags.hasOwnProperty(tag)) {
+						tags.push(gTags[tag].title);
+					}
+				}
+				document.getElementById('nodebb-content-markdown').value = markdown;
+				document.getElementById('nodebb-content-title').value = title;
+				document.getElementById('nodebb-content-cid').value = cid;
+				document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
 			}
 		}
 	};
