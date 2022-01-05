@@ -88,8 +88,9 @@
 				html = normalizePost(parse(data, templates.blocks['posts']));
 				commentsDiv.innerHTML = commentsDiv.innerHTML + html;	
 			} else {
-				console.log(data, data.template);
-				html = parse(data, data.template);
+				console.log(data, data.template, templates);
+				html = templates.parse(data.template, data);
+				// html = parse(data, data.template);
 				nodebbDiv.innerHTML = normalizePost(html);
 			}
 
