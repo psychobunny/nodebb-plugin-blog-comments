@@ -35,7 +35,7 @@
 							<img src="{posts.user.picture}" alt="{posts.user.username}" class="profile-image" title="{posts.user.username}" />
 							<!-- ELSE -->
 							<div class="profile-image" style="background-color: {posts.user.icon:bgColor}" title="{posts.user.username}" alt="{posts.user.username}">{posts.user.icon:text}</div>
-							<!-- ENDIF user.picture -->
+							<!-- ENDIF posts.user.picture -->
 						</a>
 					</div>
 					<div class="topic-text">
