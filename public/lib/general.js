@@ -83,9 +83,8 @@
 			}
 
 			if (pagination) {
-				console.log(data, window.templates.blocks);
-				// var html = templates.parse(template, data);
-				// html = window.templates.parse(data.template, data);
+				console.log(data, window.templates.getBlock(data.template, 'posts'));
+				console.log(window.templates.parse(window.templates.getBlock(data.template, 'posts'), data))
 
 				html = parse(data, templates.blocks['posts']);
 				commentsDiv.innerHTML = commentsDiv.innerHTML + normalizePost(html);
@@ -517,22 +516,6 @@
 		templates.cache = {};
 	};
 
-	function express(filename, options, fn) {
-		var fs = require('fs'),
-			tpl = filename.replace(options.settings.views + '/', '');
-
-		options._locals = null;
-
-		if (!templates.cache[tpl]) {
-			fs.readFile(filename, function(err, html) {
-				templates.cache[tpl] = (html || '').toString();
-				return fn(err, templates.parse(templates.cache[tpl], options));
-			});
-		} else {
-			return fn(null, templates.parse(templates.cache[tpl], options));
-		}
-	}
-
 	function replace(string, regex, value) {
 		return string.replace(regex, value.toString().replace(regexes.backReferenceFix, '$$$'));
 	}
@@ -838,7 +821,6 @@
 	}
 
 	module.exports = templates;
-	module.exports.__express = express;
 
 	if ('undefined' !== typeof window) {
 		window.templates = module.exports;
