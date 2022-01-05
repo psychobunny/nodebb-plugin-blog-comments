@@ -90,6 +90,7 @@ Comments.getCommentData = async function (req, res, next) {
 	}
 
 	const compose_location = meta.config['blog-comments:compose-location'] || 'top';
+	const show_branding = (meta.config['blog-comments:show-branding'] || 'off') === 'on';
 	const top = compose_location === 'top';
 
 	res.json({
@@ -105,6 +106,7 @@ Comments.getCommentData = async function (req, res, next) {
 		mainPost: mainPost,
 		atTop: top,
 		atBottom: !top,
+		show_branding,
 	});
 };
 

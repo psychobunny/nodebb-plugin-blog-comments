@@ -15,6 +15,11 @@
 				<option value="top">Compose on top</option>
 				<option value="bottom">Compose on bottom</option>
 			</select>
+			<label>Show branding and thread link</label><br />
+			<select data-field="blog-comments:show-branding" class="form-control">
+				<option value="on">On</option>
+				<option value="off">Off</option>
+			</select>
 		</form>
 	</div>
 </div>
