@@ -56,7 +56,7 @@
 			commentsCategory = document.getElementById('nodebb-comments-category');
 
 			data.relative_path = nodeBBURL;
-			data.redirect_url = articlePath;
+			data.redirect_url = (articleData && articleData.url) ? articleData.url : articlePath;
 			data.article_id = articleID;
 			data.pagination = pagination;
 			data.postCount = parseInt(data.postCount, 10);

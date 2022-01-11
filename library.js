@@ -35,7 +35,7 @@ Comments.getTopicIDByCommentID = async function (commentID) {
 	return await db.getObjectField('blog-comments', commentID);
 };
 
-Comments.getCommentData = async function (req, res, next) {
+Comments.getCommentData = async function (req, res) {
 	const commentID = req.params.id;
 	const pagination = req.params.pagination ? req.params.pagination : 0;
 
@@ -169,7 +169,7 @@ Comments.publishArticle = async function (req, res) {
 		if (result && result.postData && result.postData.tid) {
 			await posts.setPostField(result.postData.pid, 'blog-comments:url', url);
 			await db.setObjectField('blog-comments', commentID, result.postData.tid);
-			res.redirect(`${(req.header('Referer') || '/')}#nodebb-comments`);
+			res.redirect(`${url || req.header('Referer') || '/'}#nodebb-comments`);
 		}
 	} catch (err) {
 		res.json({ error: `Unable to post topic ${err.message}` });
