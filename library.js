@@ -16,13 +16,44 @@ const groups = require.main.require('./src/groups');
 
 const Comments = module.exports;
 
+// CORS Middleware
+const CORSMiddleware = function (req, res, next) {
+	const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
+	const url = hostUrls.find((hostUrl) => {
+		hostUrl = hostUrl.trim();
+		if (hostUrl[hostUrl.length - 1] === '/') {
+			hostUrl = hostUrl.substring(0, hostUrl.length - 1);
+		}
+
+		return (hostUrl === req.get('origin'))
+	});
+
+	if (url) {
+		res.header('Access-Control-Allow-Origin', req.get('origin'));
+	} else {
+		winston.warn(`[nodebb-plugin-blog-comments] Origin (${req.get('origin')}) does not match hostUrls: ${hostUrls.join(', ')}`);
+	}
+
+	res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT');
+	res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+	res.header('Access-Control-Allow-Credentials', 'true');
+
+	next();
+}
+
 Comments.init = async function (params) {
 	const { router, middleware } = params;
 	const routeHelpers = require.main.require('./src/routes/helpers');
 
 	Comments.template = await fs.promises.readFile(path.resolve(__dirname, './public/templates/comments/comments.tpl'), { encoding: 'utf-8' });
 
-	router.get('/comments/get/:id/:pagination?', middleware.applyCSRF, routeHelpers.tryRoute(Comments.getCommentData));
+	const middlewares = [
+		CORSMiddleware,
+		middleware.applyCSRF,
+		middleware.pluginHooks
+	];
+
+	router.get('/comments/get/:id/:pagination?',  middlewares, routeHelpers.tryRoute(Comments.getCommentData));
 	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
 	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
 
@@ -58,25 +89,6 @@ Comments.getCommentData = async function (req, res) {
 			topics.getMainPost(tid, req.uid),
 		]);
 	}
-
-	const hostUrls = (meta.config['blog-comments:url'] || '').split(',');
-	const url = hostUrls.find((hostUrl) => {
-		hostUrl = hostUrl.trim();
-		if (hostUrl[hostUrl.length - 1] === '/') {
-			hostUrl = hostUrl.substring(0, hostUrl.length - 1);
-		}
-
-		return (hostUrl === req.get('origin'))
-	});
-
-	if (url) {
-		res.header('Access-Control-Allow-Origin', req.get('origin'));
-	} else {
-		winston.warn(`[nodebb-plugin-blog-comments] Origin (${req.get('origin')}) does not match hostUrls: ${hostUrls.join(', ')}`);
-	}
-
-	res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-	res.header('Access-Control-Allow-Credentials', 'true');
 
 	const posts = postData.filter((post) => {
 		if (post.user && post.user.picture && !post.user.picture.startsWith('http')) {

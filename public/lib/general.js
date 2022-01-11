@@ -47,6 +47,10 @@
 	}
 
 	XHR.onload = function() {
+		if (XHR.status === 302) {
+			reloadComments();
+			return;
+		}
 		if (XHR.status >= 200 && XHR.status < 400) {
 			var data = JSON.parse(XHR.responseText), html;
 
