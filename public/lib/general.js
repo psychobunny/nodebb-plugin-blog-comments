@@ -142,11 +142,11 @@
 					};
 
 					document.getElementById('nodebb-register').onclick = function () {
-						authenticate(data.registerURL.length ? data.registerURL : `${nodeBBURL}/register/#blog/authenticate`);
+						authenticate(data.registerURL && data.registerURL.length ? data.registerURL : `${nodeBBURL}/register/#blog/authenticate`);
 					};
 
 					document.getElementById('nodebb-login').onclick = function () {
-						authenticate(data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
+						authenticate(data.loginURL && data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
 					};
 				}
 			} else if (data.isAdmin) {
