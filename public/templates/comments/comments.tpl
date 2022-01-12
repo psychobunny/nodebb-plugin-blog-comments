@@ -1,4 +1,4 @@
-<!-- IF tid -->
+<!-- IF mainPost -->
 	<!-- IF atTop -->
 		<div class="topic-profile-pic user">
 			<!-- IF isLoggedIn -->
@@ -92,4 +92,4 @@
 		<input type="hidden" name="_csrf" value="{token}" />
 	</form>
 	<!-- ENDIF isAdmin -->
-<!-- ENDIF tid -->
+<!-- ENDIF mainPost -->
