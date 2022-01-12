@@ -29,20 +29,7 @@
 		}
 	}
 
-	const XHR = newXHR(); let pagination = 0; let
-		modal;
-
-	function authenticate(type) {
-		savedText = contentDiv.value;
-		modal = window.open(`${nodeBBURL}/${type}/#blog/authenticate`, '_blank', 'toolbar=no, scrollbars=no, resizable=no, width=600, height=675');
-		const timer = setInterval(() => {
-			if (modal.closed) {
-				clearInterval(timer);
-				pagination = 0;
-				reloadComments();
-			}
-		}, 500);
-	}
+	const XHR = newXHR(); let pagination = 0;
 
 	function normalizePost(post) {
 		return post.replace(/href="\/(?=\w)/g, `href="${nodeBBURL}/`)
@@ -140,12 +127,26 @@
 						document.getElementById('nodebb-error').innerHTML = error;
 					}
 				} else {
+					const authenticate = data.authFlow !== 'redirect' ? function (url) {
+						savedText = contentDiv.value;
+						const modal = window.open(url, '_blank', 'toolbar=no, scrollbars=no, resizable=no, width=600, height=675');
+						const timer = setInterval(() => {
+							if (modal.closed) {
+								clearInterval(timer);
+								pagination = 0;
+								reloadComments();
+							}
+						}, 500);
+					} : function (url) {
+						location.href = `${url}?callbackUrl=${data.redirect_url}`;
+					};
+
 					document.getElementById('nodebb-register').onclick = function () {
-						authenticate('register');
+						authenticate(data.registerURL.length ? data.registerURL : `${nodeBBURL}/register/#blog/authenticate`);
 					};
 
 					document.getElementById('nodebb-login').onclick = function () {
-						authenticate('login');
+						authenticate(data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
 					};
 				}
 			} else if (data.isAdmin) {

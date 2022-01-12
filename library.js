@@ -104,22 +104,25 @@ Comments.getCommentData = async function (req, res) {
 
 	const compose_location = meta.config['blog-comments:compose-location'] || 'top';
 	const show_branding = (meta.config['blog-comments:show-branding'] || 'on') === 'on';
-	const top = compose_location === 'top';
+	const atTop = compose_location === 'top';
 
 	res.json({
-		posts: posts,
+		posts,
 		postCount: topicData ? topicData.postcount : 0,
 		user: userData,
 		template: Comments.template,
 		token: req.csrfToken && req.csrfToken(),
-		isAdmin: !isAdmin ? isPublisher : isAdmin,
+		isAdmin: isAdmin || isPublisher,
 		isLoggedIn: req.loggedIn,
-		tid: tid,
+		tid,
 		category: categoryData,
-		mainPost: mainPost,
-		atTop: top,
-		atBottom: !top,
+		mainPost,
+		atTop,
+		atBottom: !atTop,
 		show_branding,
+		loginURL: meta.config['blog-comments:login-url'] || '',
+		registerURL: meta.config['blog-comments:register-url'] || '',
+		authFlow: meta.config['blog-comments:auth-behavior'] || 'popup',
 	});
 };
 
