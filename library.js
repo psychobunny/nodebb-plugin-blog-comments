@@ -25,7 +25,7 @@ const CORSMiddleware = function (req, res, next) {
 			hostUrl = hostUrl.substring(0, hostUrl.length - 1);
 		}
 
-		return (hostUrl === req.get('origin'))
+		return (hostUrl === req.get('origin'));
 	});
 
 	if (url) {
@@ -39,7 +39,7 @@ const CORSMiddleware = function (req, res, next) {
 	res.header('Access-Control-Allow-Credentials', 'true');
 
 	next();
-}
+};
 
 Comments.init = async function (params) {
 	const { router, middleware } = params;
@@ -50,10 +50,10 @@ Comments.init = async function (params) {
 	const middlewares = [
 		CORSMiddleware,
 		middleware.applyCSRF,
-		middleware.pluginHooks
+		middleware.pluginHooks,
 	];
 
-	router.get('/comments/get/:id/:pagination?',  middlewares, routeHelpers.tryRoute(Comments.getCommentData));
+	router.get('/comments/get/:id/:pagination?', middlewares, routeHelpers.tryRoute(Comments.getCommentData));
 	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
 	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
 
@@ -81,7 +81,8 @@ Comments.getCommentData = async function (req, res) {
 		groups.isMember(req.uid, 'publishers'),
 	]);
 
-	let postData = [], categoryData = null, mainPost = null;
+	let postData = []; let categoryData = null; let
+		mainPost = null;
 	if (topicData) {
 		[postData, categoryData, mainPost] = await Promise.all([
 			topics.getTopicPosts(topicData, `tid:${tid}:posts`, start, stop, req.uid, true),
