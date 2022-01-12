@@ -1,58 +1,62 @@
-(function() {
-	"use strict";
-	
-	var articlePath = window.location.protocol + '//' + window.location.host + window.location.pathname;
+'use strict';
 
-	var pluginURL = nodeBBURL + '/plugins/nodebb-plugin-blog-comments',
-		savedText, nodebbDiv, contentDiv, commentsDiv, commentsCounter, commentsAuthor, commentsCategory;
+/* eslint-disable no-undef */
+(function () {
+	const articlePath = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
 
-	var stylesheet = document.createElement("link");
-	stylesheet.setAttribute("rel", "stylesheet");
-	stylesheet.setAttribute("type", "text/css");
-	stylesheet.setAttribute("href", pluginURL + '/css/comments.css');
+	const pluginURL = `${nodeBBURL}/plugins/nodebb-plugin-blog-comments`;
+	let savedText; let contentDiv; let commentsDiv; let commentsCounter; let commentsAuthor; let
+		commentsCategory;
 
-	document.getElementsByTagName("head")[0].appendChild(stylesheet);
+	const stylesheet = document.createElement('link');
+	stylesheet.setAttribute('rel', 'stylesheet');
+	stylesheet.setAttribute('type', 'text/css');
+	stylesheet.setAttribute('href', `${pluginURL}/css/comments.css`);
+
+	document.getElementsByTagName('head')[0].appendChild(stylesheet);
 	document.getElementById('nodebb-comments').insertAdjacentHTML('beforebegin', '<div id="nodebb"></div>');
-	nodebbDiv = document.getElementById('nodebb');
+	const nodebbDiv = document.getElementById('nodebb');
 
 	function newXHR() {
 		try {
-	        return XHR = new XMLHttpRequest();
-	    } catch (e) {
-	        try {
-	            return XHR = new ActiveXObject("Microsoft.XMLHTTP");
-	        } catch (e) {
-	            return XHR = new ActiveXObject("Msxml2.XMLHTTP");
-	        }
-	    }
+			return new XMLHttpRequest();
+		} catch (e) {
+			try {
+				return new ActiveXObject('Microsoft.XMLHTTP');
+			} catch (e) {
+				return new ActiveXObject('Msxml2.XMLHTTP');
+			}
+		}
 	}
 
-	var XHR = newXHR(), pagination = 0, modal;
+	const XHR = newXHR(); let pagination = 0; let
+		modal;
 
 	function authenticate(type) {
 		savedText = contentDiv.value;
-		modal = window.open(nodeBBURL + "/" + type + "/#blog/authenticate","_blank","toolbar=no, scrollbars=no, resizable=no, width=600, height=675");
-		var timer = setInterval(function() {
-			if(modal.closed) {  
+		modal = window.open(`${nodeBBURL}/${type}/#blog/authenticate`, '_blank', 'toolbar=no, scrollbars=no, resizable=no, width=600, height=675');
+		const timer = setInterval(() => {
+			if (modal.closed) {
 				clearInterval(timer);
 				pagination = 0;
 				reloadComments();
-			}  
+			}
 		}, 500);
 	}
 
 	function normalizePost(post) {
-		return post.replace(/href="\/(?=\w)/g, 'href="' + nodeBBURL + '/')
-				.replace(/src="\/(?=\w)/g, 'src="' + nodeBBURL + '/');
+		return post.replace(/href="\/(?=\w)/g, `href="${nodeBBURL}/`)
+			.replace(/src="\/(?=\w)/g, `src="${nodeBBURL}/`);
 	}
 
-	XHR.onload = function() {
+	XHR.onload = function () {
 		if (XHR.status === 302) {
 			reloadComments();
 			return;
 		}
 		if (XHR.status >= 200 && XHR.status < 400) {
-			var data = JSON.parse(XHR.responseText), html;
+			const data = JSON.parse(XHR.responseText); let
+				html;
 
 			commentsDiv = document.getElementById('nodebb-comments-list');
 			commentsCounter = document.getElementById('nodebb-comments-count');
@@ -65,30 +69,28 @@
 			data.pagination = pagination;
 			data.postCount = parseInt(data.postCount, 10);
 
-			for (var post in data.posts) {
-				if (data.posts.hasOwnProperty(post)) {
-					data.posts[post].timestamp = timeAgo(parseInt(data.posts[post].timestamp), 10);
-					if (data.posts[post]['blog-comments:url']) {
-						delete data.posts[post];
-					}
+			data.posts.forEach((_, i) => {
+				data.posts[i].timestamp = timeAgo(parseInt(data.posts[i].timestamp, 10));
+				if (data.posts[i]['blog-comments:url']) {
+					delete data.posts[i];
 				}
-			}
-			
+			});
+
 			if (commentsCounter) {
 				commentsCounter.innerHTML = data.postCount ? (data.postCount - 1) : 0;
 			}
 
 			if (commentsCategory) {
-				commentsCategory.innerHTML = '<a href="' + nodeBBURL + '/category/' + data.category.slug + '">' + data.category.name + '</a>';
+				commentsCategory.innerHTML = `<a href="${nodeBBURL}/category/${data.category.slug}">${data.category.name}</a>`;
 			}
 
 			if (commentsAuthor) {
-				commentsAuthor.innerHTML = '<span class="nodebb-author"><img src="' + data.mainPost.user.picture + '" /> <a href="' + nodeBBURL + '/user/' + data.mainPost.user.userslug + '">' + data.mainPost.user.username + '</a></span>';
+				commentsAuthor.innerHTML = `<span class="nodebb-author"><img src="${data.mainPost.user.picture}" /> <a href="${nodeBBURL}/user/${data.mainPost.user.userslug}">${data.mainPost.user.username}</a></span>`;
 			}
 
 			if (pagination) {
 				html = window.templates.parse(window.templates.getBlock(data.template, 'posts'), data);
-				commentsDiv.innerHTML = commentsDiv.innerHTML + normalizePost(html);
+				commentsDiv.innerHTML += normalizePost(html);
 			} else {
 				html = window.templates.parse(data.template, data);
 				nodebbDiv.innerHTML = normalizePost(html);
@@ -96,30 +98,28 @@
 
 			contentDiv = document.getElementById('nodebb-content');
 
-			setTimeout(function() {
-				var lists = nodebbDiv.getElementsByTagName("li");
-				for (var list in lists) {
-					if (lists.hasOwnProperty(list)) {
-						lists[list].className = '';
-					}
-				}
+			setTimeout(() => {
+				const lists = Array.from(nodebbDiv.getElementsByTagName('li'));
+				lists.forEach((_, i) => {
+					lists[i].className = '';
+				});
 			}, 100);
-			
+
 			if (savedText) {
 				contentDiv.value = savedText;
 			}
 
 			if (data.tid) {
-				var loadMore = document.getElementById('nodebb-load-more');
-				loadMore.onclick = function() {
-					pagination++;
+				const loadMore = document.getElementById('nodebb-load-more');
+				loadMore.onclick = function () {
+					pagination += 1;
 					reloadComments();
-				}
+				};
 				if (data.posts.length) {
-					loadMore.style.display = 'inline-block';	
+					loadMore.style.display = 'inline-block';
 				}
 
-				if (pagination * 10 + data.posts.length + 1 >= data.postCount) {
+				if ((pagination * 10) + data.posts.length + 1 >= data.postCount) {
 					loadMore.style.display = 'none';
 				}
 
@@ -128,7 +128,7 @@
 				}
 
 				if (data.user && data.user.uid) {
-					var error = window.location.href.match(/error=[\w-]*/);
+					let error = window.location.href.match(/error=[\w-]*/);
 					if (error) {
 						error = error[0].split('=')[1];
 						if (error === 'too-many-posts') {
@@ -138,15 +138,15 @@
 						}
 
 						document.getElementById('nodebb-error').innerHTML = error;
-					}					
+					}
 				} else {
-					document.getElementById('nodebb-register').onclick = function() {
+					document.getElementById('nodebb-register').onclick = function () {
 						authenticate('register');
 					};
 
-					document.getElementById('nodebb-login').onclick = function() {
+					document.getElementById('nodebb-login').onclick = function () {
 						authenticate('login');
-					}
+					};
 				}
 			} else if (data.isAdmin) {
 				if (!articleData) {
@@ -154,39 +154,33 @@
 					return;
 				}
 
-				var translator = document.createElement('span'),
-					gTags = articleData.tags,
-					url = articleData.url,
-					title= articleData.title_plain,
-					cid = articleData.cid || -1,
-					tags = [];
+				const translator = document.createElement('span');
+				const gTags = articleData.tags;
+				const { url } = articleData;
+				const title = articleData.title_plain;
+				const cid = articleData.cid || -1;
 				translator.innerHTML = articleData.markDownContent;
 
-				var markdown = translator.firstChild.innerHTML + '\n\n**Click [here]('+ url +') to see the full blog post**';
+				const markdown = `${translator.firstChild.innerHTML}\n\n**Click [here](${url}) to see the full blog post**`;
 
-				for (var tag in gTags) {
-					if (gTags.hasOwnProperty(tag)) {
-						tags.push(gTags[tag].title);
-					}
-				}
 				document.getElementById('nodebb-content-markdown').value = markdown;
 				document.getElementById('nodebb-content-title').value = title;
 				document.getElementById('nodebb-content-cid').value = cid;
-				document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
+				document.getElementById('nodebb-content-tags').value = JSON.stringify(gTags.map(tag => tag.title));
 			}
 		}
 	};
 
 	function reloadComments() {
-		XHR.open('GET', nodeBBURL + '/comments/get/' + articleID + '/' + pagination, true);
+		XHR.open('GET', `${nodeBBURL}/comments/get/${articleID}/${pagination}`, true);
 		XHR.withCredentials = true;
 		XHR.send();
 	}
 
 	reloadComments();
 
-	function timeAgo(time){
-		var time_formats = [
+	function timeAgo(time) {
+		const time_formats = [
 			[60, 'seconds', 1],
 			[120, '1 minute ago'],
 			[3600, 'minutes', 60],
@@ -199,498 +193,29 @@
 			[4838400, 'last month'],
 			[29030400, 'months', 2419200],
 			[58060800, 'last year'],
-			[2903040000, 'years', 29030400]
+			[2903040000, 'years', 29030400],
 		];
 
-		var seconds = (+new Date() - time) / 1000;
+		const seconds = (+new Date() - time) / 1000;
 
 		if (seconds < 10) {
 			return 'just now';
 		}
-		
-		var i = 0, format;
-		while (format = time_formats[i++]) {
-			if (seconds < format[0]) {
-				if (!format[2]) {
-					return format[1];
-				} else {
-					return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ago';
-				}
-			}
+
+		const format = time_formats.find(time => seconds < time[0]);
+		if (!format) {
+			return time;
 		}
-		return time;
+		if (!format[2]) {
+			return format[1];
+		}
+
+		return `${Math.floor(seconds / format[2])} ${format[1]} ago`;
 	}
 }());
 
 
 // https://raw.githubusercontent.com/benchpressjs/benchpressjs/v0.3.1/lib/templates.js
-(function(module) {
-	var templates = {
-			cache: {},
-			globals: {}
-		},
-		helpers = {},
-		loader,
-		worker;
-
-	var regexes = {
-		nestedConditionals: /(?!^)<!-- IF([\s\S]*?)ENDIF[ a-zA-Z0-9\/\._:]*-->(?!$)/g,
-		conditionalBlock: /[\r\n?\n]*?<!-- ELSE -->[\r\n?\n]*?/,
-		conditionalHelper: /<!-- IF function.([\s\S]*?)-->/,
-		conditionalArgs: /[ ]*,[ ]*/,
-		innerLoop: /\s*<!-- BEGIN([\s\S]*)END ([\s\S]*?)-->/g,
-		removeTabspace: /^\t*?|^\r\n?\t*?|\t?$|\r\n?\t*?$/g,
-		removeWhitespace: /(^[\r\n?|\n]*)|([\r\n\t]*$)/g,
-		cleanupEmptyLoops: /\s*<!-- BEGIN([\s\S]*?)END ([\s\S]*?)-->/g,
-		cleanupMissingKeys: /[\r\n]*?[\/]?\{[a-zA-Z0-9\.]+[\r\n]*?\}/g,
-		leftoverRoot: /\.\.\/([\S]*?)[\}| ]/g,
-		getUndefinedKeys: /<!-- IF[\s!]*([\s\S]*?) -->/g,
-		backReferenceFix: /\$+/g,
-		escapeBlocks: /<!--([\s\S]*?)-->/g,
-		escapeKeys: /\{([\s\S]*?)\}/g,
-		rootKey: /\{\.\.\/([\S]*?)\}/g,
-		rootConditional: /IF \.\.\/([\S]*?)/g,
-		rootConditionalFalse: /IF !\.\.\/([\S]*?)/g
-	};
-
-	if (typeof self !== 'undefined' && self.addEventListener) {
-		self.addEventListener('message', function(ev) {
-			if (!ev || !ev.data || !ev.data.template || !ev.data.object) {
-				return;
-			}
-			var data = ev.data;
-
-			self.postMessage({
-				result: !data.block ? templates.parse(data.template, data.object) : templates.parse(data.template, data.block, data.object),
-				signature: data.signature
-			}, '*');
-		}, false);
-	}
-
-	var callbacks = {},
-		signature = 0,
-		MAX_SAFE_INT = Math.pow(2, 53) - 1;
-
-	templates.setupWebWorker = function(pathToScript) {
-		try {
-			worker = new Worker(pathToScript);
-
-			worker.addEventListener('message', function(e) {
-				if (callbacks[e.data.signature]) {
-					callbacks[e.data.signature](e.data.result);
-				}
-			}, false);
-		} catch (err) {}
-	};
-
-	function launchWorker(template, obj, block, callback) {
-		signature++;
-		if (signature > MAX_SAFE_INT) {
-			signature = 0;
-		}
-
-		obj = sanitise(obj);
-
-		worker.postMessage({
-			template: template,
-			object: obj,
-			block: block,
-			signature: signature
-		});
-
-		callbacks[signature] = function(result) {
-			callback(result);
-			delete callbacks[signature];
-		};
-	}
-
-	function sanitise(obj) {
-		for(var prop in obj) {
-			if (!obj.hasOwnProperty(prop) || typeof obj[prop] === 'function') {
-				delete obj[prop];
-			}
-		}
-
-		return obj;
-	}
-
-	templates.parse = function(template, block, obj, callback) {
-		if (typeof block !== 'string') {
-			callback = obj;
-			obj = block;
-			block = false;
-		}
-
-		if (!template) {
-			return callback ? callback('') : '';
-		}
-
-		obj = registerGlobals(obj || {});
-
-		if (loader && callback) {
-			if (!templates.cache[template]) {
-				loader(template, function(loaded) {
-					templates.cache[template] = loaded;
-
-					launchCallback(loaded, obj, block, callback);
-				});
-			} else {
-				launchCallback(templates.cache[template], obj, block, callback);
-			}
-		} else if (callback) {
-			launchCallback(template, obj, block, callback);
-		} else {
-			return parseTemplate(block, template, obj);
-		}
-	};
-
-	function launchCallback(template, obj, block, callback) {
-		if (worker) {
-			launchWorker(template, obj, block, callback);
-		} else {
-			callback(parseTemplate(block, template, obj));
-		}
-	}
-
-	function parseTemplate(block, template, obj) {
-		block = !block ? template : templates.getBlock(template, block);
-		template = parse(block, obj);
-
-		return parseFunctions(template, template, obj);
-	}
-
-	templates.registerHelper = function(name, func) {
-		helpers[name] = func;
-	};
-
-	templates.registerLoader = function(func) {
-		loader = func;
-	};
-
-	templates.setGlobal = function(key, value) {
-		templates.globals[key] = value;
-	};
-
-	templates.getBlock = function(template, block) {
-		return template.replace(new RegExp('[\\s\\S]*(<!-- BEGIN ' + block + ' -->[\\s\\S]*?<!-- END ' + block + ' -->)[\\s\\S]*', 'g'), '$1');
-	};
-
-	templates.flush = function() {
-		templates.cache = {};
-	};
-
-	function replace(string, regex, value) {
-		return string.replace(regex, value.toString().replace(regexes.backReferenceFix, '$$$'));
-	}
-
-	function replaceValue(template, key, value) {
-		var string;
-
-		value = value.toString();
-		string = replace(template, new RegExp('{{' + key + '}}', 'g'), value);
-
-		return replace(string, new RegExp('{' + key + '}', 'g'), value
-			.replace(regexes.escapeKeys, '&#123;$1&#125;')
-			.replace(regexes.escapeBlocks, '&lt;!--$1--&gt;')
-		);
-	}
-
-	function makeRegex(block, namespace) {
-		namespace = '(' + namespace + ')?';
-		return new RegExp('<!-- BEGIN ' + namespace + block + ' -->[\\s\\S]*?<!-- END ' + namespace + block + ' -->');
-	}
-
-	function makeBlockRegex(block, namespace) {
-		namespace = '(' + namespace + ')?';
-		return new RegExp('(<!-- BEGIN ' + namespace + block + ' -->[\\r\\n?|\\n]?)|(<!-- END ' + namespace + block + ' -->)', 'g');
-	}
-
-	function makeConditionalRegex(block) {
-		return new RegExp('<!-- IF ' + block + ' -->([\\s\\S]*?)<!-- ENDIF ' + block.split(',')[0] + ' -->', 'g');
-	}
-
-	function makeStatementRegex(key) {
-		return new RegExp('(<!-- IF ' + key + ' -->)|(<!-- ENDIF ' + key.split(',')[0] + ' -->)', 'g');
-	}
-
-	function registerGlobals(obj) {
-		for (var g in templates.globals) {
-			if (templates.globals.hasOwnProperty(g)) {
-				obj[g] = obj[g] || templates.globals[g];
-			}
-		}
-
-		return obj;
-	}
-
-	function checkConditionals(template, key, value) {
-		return checkConditional(checkConditional(template, '!' + key, !value), key, value);
-	}
-
-	function checkConditional(template, key, value) {
-		var matches = template.match(makeConditionalRegex(key));
-
-		if (matches) {
-			var statement = makeStatementRegex(key);
-			for (var i = 0, ii = matches.length; i < ii; i++) {
-				var nestedConditionals = matches[i].match(regexes.nestedConditionals),
-					match = replace(matches[i].replace(statement, ''), regexes.nestedConditionals, '<!-- NESTED -->'),
-					conditionalBlock = match.split(regexes.conditionalBlock);
-
-				if (conditionalBlock[1]) {
-					// there is an else statement
-					template = replace(template, matches[i], replace(conditionalBlock[value ? 0 : 1], regexes.removeWhitespace, ''));
-				} else {
-					// regular if statement
-					template = replace(template, matches[i], value ? replace(match, regexes.removeWhitespace, '') : '');
-				}
-
-				if (nestedConditionals) {
-					for (var x = 0, xx = nestedConditionals.length; x < xx; x++) {
-						template = replace(template, '<!-- NESTED -->', nestedConditionals[x]);
-					}
-				}
-			}
-		}
-
-		return template;
-	}
-
-	function checkConditionalHelpers(template, obj) {
-		var string,
-			func;
-
-
-		while ((string = template.match(regexes.conditionalHelper)) !== null) {
-			var fn = string[1].trim(),
-				args = fn.split(regexes.conditionalArgs);
-
-			func = args[0];
-
-			if (helpers[func]) {
-				args.shift();
-				args.unshift(obj);
-				template = checkConditionals(template, 'function.' + fn, helpers[func].apply(null, args));
-			} else {
-				template = template.replace(makeConditionalRegex('function.' + fn));
-			}
-		}
-
-		return template;
-	}
-
-	function callMethod(method, parameters) {
-		return method.apply(templates, parameters);
-	}
-
-	function parseFunctions(block, result, obj) {
-		var functions = block.match(/{function.*?}/g, '');
-		if (!functions) {
-			return result;
-		}
-
-		for (var i=0, ii=functions.length; i<ii; ++i) {
-			var search = functions[i],
-				fn = functions[i].replace('{function.', '').split('}').shift().split(/[ ]*,[ ]*/),
-				method = fn.shift(),
-				parameters = [];
-
-			if (fn.length) {
-				for (var j = 0, jj = fn.length; j < jj; j++) {
-					parameters.push(obj[fn[j]]);
-				}
-			} else {
-				parameters = [obj];
-			}
-
-			if (helpers[method]) {
-				result = replace(result, new RegExp(search, 'g'), callMethod(helpers[method], parameters));
-			}
-		}
-
-		return result;
-	}
-
-	function parseObject(template, array, key, namespace) {
-		return parseArray(template, array, key, namespace, true);
-	}
-
-	function parseArray(template, array, key, namespace, isObject) {
-
-		if (!isObject) {
-			template = checkConditionals(template, namespace  + key + '.length', array[key].length);
-		}
-
-		var regex = makeRegex(key, namespace), block, result;
-
-		if (!array[key].length && !isObject) {
-			return template.replace(regex, '');
-		}
-
-		while ((block = template.match(regex)) !== null) {
-			block = block[0].replace(makeBlockRegex(key, namespace), '');
-
-			var innerLoops = block.match(regexes.innerLoop);
-
-			block = block
-				.replace(regexes.innerLoop, '<!-- INNER LOOP -->')
-				.replace(regexes.rootKey, '{' + namespace + key + '.$1}')
-				.replace(regexes.rootConditional, 'IF ' + namespace + key + '.$1')
-				.replace(regexes.rootConditionalFalse, 'IF !' + namespace + key + '.$1');
-
-			if (innerLoops) {
-				for (var x = 0, xx = innerLoops.length; x < xx; x++) {
-					block = replace(block, '<!-- INNER LOOP -->', innerLoops[x]);
-				}
-			}
-
-			block = block
-					.replace(regexes.removeTabspace, '');
-
-			result = parseArrayBlock(block, array[key], namespace + key + '.', isObject);
-
-			template = replace(template, regex, result.replace(regexes.removeWhitespace, ''));
-		}
-
-		return template;
-	}
-
-	function parseArrayBlock(block, array, namespace, isObject) {
-		var template = '';
-
-		for (var iterator in array) {
-			if (array.hasOwnProperty(iterator)) {
-				var result = '';
-
-				if (!isObject) {
-					iterator = parseInt(iterator, 10);
-				}
-
-				result += parse(block, array[iterator], namespace);
-
-				if (!isObject) {
-					result = checkConditionals(result, '@first', iterator === 0);
-					result = checkConditionals(result, '@last', iterator === array.length - 1);
-
-					result = result
-						.replace(/@index/g, iterator)
-						.replace(/@value/g, array[iterator]);
-				} else {
-					result = result
-						.replace(/@key/g, iterator)
-						.replace(/@value/g, array[iterator]);
-				}
-
-				result = parseFunctions(block, result, array[iterator]);
-				template = template + result;
-			}
-		}
-
-		return template;
-	}
-
-	function parseValue(template, key, value) {
-		template = checkConditionals(template, key, value);
-		return replaceValue(template, key, value);
-	}
-
-	function parse(template, obj, namespace) {
-
-		namespace = namespace || '';
-		var key;
-		for (key in obj) {
-			if (obj.hasOwnProperty(key)) {
-				if (typeof obj[key] === 'undefined' || typeof obj[key] === 'function' || !template.match(key) || (obj[key] && obj[key].constructor === Array)) {
-					continue;
-				} else if (obj[key] === null) {
-					template = replaceValue(template, namespace + key, '');
-				} else if (obj[key] instanceof Object) {
-					template = parseObject(template, obj, key, namespace);
-					template = checkConditionals(template, key, obj[key]);
-					template = parse(template, obj[key], namespace + key + '.');
-				} else {
-					template = parseValue(template, namespace + key, obj[key]);
-				}
-			}
-		}
-
-		for (key in obj) {
-			if (obj.hasOwnProperty(key) && Array.isArray(obj[key]) && template.match(key)) {
-				template = replaceValue(template, namespace + key + '.length', obj[key].length);
-				template = parseArray(template, obj, key, namespace);
-			}
-		}
-
-
-		if (namespace) {
-			namespace = '';
-		} else {
-			template = checkConditionalHelpers(template, obj);
-			template = cleanup(template, obj);
-		}
-
-		return template;
-	}
-
-	function cleanup(template, obj) {
-		template = template
-			.replace(regexes.cleanupEmptyLoops, '');
-
-		var missingKeys = template.match(regexes.cleanupMissingKeys) || [];
-
-		for (var i = 0, ii = missingKeys.length; i < ii; i++) {
-			if (missingKeys[i].substr(0, 1) !== '/') {
-				template = template.replace(missingKeys[i], '');
-			} else {
-				template = template.replace(missingKeys[i], missingKeys[i].slice(1));
-			}
-		}
-
-		var keysToReparse = {},
-			undefinedKeys = template.match(regexes.getUndefinedKeys) || [];
-
-		for (var i = 0, ii = undefinedKeys.length; i < ii; i++) {
-			var undefinedKey = regexes.getUndefinedKeys.exec(undefinedKeys[i]);
-
-			if (undefinedKey) {
-				keysToReparse[undefinedKey[1]] = false;
-			}
-		}
-
-		var leftoverRoot = template.match(regexes.leftoverRoot) || [];
-
-		for (var i = 0, ii = leftoverRoot.length; i < ii; i++) {
-			var key = regexes.leftoverRoot.exec(leftoverRoot[i]);
-
-			if (key) {
-				key = key[1].split('.')[0];
-
-				if (obj[key]) {
-					keysToReparse['../' + key] = obj[key];
-				}
-			}
-		}
-
-		var parseUndefined = false;
-
-		for(var prop in keysToReparse) {
-			if (keysToReparse.hasOwnProperty(prop)) {
-				parseUndefined = true;
-				break;
-			}
-		}
-
-		return parseUndefined ? parse(template, keysToReparse, '') : template;
-	}
-
-	module.exports = templates;
-
-	if ('undefined' !== typeof window) {
-		window.templates = module.exports;
-	}
-
-})('undefined' === typeof module ? {
-	module: {
-		exports: {}
-	}
-} : module);
+/* eslint-disable */
+!function(){const e={cache:{},globals:{}},t={};let n,o;const r={nestedConditionals:/(?!^)<!-- IF([\s\S]*?)ENDIF[ a-zA-Z0-9\/\._:]*-->(?!$)/g,conditionalBlock:/[\r\n?\n]*?<!-- ELSE -->[\r\n?\n]*?/,conditionalHelper:/<!-- IF function.([\s\S]*?)-->/,conditionalArgs:/[ ]*,[ ]*/,innerLoop:/\s*<!-- BEGIN([\s\S]*)END ([\s\S]*?)-->/g,removeTabspace:/^\t*?|^\r\n?\t*?|\t?$|\r\n?\t*?$/g,removeWhitespace:/(^[\r\n?|\n]*)|([\r\n\t]*$)/g,cleanupEmptyLoops:/\s*<!-- BEGIN([\s\S]*?)END ([\s\S]*?)-->/g,cleanupMissingKeys:/[\r\n]*?[\/]?\{[a-zA-Z0-9\.]+[\r\n]*?\}/g,leftoverRoot:/\.\.\/([\S]*?)[\}| ]/g,getUndefinedKeys:/<!-- IF[\s!]*([\s\S]*?) -->/g,backReferenceFix:/\$+/g,escapeBlocks:/<!--([\s\S]*?)-->/g,escapeKeys:/\{([\s\S]*?)\}/g,rootKey:/\{\.\.\/([\S]*?)\}/g,rootConditional:/IF \.\.\/([\S]*?)/g,rootConditionalFalse:/IF !\.\.\/([\S]*?)/g};"undefined"!=typeof self&&self.addEventListener&&self.addEventListener("message",t=>{if(!(t&&t.data&&t.data.template&&t.data.object))return;const{data:n}=t;self.postMessage({result:n.block?e.parse(n.template,n.block,n.object):e.parse(n.template,n.object),signature:n.signature},"*")},!1);const c={};let l=0;const s=2**53-1;function i(e,t,n,r){o?function(e,t,n,r){++l>s&&(l=0),t=function(e){for(const t in e)e.hasOwnProperty(t)&&"function"!=typeof e[t]||delete e[t];return e}(t),o.postMessage({template:e,object:t,block:n,signature:l}),c[l]=function(e){r(e),delete c[l]}}(e,t,n,r):r(a(n,e,t))}function a(t,n,o){return x(n=b(t=t?e.getBlock(n,t):n,o),n,o)}function f(e,t,n){return e.replace(t,n.toString().replace(r.backReferenceFix,"$$$"))}function u(e,t,n){let o;return n=n.toString(),o=f(e,new RegExp(`{{${t}}}`,"g"),n),f(o,new RegExp(`{${t}}`,"g"),n.replace(r.escapeKeys,"&#123;$1&#125;").replace(r.escapeBlocks,"&lt;!--$1--&gt;"))}function p(e,t){return t=`(${t})?`,new RegExp(`(\x3c!-- BEGIN ${t}${e} --\x3e[\\r\\n?|\\n]?)|(\x3c!-- END ${t}${e} --\x3e)`,"g")}function g(e){return new RegExp(`\x3c!-- IF ${e} --\x3e([\\s\\S]*?)\x3c!-- ENDIF ${e.split(",")[0]} --\x3e`,"g")}function d(e,t,n){return h(h(e,`!${t}`,!n),t,n)}function h(e,t,n){const o=e.match(g(t));if(o){const c=function(e){return new RegExp(`(\x3c!-- IF ${e} --\x3e)|(\x3c!-- ENDIF ${e.split(",")[0]} --\x3e)`,"g")}(t);for(let t=0,l=o.length;t<l;t++){const l=o[t].match(r.nestedConditionals),s=f(o[t].replace(c,""),r.nestedConditionals,"\x3c!-- NESTED --\x3e"),i=s.split(r.conditionalBlock);if(e=i[1]?f(e,o[t],f(i[n?0:1],r.removeWhitespace,"")):f(e,o[t],n?f(s,r.removeWhitespace,""):""),l)for(let t=0,n=l.length;t<n;t++)e=f(e,"\x3c!-- NESTED --\x3e",l[t])}}return e}function $(t,n){return t.apply(e,n)}function x(e,n,o){const r=e.match(/{function.*?}/g,"");if(!r)return n;for(let e=0,c=r.length;e<c;++e){const c=r[e],l=r[e].replace("{function.","").split("}").shift().split(/[ ]*,[ ]*/),s=l.shift();let i=[];if(l.length)for(let e=0,t=l.length;e<t;e++)i.push(o[l[e]]);else i=[o];t[s]&&(n=f(n,new RegExp(c,"g"),$(t[s],i)))}return n}function E(e,t,n,o){return y(e,t,n,o,!0)}function y(e,t,n,o,c){c||(e=d(e,`${o+n}.length`,t[n].length));const l=function(e,t){return t=`(${t})?`,new RegExp(`\x3c!-- BEGIN ${t}${e} --\x3e[\\s\\S]*?\x3c!-- END ${t}${e} --\x3e`)}(n,o);let s,i;if(!t[n].length&&!c)return e.replace(l,"");for(;null!==(s=e.match(l));){const a=(s=s[0].replace(p(n,o),"")).match(r.innerLoop);if(s=s.replace(r.innerLoop,"\x3c!-- INNER LOOP --\x3e").replace(r.rootKey,`{${o}${n}.$1}`).replace(r.rootConditional,`IF ${o}${n}.$1`).replace(r.rootConditionalFalse,`IF !${o}${n}.$1`),a)for(let e=0,t=a.length;e<t;e++)s=f(s,"\x3c!-- INNER LOOP --\x3e",a[e]);e=f(e,l,(i=m(s=s.replace(r.removeTabspace,""),t[n],`${o+n}.`,c)).replace(r.removeWhitespace,""))}return e}function m(e,t,n,o){let r="";for(let c in t)if(t.hasOwnProperty(c)){let l="";o||(c=parseInt(c,10)),l+=b(e,t[c],n),o?l=l.replace(/@key/g,c).replace(/@value/g,t[c]):(l=d(l,"@first",0===c),l=(l=d(l,"@last",c===t.length-1)).replace(/@index/g,c).replace(/@value/g,t[c])),r+=l=x(e,l,t[c])}return r}function S(e,t,n){return u(e=d(e,t,n),t,n)}function b(e,n,o){let c;for(c in o=o||"",n)if(n.hasOwnProperty(c)){if(void 0===n[c]||"function"==typeof n[c]||!e.match(c)||n[c]&&n[c].constructor===Array)continue;e=null===n[c]?u(e,o+c,""):n[c]instanceof Object?b(e=d(e=E(e,n,c,o),c,n[c]),n[c],`${o+c}.`):S(e,o+c,n[c])}for(c in n)n.hasOwnProperty(c)&&Array.isArray(n[c])&&e.match(c)&&(e=y(e=u(e,`${o+c}.length`,n[c].length),n,c,o));return o?o="":e=function(e,t){const n=(e=e.replace(r.cleanupEmptyLoops,"")).match(r.cleanupMissingKeys)||[];for(var o=0,c=n.length;o<c;o++)e="/"!==n[o].substr(0,1)?e.replace(n[o],""):e.replace(n[o],n[o].slice(1));const l={},s=e.match(r.getUndefinedKeys)||[];for(var o=0,c=s.length;o<c;o++){const e=r.getUndefinedKeys.exec(s[o]);e&&(l[e[1]]=!1)}const i=e.match(r.leftoverRoot)||[];for(var o=0,c=i.length;o<c;o++){let e=r.leftoverRoot.exec(i[o]);e&&(e=e[1].split(".")[0],t[e]&&(l[`../${e}`]=t[e]))}let a=!1;for(const e in l)if(l.hasOwnProperty(e)){a=!0;break}return a?b(e,l,""):e}(e=function(e,n){let o,c;for(;null!==(o=e.match(r.conditionalHelper));){const l=o[1].trim(),s=l.split(r.conditionalArgs);c=s[0],t[c]?(s.shift(),s.unshift(n),e=d(e,`function.${l}`,t[c].apply(null,s))):e=e.replace(g(`function.${l}`))}return e}(e,n),n),e}e.setupWebWorker=function(e){try{(o=new Worker(e)).addEventListener("message",e=>{c[e.data.signature]&&c[e.data.signature](e.data.result)},!1)}catch(e){}},e.parse=function(t,o,r,c){if("string"!=typeof o&&(c=r,r=o,o=!1),!t)return c?c(""):"";if(r=function(t){for(const n in e.globals)e.globals.hasOwnProperty(n)&&(t[n]=t[n]||e.globals[n]);return t}(r||{}),n&&c)e.cache[t]?i(e.cache[t],r,o,c):n(t,n=>{e.cache[t]=n,i(n,r,o,c)});else{if(!c)return a(o,t,r);i(t,r,o,c)}},e.registerHelper=function(e,n){t[e]=n},e.registerLoader=function(e){n=e},e.setGlobal=function(t,n){e.globals[t]=n},e.getBlock=function(e,t){return e.replace(new RegExp(`[\\s\\S]*(\x3c!-- BEGIN ${t} --\x3e[\\s\\S]*?\x3c!-- END ${t} --\x3e)[\\s\\S]*`,"g"),"$1")},e.flush=function(){e.cache={}},"undefined"!=typeof module&&(module.exports=e),"undefined"!=typeof window&&(window.templates=e)}();
+/* eslint-enable */
