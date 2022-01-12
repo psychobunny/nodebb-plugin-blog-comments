@@ -58,6 +58,15 @@
 			<br />
 			<input type="text" data-field="blog-comments:register-url" title="Login URL Override" class="form-control" placeholder="http://blog.mydomain.com/register/#blog/authenticate">
 			<br />
+			<label>Support Profile Links</label>
+			<br />
+			<small>Users can click on avatar images to go to the user's profile</small>
+			<br />
+			<select data-field="blog-comments:profile-links" class="form-control">
+				<option value="on">On</option>
+				<option value="off">Off</option>
+			</select>
+			<br /><br />
 		</form>
 	</div>
 </div>

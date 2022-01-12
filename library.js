@@ -123,6 +123,7 @@ Comments.getCommentData = async function (req, res) {
 		registerURL: meta.config['blog-comments:register-url'] || '',
 		authFlow: meta.config['blog-comments:auth-behavior'] || 'popup',
 		autoCreate: meta.config['blog-comments:autocreate'] === 'on',
+		profileLink: !(meta.config['blog-comments:profile-links'] === 'off'),
 	});
 };
 

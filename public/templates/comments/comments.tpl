@@ -30,13 +30,21 @@
 			<div class="topic-item">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
-						<a href="{relative_path}/user/{posts.user.userslug}">
+						<!-- IF profileLink -->
+							<a href="{relative_path}/user/{posts.user.userslug}">
+								<!-- IF posts.user.picture -->
+								<img src="{posts.user.picture}" alt="{posts.user.username}" class="profile-image" title="{posts.user.username}" />
+								<!-- ELSE -->
+								<div class="profile-image" style="background-color: {posts.user.icon:bgColor}" title="{posts.user.username}" alt="{posts.user.username}">{posts.user.icon:text}</div>
+								<!-- ENDIF posts.user.picture -->
+							</a>
+						<!-- ELSE -->
 							<!-- IF posts.user.picture -->
 							<img src="{posts.user.picture}" alt="{posts.user.username}" class="profile-image" title="{posts.user.username}" />
 							<!-- ELSE -->
 							<div class="profile-image" style="background-color: {posts.user.icon:bgColor}" title="{posts.user.username}" alt="{posts.user.username}">{posts.user.icon:text}</div>
 							<!-- ENDIF posts.user.picture -->
-						</a>
+						<!-- ENDIF profileLink -->
 					</div>
 					<div class="topic-text">
 						<div class="post-content" itemprop="text"><small><strong>{posts.user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
