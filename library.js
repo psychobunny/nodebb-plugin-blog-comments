@@ -50,14 +50,13 @@ Comments.init = async function (params) {
 	const middlewares = [
 		CORSMiddleware,
 		middleware.applyCSRF,
-		middleware.pluginHooks,
 	];
 
-	router.get('/comments/get/:id/:pagination?', middlewares, routeHelpers.tryRoute(Comments.getCommentData));
-	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
-	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
+	router.get('/comments/get/:id/:pagination?', middlewares, middleware.pluginHooks, routeHelpers.tryRoute(Comments.getCommentData));
+	router.post('/comments/reply', middlewares, routeHelpers.tryRoute(Comments.replyToComment));
+	router.post('/comments/publish', middlewares, routeHelpers.tryRoute(Comments.publishArticle));
 
-	routeHelpers.setupAdminPageRoute(router, '/admin/blog-comments', middleware, [], (req, res) => {
+	routeHelpers.setupAdminPageRoute(router, '/admin/blog-comments', middleware, [], (_, res) => {
 		res.render('comments/admin', {});
 	});
 };
@@ -123,6 +122,7 @@ Comments.getCommentData = async function (req, res) {
 		loginURL: meta.config['blog-comments:login-url'] || '',
 		registerURL: meta.config['blog-comments:register-url'] || '',
 		authFlow: meta.config['blog-comments:auth-behavior'] || 'popup',
+		autoCreate: meta.config['blog-comments:autocreate'] === 'on',
 	});
 };
 
@@ -170,12 +170,19 @@ Comments.publishArticle = async function (req, res) {
 		groups.isMember(req.uid, 'publishers'),
 	]);
 
-	if (!isAdmin && !isPublisher) {
+	let { uid } = req;
+	if (meta.config['blog-comments:autocreate'] === 'on') {
+		uid = parseInt(meta.config['blog-comments:autocreate-user-id'], 10);
+		if (!uid) {
+			return res.json({ error: 'Invalid autocreate user specified' });
+		}
+	} else if (!isAdmin && !isPublisher) {
 		return res.json({ error: 'Only Administrators or members of the publishers group can publish articles' });
 	}
+
 	try {
 		const result = await topics.post({
-			uid: req.uid,
+			uid,
 			title: title,
 			content: markdown,
 			tags: tags ? JSON.parse(tags) : [],

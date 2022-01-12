@@ -36,6 +36,27 @@
 			.replace(/src="\/(?=\w)/g, `src="${nodeBBURL}/`);
 	}
 
+	function getArticleData() {
+		if (!articleData) {
+			console.error('Declare articleData variable!');
+			return;
+		}
+
+		const tags = (articleData.tags || []).map(tag => tag.title);
+		const { url } = articleData;
+		const title = articleData.title_plain;
+		const cid = articleData.cid || -1;
+
+		const translator = document.createElement('span');
+		translator.innerHTML = articleData.markDownContent;
+		const markdown = [
+			translator.firstChild.innerHTML,
+			articleData.url && articleData.url.length ? `\n\n**Click [here](${url}) to see the full blog post**` : '',
+		].join('');
+
+		return [markdown, title, cid, tags];
+	}
+
 	XHR.onload = function () {
 		if (XHR.status === 302) {
 			reloadComments();
@@ -96,7 +117,7 @@
 				contentDiv.value = savedText;
 			}
 
-			if (data.tid) {
+			if (data.mainPost) {
 				const loadMore = document.getElementById('nodebb-load-more');
 				loadMore.onclick = function () {
 					pagination += 1;
@@ -149,25 +170,42 @@
 						authenticate(data.loginURL && data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
 					};
 				}
-			} else if (data.isAdmin) {
-				if (!articleData) {
-					console.error('Declare articleData variable!');
+			} else if (data.autoCreate) {
+				const [markdown, title, cid, tags] = getArticleData();
+				if (!markdown.length || !title.length) {
+					console.error('Need a title and content to auto-create a topic.');
 					return;
 				}
 
-				const translator = document.createElement('span');
-				const gTags = articleData.tags;
-				const { url } = articleData;
-				const title = articleData.title_plain;
-				const cid = articleData.cid || -1;
-				translator.innerHTML = articleData.markDownContent;
+				const formValues = {
+					markdown,
+					title,
+					cid,
+					tags: JSON.stringify(tags),
+					id: data.article_id,
+					url: data.redirect_url,
+					_csrf: data.token,
+				};
 
-				const markdown = `${translator.firstChild.innerHTML}\n\n**Click [here](${url}) to see the full blog post**`;
+				const formData = Object.keys(formValues).map(name => `${encodeURIComponent(name)}=${encodeURIComponent(formValues[name])}`).join('&');
+
+				const postXHR = newXHR();
+				postXHR.onreadystatechange = function () {
+					if (postXHR.readyState === postXHR.DONE) {
+						reloadComments();
+					}
+				};
+				postXHR.open('POST', `${data.relative_path}/comments/publish`, true);
+				postXHR.withCredentials = true;
+				postXHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				postXHR.send(formData);
+			} else if (data.isAdmin) {
+				const [markdown, title, cid, tags] = getArticleData();
 
 				document.getElementById('nodebb-content-markdown').value = markdown;
 				document.getElementById('nodebb-content-title').value = title;
 				document.getElementById('nodebb-content-cid').value = cid;
-				document.getElementById('nodebb-content-tags').value = JSON.stringify(gTags.map(tag => tag.title));
+				document.getElementById('nodebb-content-tags').value = JSON.stringify(tags);
 			}
 		}
 	};

@@ -28,6 +28,19 @@
 				<option value="off">Off</option>
 			</select>
 			<br />
+			<label>Auto Create Topic</label>
+			<br />
+			<small>If no article topic exists, auto-publish articles when accessed.</small>
+			<select data-field="blog-comments:autocreate" class="form-control">
+				<option value="on">On</option>
+				<option value="off">Off</option>
+			</select>
+			<br />
+			<label>Auto Create User ID</label>
+			<br />
+			<small>If auto create is on, which user should own the post?</small>
+			<input type="text" data-field="blog-comments:autocreate-user-id" title="User ID" class="form-control" placeholder="1" />
+			<br />
 			<label>Login / Registeration Behavior</label>
 			<br />
 			<small>When authenticating, should it be a pop-up or redirect?</small>
