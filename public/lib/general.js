@@ -119,10 +119,13 @@
 
 			if (data.mainPost) {
 				const loadMore = document.getElementById('nodebb-load-more');
-				loadMore.onclick = function () {
-					pagination += 1;
-					reloadComments();
-				};
+				if (loadMore) {
+					loadMore.onclick = function () {
+						pagination += 1;
+						reloadComments();
+					};
+				}
+
 				if (data.posts.length) {
 					loadMore.style.display = 'inline-block';
 				}
@@ -162,13 +165,19 @@
 						location.href = `${url}?callbackUrl=${data.redirect_url}`;
 					};
 
-					document.getElementById('nodebb-register').onclick = function () {
-						authenticate(data.registerURL && data.registerURL.length ? data.registerURL : `${nodeBBURL}/register/#blog/authenticate`);
-					};
+					const registerButton = document.getElementById('nodebb-register');
+					if (registerButton) {
+						registerButton.onclick = function () {
+							authenticate(data.registerURL && data.registerURL.length ? data.registerURL : `${nodeBBURL}/register/#blog/authenticate`);
+						};
+					}
 
-					document.getElementById('nodebb-login').onclick = function () {
-						authenticate(data.loginURL && data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
-					};
+					const loginButton = document.getElementById('nodebb-login');
+					if (loginButton) {
+						loginButton.onclick = function () {
+							authenticate(data.loginURL && data.loginURL.length ? data.loginURL : `${nodeBBURL}/login/#blog/authenticate`);
+						};
+					}
 				}
 			} else if (data.autoCreate) {
 				const [markdown, title, cid, tags] = getArticleData();
