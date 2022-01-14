@@ -139,9 +139,10 @@
 				}
 
 				if (data.user && data.user.uid) {
-					let error = window.location.href.match(/error=[\w-]*/);
+					const params = new URLSearchParams(window.location.search);
+					let error = (params.get('error') || '').match(/[^[[error:]([\w-])*/);
 					if (error) {
-						error = error[0].split('=')[1];
+						error = error[0];
 						if (error === 'too-many-posts') {
 							error = 'Please wait before posting so soon.';
 						} else if (error === 'content-too-short') {

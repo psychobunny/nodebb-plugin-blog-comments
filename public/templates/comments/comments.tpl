@@ -62,7 +62,7 @@
 		</div>
 		<form action="{relative_path}/comments/reply" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
-		<!-- IF isLoggedIn -->
+		<!-- IF user -->
 			<small>Signed in as <strong>{user.username}</strong>. <strong id="nodebb-error"></strong></small>
 			<button class="btn btn-primary">Post a Reply</button>
 			<input type="hidden" name="_csrf" value="{token}" />
@@ -74,7 +74,7 @@
 		<button class="btn btn-primary" id="nodebb-register">Register</button>
 		<button class="btn btn-primary" id="nodebb-login">Login</button>
 		<br />
-		<!-- ENDIF isLoggedIn -->
+		<!-- ENDIF user -->
 	<!-- ENDIF atBottom -->
 
 	<!-- IF show_branding -->
