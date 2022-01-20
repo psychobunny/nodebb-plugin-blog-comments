@@ -1,4 +1,4 @@
-<!-- IF tid -->
+<!-- IF mainPost -->
 	<!-- IF atTop -->
 		<div class="topic-profile-pic user">
 			<!-- IF isLoggedIn -->
@@ -30,16 +30,20 @@
 			<div class="topic-item">
 				<div class="topic-body">
 					<div class="topic-profile-pic">
-						<a href="{relative_path}/user/{user.userslug}">
-							<!-- IF user.picture -->
-							<img src="{user.picture}" alt="{user.username}" class="profile-image" title="{user.username}">
-							<!-- ELSE -->
-							<div class="profile-image" style="background-color: {user.icon:bgColor}" title="{user.username}" alt="{user.username}">{user.icon:text}</div>
-							<!-- ENDIF user.picture -->
-						</a>
+						<!-- IF profileLink -->
+							<a href="{relative_path}/user/{posts.user.userslug}">
+						<!-- ENDIF profileLink -->
+						<!-- IF posts.user.picture -->
+							<img src="{posts.user.picture}" alt="{posts.user.username}" class="profile-image" title="{posts.user.username}" />
+						<!-- ELSE -->
+							<div class="profile-image" style="background-color: {posts.user.icon:bgColor}" title="{posts.user.username}" alt="{posts.user.username}">{posts.user.icon:text}</div>
+						<!-- ENDIF posts.user.picture -->
+						<!-- IF profileLink -->
+							</a>
+						<!-- ENDIF profileLink -->
 					</div>
 					<div class="topic-text">
-						<div class="post-content" itemprop="text"><small><strong>{user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
+						<div class="post-content" itemprop="text"><small><strong>{posts.user.username}</strong> commented {posts.timestamp}</small><br />{posts.content}</div>
 					</div>
 				</div>
 			</div>
@@ -58,7 +62,7 @@
 		</div>
 		<form action="{relative_path}/comments/reply" method="post">
 			<textarea id="nodebb-content" class="form-control" name="content" placeholder="Join the conversation" rows="3"></textarea>
-		<!-- IF isLoggedIn -->
+		<!-- IF user -->
 			<small>Signed in as <strong>{user.username}</strong>. <strong id="nodebb-error"></strong></small>
 			<button class="btn btn-primary">Post a Reply</button>
 			<input type="hidden" name="_csrf" value="{token}" />
@@ -70,10 +74,13 @@
 		<button class="btn btn-primary" id="nodebb-register">Register</button>
 		<button class="btn btn-primary" id="nodebb-login">Login</button>
 		<br />
-		<!-- ENDIF isLoggedIn -->
+		<!-- ENDIF user -->
 	<!-- ENDIF atBottom -->
 
-	<small class="nodebb-copyright">Powered by <a href="http://nodebb.org" target="_blank">NodeBB</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
+	<!-- IF show_branding -->
+		<small class="nodebb-copyright">Powered by <a href="http://nodebb.org" target="_blank">NodeBB</a> &bull; <a href="{relative_path}/topic/{tid}">View original thread</a></small>
+	<!-- ENDIF show_branding -->
+
 	<button class="btn btn-primary" <!-- IF !posts.length -->style="display: none"<!-- ENDIF !posts.length --> id="nodebb-load-more">Load more comments...</button>
 <!-- ELSE -->
 	Commenting has been disabled.
@@ -89,4 +96,4 @@
 		<input type="hidden" name="_csrf" value="{token}" />
 	</form>
 	<!-- ENDIF isAdmin -->
-<!-- ENDIF tid -->
+<!-- ENDIF mainPost -->
