@@ -15,6 +15,9 @@
 	"scripts": [
 		"public/lib/main.js"
 	],
+	"modules": {
+		"../admin/plugins/blog-comments.js": "public/lib/admin.js"
+	},
 	"staticDirs": {
 		"templates": "./public/templates",
 		"css": "./public/css",

@@ -26,8 +26,8 @@ Comments.init = async function (params) {
 	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
 	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
 
-	routeHelpers.setupAdminPageRoute(router, '/admin/blog-comments', middleware, [], (req, res) => {
-		res.render('comments/admin', {});
+	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/blog-comments', middleware, [], (req, res) => {
+		res.render('admin/plugins/blog-comments', {});
 	});
 };
 
@@ -176,7 +176,7 @@ Comments.publishArticle = async function (req, res) {
 
 Comments.addAdminLink = function (custom_header) {
 	custom_header.plugins.push({
-		route: '/blog-comments',
+		route: '/plugins/blog-comments',
 		icon: 'fa-book',
 		name: 'Blog Comments',
 	});
