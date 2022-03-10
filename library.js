@@ -35,19 +35,17 @@ Comments.getTopicIDByCommentID = async function (commentID) {
 	return await db.getObjectField('blog-comments', commentID);
 };
 
-Comments.getCommentData = async function (req, res, next) {
+Comments.getCommentData = async function (req, res) {
 	const commentID = req.params.id;
 	const pagination = req.params.pagination ? req.params.pagination : 0;
 
 	const tid = await Comments.getTopicIDByCommentID(commentID);
 	const topicData = await topics.getTopicData(tid);
-	if (!topicData) {
-		return next();
-	}
+
 	const start = pagination * 10;
 	const stop = start + 9;
 	const [postData, userData, isAdmin, isPublisher, categoryData, mainPost] = await Promise.all([
-		topics.getTopicPosts(topicData, `tid:${tid}:posts`, start, stop, req.uid, true),
+		topicData ? topics.getTopicPosts(topicData, `tid:${tid}:posts`, start, stop, req.uid, true) : [],
 		user.getUserData(req.uid),
 		user.isAdministrator(req.uid),
 		groups.isMember(req.uid, 'publishers'),
