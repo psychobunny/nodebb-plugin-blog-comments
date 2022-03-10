@@ -92,7 +92,7 @@ Comments.getCommentData = async function (req, res) {
 
 	res.json({
 		posts: posts,
-		postCount: topicData.postcount,
+		postCount: topicData ? topicData.postcount : 0,
 		user: userData,
 		template: Comments.template,
 		token: req.csrfToken && req.csrfToken(),
