@@ -26,7 +26,7 @@ Comments.init = async function (params) {
 	router.post('/comments/reply', middleware.applyCSRF, routeHelpers.tryRoute(Comments.replyToComment));
 	router.post('/comments/publish', middleware.applyCSRF, routeHelpers.tryRoute(Comments.publishArticle));
 
-	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/blog-comments', middleware, [], (req, res) => {
+	routeHelpers.setupAdminPageRoute(router, '/admin/plugins/blog-comments', (req, res) => {
 		res.render('admin/plugins/blog-comments', {});
 	});
 };
