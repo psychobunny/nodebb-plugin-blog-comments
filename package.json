@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-blog-comments",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "NodeBB Blog Comments (Ghost / WP Commenting Engine)",
   "main": "library.js",
   "scripts": {
