@@ -28,7 +28,7 @@
     "url": "https://github.com/psychobunny/nodebb-plugin-blog-comments/issues"
   },
   "nbbpm": {
-    "compatibility": "^3.0.0"
+    "compatibility": "^3.2.0"
   },
   "devDependencies": {
     "eslint": "8.3.0",
